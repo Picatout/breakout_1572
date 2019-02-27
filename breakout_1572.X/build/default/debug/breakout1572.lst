@@ -1,0 +1,1478 @@
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ; TODO INSERT CONFIG CODE HERE USING CONFIG BITS GENERATOR
+                      00002 
+                      00003     include p12f1572.inc
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ; Build date : Jan 21 2019
+                      00005 ;  MPASM PIC12F1572 processor include
+                      00006 ; 
+                      00007 ;  (c) Copyright 1999-2019 Microchip Technology, All rights reserved
+                      00008 ;==========================================================================
+                      00009 
+                      01601         LIST
+                      00004     
+8007   3FA7           00005     __config _CONFIG1, _FOSC_ECH & _WDTE_OFF  & _MCLRE_OFF
+8008   3EFF           00006     __config _CONFIG2, _PLLEN_OFF
+                      00007     
+                      00008     radix dec
+                      00009 
+                      00010 ; constants    
+  00DA79B0            00011 Fosc equ 14318000
+  00369E6C            00012 Fcy  equ (Fosc/4)
+                      00013 ; NTSC signal 
+  00003D76            00014 Fhorz equ 15734 ; horizontal frequency
+  0000038D            00015 HPERIOD equ ((Fosc/Fhorz)-1)  ; horizontal period pwm count(63,55µS)
+  00000042            00016 HSYNC  equ 66  ;  (4,7µS) ; horz. sync. pwm pulse count
+  00000020            00017 HEQUAL equ 32 ; 2,3µS equalization pwm pulse count
+  00000183            00018 VSYNC_PULSE equ 387 ; 27,1µS vertical sync. pwm pulse count
+  000001C6            00019 HALF_LINE equ ((Fosc/Fhorz/2)-1) 
+                      00020 ; boolean flags 
+  00000000            00021 F_HI_LINE equ 0 ; horz. line > 255
+  00000001            00022 F_EVEN equ 1    ; even field
+                      00023 
+                      00024 ;pins assignment
+  00000005            00025 CLKIN equ RA5
+  00000001            00026 CHROMA equ RA1
+  00000002            00027 SYNC_OUT equ RA2
+  00000000            00028 AUDIO EQU RA0
+  00000004            00029 VIDEO_OUT equ RA4
+                      00030  
+                      00031 ;; macros 
+                      00032 case macro n, adr
+                      00033     xorlw n
+                      00034     skpnz
+                      00035     goto adr
+                      00036     xorlw n
+                      00037     endm
+                      00038 
+                      00039 ; variables
+                      00040     udata_shr
+0000                  00041 flags  res 1 ; boolean variables
+0001                  00042 lcount res 1 ; video field line counter
+0002                  00043 vsync_count res 1 ; vertical sync seration counter
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0003                  00044 state res 1 ; where in video phase 
+                      00045    
+                      00046 ;; code 
+                      00047 RES_VECT  CODE    0x0000            ; processor reset vector
+0000   2???           00048     GOTO    START                   ; go to beginning of program
+0001   0001           00049     reset
+0002   0001           00050     reset
+0003   0001           00051     reset
+                      00052     
+                      00053 ; interrupt service routine triggered by PWM3 period rollover
+                      00054 ISR CODE 0x0004
+0004   018A           00055 isr clrf PCLATH
+0005   08??           00056     movfw state
+Message[305]: Using default destination of 1 (file).
+0006   0782           00057     addwf PCL
+0007   2???           00058     goto pre_equalization ; vertical pre-equalization pulses
+0008   2???           00059     goto vsync ; vertical sync pulses
+0009   2???           00060     goto post_equalization ; vertical post-equalization pulses
+000A   2???           00061     goto vsync_completed ; return to normal video line
+000B   2???           00062     goto video_lines ; in video normal lines
+000C   2801           00063     goto 1 ; error trap
+                      00064 ; set PWM3 to generate HALF_LINE with narrow pulse
+000D                  00065 pre_equalization
+Message[305]: Using default destination of 1 (file).
+000D   0A??           00066     incf vsync_count
+000E   08??           00067     movfw vsync_count
+Message[305]: Using default destination of 1 (file).
+000F   0782           00068     addwf PCL
+0010   0000           00069     nop
+0011   2???           00070     goto set_presync
+0012   2???           00071     goto isr_exit
+0013   2???           00072     goto isr_exit
+0014   2???           00073     goto isr_exit
+0015   2???           00074     goto isr_exit
+                      00075 ;vsync_count==6    
+0016   01??           00076     clrf vsync_count
+Message[305]: Using default destination of 1 (file).
+0017   0A??           00077     incf state
+0018   2???           00078     goto isr_exit
+0019                  00079 set_presync    
+0019   003B           00080     banksel PWM3DC
+001A   3020           00081     movlw HEQUAL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001B   00B3           00082     movwf PWM3DCL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001C   01B4           00083     clrf PWM3DCH
+001D   3001           00084     movlw high HALF_LINE
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001E   00B6           00085     movwf PWM3PRH
+001F   30C6           00086     movlw low HALF_LINE
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0020   00B5           00087     movwf PWM3PRL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE  3
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0021   17BF           00088     bsf PWM3LDCON,7
+0022   2???           00089     goto isr_exit
+                      00090 ; set PWM3 to generate wide sync pulses
+0023                  00091 vsync 
+Message[305]: Using default destination of 1 (file).
+0023   0A??           00092     incf vsync_count
+0024   08??           00093     movfw vsync_count
+Message[305]: Using default destination of 1 (file).
+0025   0782           00094     addwf PCL
+0026   0000           00095     nop
+0027   2???           00096     goto set_vsync
+0028   2???           00097     goto isr_exit
+0029   2???           00098     goto isr_exit
+002A   2???           00099     goto isr_exit
+002B   2???           00100     goto isr_exit
+                      00101  ; vsync_count==6    
+002C   01??           00102     clrf vsync_count
+Message[305]: Using default destination of 1 (file).
+002D   0A??           00103     incf state
+002E   2???           00104     goto isr_exit
+002F                  00105 set_vsync
+002F   003B           00106     banksel PWM3DC
+0030   3083           00107     movlw low VSYNC_PULSE
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0031   00B3           00108     movwf PWM3DCL
+0032   3001           00109     movlw high VSYNC_PULSE
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0033   00B4           00110     movwf PWM3DCH
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0034   17BF           00111     bsf PWM3LDCON,7
+0035   2???           00112     goto isr_exit
+                      00113 ; set PWM3 for post equalization pulses    
+0036                  00114 post_equalization
+Message[305]: Using default destination of 1 (file).
+0036   0A??           00115     incf vsync_count
+0037   08??           00116     movfw vsync_count
+Message[305]: Using default destination of 1 (file).
+0038   0782           00117     addwf PCL
+0039   0000           00118     nop
+003A   2???           00119     goto set_presync
+003B   2???           00120     goto isr_exit
+003C   2???           00121     goto isr_exit
+003D   2???           00122     goto isr_exit
+003E   2???           00123     goto isr_exit
+003F   1880           00124     btfsc flags, F_EVEN
+0040   2???           00125     goto pe_last
+0041   003B           00126     banksel PWM3DC
+0042   3003           00127     movlw high HPERIOD
+0043   3003           00128     movlw high HPERIOD
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0044   00B6           00129     movwf PWM3PRH
+0045   308D           00130     movlw low HPERIOD
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE  4
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0046   00B5           00131     movwf PWM3PRL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0047   17BF           00132     bsf PWM3LDCON,7
+Message[305]: Using default destination of 1 (file).
+0048   0A??           00133     incf state
+0049                  00134 pe_last
+0049   01??           00135     clrf vsync_count
+Message[305]: Using default destination of 1 (file).
+004A   0A??           00136     incf state
+004B   2???           00137     goto isr_exit
+                      00138 ; return to normal line
+004C                  00139 vsync_completed
+004C   003B           00140     banksel PWM3DC
+004D   3042           00141     movlw HSYNC
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+004E   00B3           00142     movwf PWM3DCL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+004F   01B4           00143     clrf PWM3DCH
+0050   3003           00144     movlw high HPERIOD
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0051   00B6           00145     movwf PWM3PRH
+0052   308D           00146     movlw low HPERIOD
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0053   00B5           00147     movwf PWM3PRL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0054   17BF           00148     bsf PWM3LDCON,7
+Message[305]: Using default destination of 1 (file).
+0055   0A??           00149     incf state
+0056   3009           00150     movlw 9
+0057   00??           00151     movwf lcount
+0058   2???           00152     goto isr_exit
+0059                  00153 video_lines
+                      00154 ; chroma sync
+0059   0000           00155     nop
+005A   2???           00156     goto $+1
+005B   2???           00157     goto $+1
+005C   003B           00158     banksel PWM1CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+005D   171B           00159     bsf PWM1CON,OE
+005E   3003           00160     movlw 3
+Message[305]: Using default destination of 1 (file).
+005F   0B89           00161     decfsz WREG
+0060   2???           00162     goto $-1
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0061   131B           00163     bcf PWM1CON,OE
+Message[305]: Using default destination of 1 (file).
+0062   0A??           00164     incf lcount
+0063   1903           00165     skpnz
+0064   1400           00166     bsf flags, F_HI_LINE
+0065   1800           00167     btfsc flags, F_HI_LINE
+0066   2???           00168     goto hi_line
+                      00169     ; back porch delay
+0067   3003           00170     movlw 3
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE  5
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Message[305]: Using default destination of 1 (file).
+0068   0B89           00171     decfsz WREG
+0069   2???           00172     goto $-1
+                      00173 ; video output
+006A   0022           00174     banksel LATA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+006B   160C           00175     bsf LATA, VIDEO_OUT
+006C   003B           00176     banksel PWM1CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+006D   171B           00177     bsf PWM1CON,OE
+006E   3008           00178     movlw 8 
+Message[305]: Using default destination of 1 (file).
+006F   0B89           00179     decfsz WREG
+0070   2???           00180     goto $-1
+0071   0022           00181     banksel LATA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0072   120C           00182     bcf LATA, VIDEO_OUT
+0073   003B           00183     banksel PWM1CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0074   161B           00184     bsf PWM1CON,POL
+0075   3008           00185     movlw 8
+Message[305]: Using default destination of 1 (file).
+0076   0B89           00186     decfsz WREG
+0077   2???           00187     goto $-1
+0078   003B           00188     banksel PWM1CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0079   131B           00189     bcf PWM1CON,OE
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+007A   121B           00190     bcf PWM1CON,POL
+007B   0022           00191     banksel LATA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+007C   160C           00192     bsf LATA,VIDEO_OUT
+007D   3008           00193     movlw 8
+Message[305]: Using default destination of 1 (file).
+007E   0B89           00194     decfsz WREG
+007F   2???           00195     goto $-1
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0080   120C           00196     bcf LATA,VIDEO_OUT
+0081   2???           00197     goto isr_exit
+0082                  00198 hi_line
+0082   1880           00199     btfsc flags,F_EVEN
+0083   2???           00200     goto even_field
+0084   3005           00201     movlw 5
+0085   02??           00202     subwf lcount,W
+0086   1D03           00203     skpz
+0087   2???           00204     goto isr_exit
+0088   2???           00205     goto field_end
+0089                  00206 even_field
+0089   3006           00207     movlw 6
+008A   02??           00208     subwf lcount,W
+008B   1D03           00209     skpz
+008C   2???           00210     goto isr_exit
+                      00211 ; even field last line is half_line    
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE  6
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00212 ; set PWM3 for line 263 half-line
+008D   003B           00213     banksel PWM3DC
+008E   3001           00214     movlw high HALF_LINE
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+008F   00B6           00215     movwf PWM3PRH
+0090   30C6           00216     movlw low HALF_LINE
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0091   00B5           00217     movwf PWM3PRL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0092   17BF           00218     bsf PWM3LDCON,7
+0093                  00219 field_end
+0093   01??           00220     clrf state
+0094   01??           00221     clrf lcount
+0095   1000           00222     bcf flags, F_HI_LINE
+                      00223 ; toggle odd/even field flag    
+0096   3002           00224     movlw 1<<F_EVEN
+Message[305]: Using default destination of 1 (file).
+0097   06??           00225     xorwf flags
+0098                  00226 isr_exit  
+0098   003B           00227     banksel PWM3INTF
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0099   103D           00228     bcf PWM3INTF,PRIF
+009A   0020           00229     banksel PIR3
+009B   1313           00230     bcf PIR3,PWM3IF
+009C   0009           00231     retfie
+                      00232     
+                      00233 MAIN_PROG CODE                      ; let linker place main program
+                      00234 
+0000                  00235 START
+                      00236 ; reset common ram 0x70-0x7f
+0000   3070           00237     movlw 0x70
+0001   0084           00238     movwf FSR0L
+0002   0185           00239     clrf FSR0H
+0003   0180           00240     clrf INDF0
+Message[305]: Using default destination of 1 (file).
+0004   0A84           00241     incf FSR0L
+0005   1F84           00242     btfss FSR0L,7
+0006   2???           00243     goto $-3
+                      00244 ; disable analog inputs
+0007   0023           00245     banksel ANSELA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0008   018C           00246     clrf ANSELA
+                      00247 ; pin setup   
+0009   0021           00248     banksel TRISA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000A   108C           00249     bcf TRISA,CHROMA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000B   110C           00250     bcf TRISA,SYNC_OUT
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000C   120C           00251     bcf TRISA,VIDEO_OUT
+000D   0022           00252     banksel LATA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000E   120C           00253     bcf LATA, VIDEO_OUT
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE  7
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000F   150C           00254     bsf LATA, SYNC_OUT
+                      00255 ; PWM1 chroma signal on RA1
+0010   003B           00256     banksel PWM1CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0011   019F           00257     clrf PWM1LDCON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0012   0191           00258     clrf PWM1PHL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0013   0192           00259     clrf PWM1PHH
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0014   0197           00260     clrf PWM1OFL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0015   0198           00261     clrf PWM1OFH
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0016   0196           00262     clrf PWM1PRH
+0017   3003           00263     movlw 3
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0018   0095           00264     movwf PWM1PRL
+0019   3002           00265     movlw 2
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001A   0093           00266     movwf PWM1DCL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001B   0194           00267     clrf PWM1DCH
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001C   179F           00268     bsf PWM1LDCON,7
+001D   3080           00269     movlw (1<<EN)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001E   009B           00270     movwf PWM1CON
+                      00271 ; PWM3 set to horizontal period 15734 hertz, output on RA2
+001F   003B           00272     banksel PWM3CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0020   01BF           00273     clrf PWM3LDCON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0021   01B1           00274     clrf PWM3PHL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0022   01B2           00275     clrf PWM3PHH
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0023   01B7           00276     clrf PWM3OFL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0024   01B8           00277     clrf PWM3OFH
+0025   308D           00278     movlw low HPERIOD
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0026   00B5           00279     movwf PWM3PRL
+0027   3003           00280     movlw high HPERIOD
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0028   00B6           00281     movwf PWM3PRH
+0029   3042           00282     movlw HSYNC
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002A   00B3           00283     movwf PWM3DCL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002B   01B4           00284     clrf PWM3DCH
+002C   30D0           00285     movlw (1<<EN)|(1<<OE)|(1<<POL)
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE  8
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002D   00BB           00286     movwf PWM3CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002E   17BF           00287     bsf PWM3LDCON,7
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002F   143C           00288     bsf PWM3INTE,PRIE
+0030   0020           00289     banksel PIR3
+0031   1313           00290     bcf PIR3,PWM3IF
+0032   0021           00291     banksel PIE3
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0033   1713           00292     bsf PIE3,PWM3IE
+0034   170B           00293     bsf INTCON,PEIE
+0035   178B           00294     bsf INTCON,GIE
+0036   1480           00295     bsf flags, F_EVEN
+                      00296  ; all processing done in ISR    
+0037   2???           00297     goto $
+                      00298     
+                      00299     
+3FA7 3EFF             00300     END
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE  9
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+ABDEN                             00000000
+ABDOVF                            00000007
+ADCON0                            0000009D
+ADCON1                            0000009E
+ADCON2                            0000009F
+ADCS0                             00000004
+ADCS1                             00000005
+ADCS2                             00000006
+ADDEN                             00000003
+ADFM                              00000007
+ADFVR0                            00000000
+ADFVR1                            00000001
+ADGO                              00000001
+ADIE                              00000006
+ADIF                              00000006
+ADON                              00000000
+ADPREF0                           00000000
+ADPREF1                           00000001
+ADRES                             0000009B
+ADRESH                            0000009C
+ADRESL                            0000009B
+ANSA0                             00000000
+ANSA1                             00000001
+ANSA2                             00000002
+ANSA4                             00000004
+ANSELA                            0000018C
+APFCON                            0000011D
+APFCON0                           0000011D
+AUDIO                             00000000
+BAUDCON                           0000019F
+BORCON                            00000116
+BORFS                             00000006
+BORRDY                            00000000
+BRG16                             00000003
+BRGH                              00000002
+BSR                               00000008
+BSR0                              00000000
+BSR1                              00000001
+BSR2                              00000002
+BSR3                              00000003
+BSR4                              00000004
+BSR_SHAD                          00000FE6
+C                                 00000000
+C1HYS                             00000001
+C1IE                              00000005
+C1IF                              00000005
+C1INTN                            00000006
+C1INTP                            00000007
+C1NCH0                            00000000
+C1NCH1                            00000001
+C1NCH2                            00000002
+C1OE                              00000005
+C1ON                              00000007
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 10
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+C1OUT                             00000006
+C1PCH0                            00000004
+C1PCH1                            00000005
+C1POL                             00000004
+C1SP                              00000002
+C1SYNC                            00000000
+CDAFVR0                           00000002
+CDAFVR1                           00000003
+CFGS                              00000006
+CHROMA                            00000001
+CHS0                              00000002
+CHS1                              00000003
+CHS2                              00000004
+CHS3                              00000005
+CHS4                              00000006
+CLKIN                             00000005
+CM1CON0                           00000111
+CM1CON1                           00000112
+CMOUT                             00000115
+CREN                              00000004
+CS0                               00000000
+CS1                               00000001
+CSRC                              00000007
+CWG1CON0                          00000693
+CWG1CON1                          00000694
+CWG1CON2                          00000695
+CWG1DBF                           00000692
+CWG1DBF0                          00000000
+CWG1DBF1                          00000001
+CWG1DBF2                          00000002
+CWG1DBF3                          00000003
+CWG1DBF4                          00000004
+CWG1DBF5                          00000005
+CWG1DBR                           00000691
+CWG1DBR0                          00000000
+CWG1DBR1                          00000001
+CWG1DBR2                          00000002
+CWG1DBR3                          00000003
+CWG1DBR4                          00000004
+CWG1DBR5                          00000005
+CWGASEL                           00000006
+CWGBSEL                           00000005
+C_SHAD                            00000000
+DACCON0                           00000118
+DACCON1                           00000119
+DACEN                             00000007
+DACLPS                            00000006
+DACOE                             00000005
+DACPSS0                           00000002
+DACPSS1                           00000003
+DACR0                             00000000
+DACR1                             00000001
+DACR2                             00000002
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 11
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+DACR3                             00000003
+DACR4                             00000004
+DC                                00000001
+DCIE                              00000001
+DCIF                              00000001
+DC_SHAD                           00000001
+EN                                00000007
+F                                 00000001
+FERR                              00000002
+FREE                              00000004
+FSR0                              00000004
+FSR0H                             00000005
+FSR0H_SHAD                        00000FE9
+FSR0L                             00000004
+FSR0L_SHAD                        00000FE8
+FSR0_SHAD                         00000FE8
+FSR1                              00000006
+FSR1H                             00000007
+FSR1H_SHAD                        00000FEB
+FSR1L                             00000006
+FSR1L_SHAD                        00000FEA
+FSR1_SHAD                         00000FEA
+FVRCON                            00000117
+FVREN                             00000007
+FVRRDY                            00000006
+F_EVEN                            00000001
+F_HI_LINE                         00000000
+Fcy                               00369E6C
+Fhorz                             00003D76
+Fosc                              00DA79B0
+G1ARSEN                           00000006
+G1ASDLA0                          00000004
+G1ASDLA1                          00000005
+G1ASDLB0                          00000006
+G1ASDLB1                          00000007
+G1ASDSC1                          00000002
+G1ASDSFLT                         00000001
+G1ASE                             00000007
+G1CS0                             00000000
+G1EN                              00000007
+G1IS0                             00000000
+G1IS1                             00000001
+G1IS2                             00000002
+G1OEA                             00000005
+G1OEB                             00000006
+G1POLA                            00000003
+G1POLB                            00000004
+GIE                               00000007
+GO                                00000001
+GO_NOT_DONE                       00000001
+HALF_LINE                         000001C6
+HEQUAL                            00000020
+HFIOFL                            00000003
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 12
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+HFIOFR                            00000004
+HFIOFS                            00000000
+HPERIOD                           0000038D
+HSYNC                             00000042
+INDF0                             00000000
+INDF1                             00000001
+INLVLA                            0000038C
+INLVLA0                           00000000
+INLVLA1                           00000001
+INLVLA2                           00000002
+INLVLA3                           00000003
+INLVLA4                           00000004
+INLVLA5                           00000005
+INTCON                            0000000B
+INTE                              00000004
+INTEDG                            00000006
+INTF                              00000001
+IOCAF                             00000393
+IOCAF0                            00000000
+IOCAF1                            00000001
+IOCAF2                            00000002
+IOCAF3                            00000003
+IOCAF4                            00000004
+IOCAF5                            00000005
+IOCAN                             00000392
+IOCAN0                            00000000
+IOCAN1                            00000001
+IOCAN2                            00000002
+IOCAN3                            00000003
+IOCAN4                            00000004
+IOCAN5                            00000005
+IOCAP                             00000391
+IOCAP0                            00000000
+IOCAP1                            00000001
+IOCAP2                            00000002
+IOCAP3                            00000003
+IOCAP4                            00000004
+IOCAP5                            00000005
+IOCIE                             00000003
+IOCIF                             00000000
+IRCF0                             00000003
+IRCF1                             00000004
+IRCF2                             00000005
+IRCF3                             00000006
+LATA                              0000010C
+LATA0                             00000000
+LATA1                             00000001
+LATA2                             00000002
+LATA4                             00000004
+LATA5                             00000005
+LDA                               00000007
+LDS0                              00000000
+LDS1                              00000001
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 13
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+LDT                               00000006
+LFIOFR                            00000001
+LWLO                              00000005
+MC1OUT                            00000000
+MFIOFR                            00000002
+MODE0                             00000002
+MODE1                             00000003
+MPWM1EN                           00000000
+MPWM1LD                           00000000
+MPWM1OUT                          00000000
+MPWM2EN                           00000001
+MPWM2LD                           00000001
+MPWM2OUT                          00000001
+MPWM3EN                           00000002
+MPWM3LD                           00000002
+MPWM3OUT                          00000002
+NOT_BOR                           00000000
+NOT_DONE                          00000001
+NOT_PD                            00000003
+NOT_POR                           00000001
+NOT_RI                            00000002
+NOT_RMCLR                         00000003
+NOT_RWDT                          00000004
+NOT_T1SYNC                        00000002
+NOT_TO                            00000004
+NOT_WPUEN                         00000007
+ODA0                              00000000
+ODA1                              00000001
+ODA2                              00000002
+ODA4                              00000004
+ODA5                              00000005
+ODCONA                            0000028C
+OE                                00000006
+OERR                              00000001
+OFIE                              00000003
+OFIF                              00000003
+OFM0                              00000005
+OFM1                              00000006
+OFO                               00000004
+OFS0                              00000000
+OFS1                              00000001
+OPTION_REG                        00000095
+OSCCON                            00000099
+OSCSTAT                           0000009A
+OSCTUNE                           00000098
+OSTS                              00000005
+OUT                               00000005
+P1SEL                             00000000
+P2SEL                             00000001
+PCL                               00000002
+PCLATH                            0000000A
+PCLATH_SHAD                       00000FE7
+PCON                              00000096
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 14
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PEIE                              00000006
+PHIE                              00000002
+PHIF                              00000002
+PIE1                              00000091
+PIE2                              00000092
+PIE3                              00000093
+PIR1                              00000011
+PIR2                              00000012
+PIR3                              00000013
+PLLR                              00000006
+PMADR                             00000191
+PMADRH                            00000192
+PMADRL                            00000191
+PMCON1                            00000195
+PMCON2                            00000196
+PMDAT                             00000193
+PMDATH                            00000194
+PMDATL                            00000193
+POL                               00000004
+PORTA                             0000000C
+PR2                               0000001B
+PRIE                              00000000
+PRIF                              00000000
+PS0_OPTION_REG                    00000000
+PS0_PWM1CLKCON                    00000004
+PS0_PWM2CLKCON                    00000004
+PS0_PWM3CLKCON                    00000004
+PS1_OPTION_REG                    00000001
+PS1_PWM1CLKCON                    00000005
+PS1_PWM2CLKCON                    00000005
+PS1_PWM3CLKCON                    00000005
+PS2_OPTION_REG                    00000002
+PS2_PWM1CLKCON                    00000006
+PS2_PWM2CLKCON                    00000006
+PS2_PWM3CLKCON                    00000006
+PSA                               00000003
+PWM1CLKCON                        00000D9E
+PWM1CON                           00000D9B
+PWM1CS0                           00000000
+PWM1CS1                           00000001
+PWM1DC                            00000D93
+PWM1DCH                           00000D94
+PWM1DCH0                          00000000
+PWM1DCH1                          00000001
+PWM1DCH2                          00000002
+PWM1DCH3                          00000003
+PWM1DCH4                          00000004
+PWM1DCH5                          00000005
+PWM1DCH6                          00000006
+PWM1DCH7                          00000007
+PWM1DCIE                          00000001
+PWM1DCIF                          00000001
+PWM1DCL                           00000D93
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 15
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PWM1DCL0                          00000000
+PWM1DCL1                          00000001
+PWM1DCL2                          00000002
+PWM1DCL3                          00000003
+PWM1DCL4                          00000004
+PWM1DCL5                          00000005
+PWM1DCL6                          00000006
+PWM1DCL7                          00000007
+PWM1EN                            00000007
+PWM1EN_A                          00000000
+PWM1IE                            00000004
+PWM1IF                            00000004
+PWM1INTCON                        00000D9C
+PWM1INTE                          00000D9C
+PWM1INTF                          00000D9D
+PWM1INTFLG                        00000D9D
+PWM1LD                            00000007
+PWM1LDA_A                         00000000
+PWM1LDCON                         00000D9F
+PWM1LDM                           00000006
+PWM1LDS0                          00000000
+PWM1LDS1                          00000001
+PWM1MODE0                         00000002
+PWM1MODE1                         00000003
+PWM1OE                            00000006
+PWM1OF                            00000D97
+PWM1OFCON                         00000DA0
+PWM1OFH                           00000D98
+PWM1OFH0                          00000000
+PWM1OFH1                          00000001
+PWM1OFH2                          00000002
+PWM1OFH3                          00000003
+PWM1OFH4                          00000004
+PWM1OFH5                          00000005
+PWM1OFH6                          00000006
+PWM1OFH7                          00000007
+PWM1OFIE                          00000003
+PWM1OFIF                          00000003
+PWM1OFL                           00000D97
+PWM1OFL0                          00000000
+PWM1OFL1                          00000001
+PWM1OFL2                          00000002
+PWM1OFL3                          00000003
+PWM1OFL4                          00000004
+PWM1OFL5                          00000005
+PWM1OFL6                          00000006
+PWM1OFL7                          00000007
+PWM1OFM0                          00000005
+PWM1OFM1                          00000006
+PWM1OFMC                          00000004
+PWM1OFS0                          00000000
+PWM1OFS1                          00000001
+PWM1OUT                           00000005
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 16
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PWM1OUT_A                         00000000
+PWM1PH                            00000D91
+PWM1PHH                           00000D92
+PWM1PHH0                          00000000
+PWM1PHH1                          00000001
+PWM1PHH2                          00000002
+PWM1PHH3                          00000003
+PWM1PHH4                          00000004
+PWM1PHH5                          00000005
+PWM1PHH6                          00000006
+PWM1PHH7                          00000007
+PWM1PHIE                          00000002
+PWM1PHIF                          00000002
+PWM1PHL                           00000D91
+PWM1PHL0                          00000000
+PWM1PHL1                          00000001
+PWM1PHL2                          00000002
+PWM1PHL3                          00000003
+PWM1PHL4                          00000004
+PWM1PHL5                          00000005
+PWM1PHL6                          00000006
+PWM1PHL7                          00000007
+PWM1POL                           00000004
+PWM1PR                            00000D95
+PWM1PRH                           00000D96
+PWM1PRH0                          00000000
+PWM1PRH1                          00000001
+PWM1PRH2                          00000002
+PWM1PRH3                          00000003
+PWM1PRH4                          00000004
+PWM1PRH5                          00000005
+PWM1PRH6                          00000006
+PWM1PRH7                          00000007
+PWM1PRIE                          00000000
+PWM1PRIF                          00000000
+PWM1PRL                           00000D95
+PWM1PRL0                          00000000
+PWM1PRL1                          00000001
+PWM1PRL2                          00000002
+PWM1PRL3                          00000003
+PWM1PRL4                          00000004
+PWM1PRL5                          00000005
+PWM1PRL6                          00000006
+PWM1PRL7                          00000007
+PWM1PS0                           00000004
+PWM1PS1                           00000005
+PWM1PS2                           00000006
+PWM1TMR                           00000D99
+PWM1TMRH                          00000D9A
+PWM1TMRH0                         00000000
+PWM1TMRH1                         00000001
+PWM1TMRH2                         00000002
+PWM1TMRH3                         00000003
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 17
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PWM1TMRH4                         00000004
+PWM1TMRH5                         00000005
+PWM1TMRH6                         00000006
+PWM1TMRH7                         00000007
+PWM1TMRL                          00000D99
+PWM1TMRL0                         00000000
+PWM1TMRL1                         00000001
+PWM1TMRL2                         00000002
+PWM1TMRL3                         00000003
+PWM1TMRL4                         00000004
+PWM1TMRL5                         00000005
+PWM1TMRL6                         00000006
+PWM1TMRL7                         00000007
+PWM2CLKCON                        00000DAE
+PWM2CON                           00000DAB
+PWM2CS0                           00000000
+PWM2CS1                           00000001
+PWM2DC                            00000DA3
+PWM2DCH                           00000DA4
+PWM2DCH0                          00000000
+PWM2DCH1                          00000001
+PWM2DCH2                          00000002
+PWM2DCH3                          00000003
+PWM2DCH4                          00000004
+PWM2DCH5                          00000005
+PWM2DCH6                          00000006
+PWM2DCH7                          00000007
+PWM2DCIE                          00000001
+PWM2DCIF                          00000001
+PWM2DCL                           00000DA3
+PWM2DCL0                          00000000
+PWM2DCL1                          00000001
+PWM2DCL2                          00000002
+PWM2DCL3                          00000003
+PWM2DCL4                          00000004
+PWM2DCL5                          00000005
+PWM2DCL6                          00000006
+PWM2DCL7                          00000007
+PWM2EN                            00000007
+PWM2EN_A                          00000001
+PWM2IE                            00000005
+PWM2IF                            00000005
+PWM2INTCON                        00000DAC
+PWM2INTE                          00000DAC
+PWM2INTF                          00000DAD
+PWM2INTFLG                        00000DAD
+PWM2LD                            00000007
+PWM2LDA_A                         00000001
+PWM2LDCON                         00000DAF
+PWM2LDM                           00000006
+PWM2LDS0                          00000000
+PWM2LDS1                          00000001
+PWM2MODE0                         00000002
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 18
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PWM2MODE1                         00000003
+PWM2OE                            00000006
+PWM2OF                            00000DA7
+PWM2OFCON                         00000DB0
+PWM2OFH                           00000DA8
+PWM2OFH0                          00000000
+PWM2OFH1                          00000001
+PWM2OFH2                          00000002
+PWM2OFH3                          00000003
+PWM2OFH4                          00000004
+PWM2OFH5                          00000005
+PWM2OFH6                          00000006
+PWM2OFH7                          00000007
+PWM2OFIE                          00000003
+PWM2OFIF                          00000003
+PWM2OFL                           00000DA7
+PWM2OFL0                          00000000
+PWM2OFL1                          00000001
+PWM2OFL2                          00000002
+PWM2OFL3                          00000003
+PWM2OFL4                          00000004
+PWM2OFL5                          00000005
+PWM2OFL6                          00000006
+PWM2OFL7                          00000007
+PWM2OFM0                          00000005
+PWM2OFM1                          00000006
+PWM2OFMC                          00000004
+PWM2OFS0                          00000000
+PWM2OFS1                          00000001
+PWM2OUT                           00000005
+PWM2OUT_A                         00000001
+PWM2PH                            00000DA1
+PWM2PHH                           00000DA2
+PWM2PHH0                          00000000
+PWM2PHH1                          00000001
+PWM2PHH2                          00000002
+PWM2PHH3                          00000003
+PWM2PHH4                          00000004
+PWM2PHH5                          00000005
+PWM2PHH6                          00000006
+PWM2PHH7                          00000007
+PWM2PHIE                          00000002
+PWM2PHIF                          00000002
+PWM2PHL                           00000DA1
+PWM2PHL0                          00000000
+PWM2PHL1                          00000001
+PWM2PHL2                          00000002
+PWM2PHL3                          00000003
+PWM2PHL4                          00000004
+PWM2PHL5                          00000005
+PWM2PHL6                          00000006
+PWM2PHL7                          00000007
+PWM2POL                           00000004
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 19
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PWM2PR                            00000DA5
+PWM2PRH                           00000DA6
+PWM2PRH0                          00000000
+PWM2PRH1                          00000001
+PWM2PRH2                          00000002
+PWM2PRH3                          00000003
+PWM2PRH4                          00000004
+PWM2PRH5                          00000005
+PWM2PRH6                          00000006
+PWM2PRH7                          00000007
+PWM2PRIE                          00000000
+PWM2PRIF                          00000000
+PWM2PRL                           00000DA5
+PWM2PRL0                          00000000
+PWM2PRL1                          00000001
+PWM2PRL2                          00000002
+PWM2PRL3                          00000003
+PWM2PRL4                          00000004
+PWM2PRL5                          00000005
+PWM2PRL6                          00000006
+PWM2PRL7                          00000007
+PWM2PS0                           00000004
+PWM2PS1                           00000005
+PWM2PS2                           00000006
+PWM2TMR                           00000DA9
+PWM2TMRH                          00000DAA
+PWM2TMRH0                         00000000
+PWM2TMRH1                         00000001
+PWM2TMRH2                         00000002
+PWM2TMRH3                         00000003
+PWM2TMRH4                         00000004
+PWM2TMRH5                         00000005
+PWM2TMRH6                         00000006
+PWM2TMRH7                         00000007
+PWM2TMRL                          00000DA9
+PWM2TMRL0                         00000000
+PWM2TMRL1                         00000001
+PWM2TMRL2                         00000002
+PWM2TMRL3                         00000003
+PWM2TMRL4                         00000004
+PWM2TMRL5                         00000005
+PWM2TMRL6                         00000006
+PWM2TMRL7                         00000007
+PWM3CLKCON                        00000DBE
+PWM3CON                           00000DBB
+PWM3CS0                           00000000
+PWM3CS1                           00000001
+PWM3DC                            00000DB3
+PWM3DCH                           00000DB4
+PWM3DCH0                          00000000
+PWM3DCH1                          00000001
+PWM3DCH2                          00000002
+PWM3DCH3                          00000003
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 20
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PWM3DCH4                          00000004
+PWM3DCH5                          00000005
+PWM3DCH6                          00000006
+PWM3DCH7                          00000007
+PWM3DCIE                          00000001
+PWM3DCIF                          00000001
+PWM3DCL                           00000DB3
+PWM3DCL0                          00000000
+PWM3DCL1                          00000001
+PWM3DCL2                          00000002
+PWM3DCL3                          00000003
+PWM3DCL4                          00000004
+PWM3DCL5                          00000005
+PWM3DCL6                          00000006
+PWM3DCL7                          00000007
+PWM3EN                            00000007
+PWM3EN_A                          00000002
+PWM3IE                            00000006
+PWM3IF                            00000006
+PWM3INTCON                        00000DBC
+PWM3INTE                          00000DBC
+PWM3INTF                          00000DBD
+PWM3INTFLG                        00000DBD
+PWM3LD                            00000007
+PWM3LDA_A                         00000002
+PWM3LDCON                         00000DBF
+PWM3LDM                           00000006
+PWM3LDS0                          00000000
+PWM3LDS1                          00000001
+PWM3MODE0                         00000002
+PWM3MODE1                         00000003
+PWM3OE                            00000006
+PWM3OF                            00000DB7
+PWM3OFCON                         00000DC0
+PWM3OFH                           00000DB8
+PWM3OFH0                          00000000
+PWM3OFH1                          00000001
+PWM3OFH2                          00000002
+PWM3OFH3                          00000003
+PWM3OFH4                          00000004
+PWM3OFH5                          00000005
+PWM3OFH6                          00000006
+PWM3OFH7                          00000007
+PWM3OFIE                          00000003
+PWM3OFIF                          00000003
+PWM3OFL                           00000DB7
+PWM3OFL0                          00000000
+PWM3OFL1                          00000001
+PWM3OFL2                          00000002
+PWM3OFL3                          00000003
+PWM3OFL4                          00000004
+PWM3OFL5                          00000005
+PWM3OFL6                          00000006
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 21
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PWM3OFL7                          00000007
+PWM3OFM0                          00000005
+PWM3OFM1                          00000006
+PWM3OFMC                          00000004
+PWM3OFS0                          00000000
+PWM3OFS1                          00000001
+PWM3OUT                           00000005
+PWM3OUT_A                         00000002
+PWM3PH                            00000DB1
+PWM3PHH                           00000DB2
+PWM3PHH0                          00000000
+PWM3PHH1                          00000001
+PWM3PHH2                          00000002
+PWM3PHH3                          00000003
+PWM3PHH4                          00000004
+PWM3PHH5                          00000005
+PWM3PHH6                          00000006
+PWM3PHH7                          00000007
+PWM3PHIE                          00000002
+PWM3PHIF                          00000002
+PWM3PHL                           00000DB1
+PWM3PHL0                          00000000
+PWM3PHL1                          00000001
+PWM3PHL2                          00000002
+PWM3PHL3                          00000003
+PWM3PHL4                          00000004
+PWM3PHL5                          00000005
+PWM3PHL6                          00000006
+PWM3PHL7                          00000007
+PWM3POL                           00000004
+PWM3PR                            00000DB5
+PWM3PRH                           00000DB6
+PWM3PRH0                          00000000
+PWM3PRH1                          00000001
+PWM3PRH2                          00000002
+PWM3PRH3                          00000003
+PWM3PRH4                          00000004
+PWM3PRH5                          00000005
+PWM3PRH6                          00000006
+PWM3PRH7                          00000007
+PWM3PRIE                          00000000
+PWM3PRIF                          00000000
+PWM3PRL                           00000DB5
+PWM3PRL0                          00000000
+PWM3PRL1                          00000001
+PWM3PRL2                          00000002
+PWM3PRL3                          00000003
+PWM3PRL4                          00000004
+PWM3PRL5                          00000005
+PWM3PRL6                          00000006
+PWM3PRL7                          00000007
+PWM3PS0                           00000004
+PWM3PS1                           00000005
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 22
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PWM3PS2                           00000006
+PWM3TMR                           00000DB9
+PWM3TMRH                          00000DBA
+PWM3TMRH0                         00000000
+PWM3TMRH1                         00000001
+PWM3TMRH2                         00000002
+PWM3TMRH3                         00000003
+PWM3TMRH4                         00000004
+PWM3TMRH5                         00000005
+PWM3TMRH6                         00000006
+PWM3TMRH7                         00000007
+PWM3TMRL                          00000DB9
+PWM3TMRL0                         00000000
+PWM3TMRL1                         00000001
+PWM3TMRL2                         00000002
+PWM3TMRL3                         00000003
+PWM3TMRL4                         00000004
+PWM3TMRL5                         00000005
+PWM3TMRL6                         00000006
+PWM3TMRL7                         00000007
+PWMEN                             00000D8E
+PWMLD                             00000D8F
+PWMOUT                            00000D90
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RA5                               00000005
+RCIDL                             00000006
+RCIE                              00000005
+RCIF                              00000005
+RCREG                             00000199
+RCSTA                             0000019D
+RD                                00000000
+RX9                               00000006
+RX9D                              00000000
+RXDTSEL                           00000007
+SBOREN                            00000007
+SCKP                              00000004
+SCS0                              00000000
+SCS1                              00000001
+SENDB                             00000003
+SLRA0                             00000000
+SLRA1                             00000001
+SLRA2                             00000002
+SLRA4                             00000004
+SLRA5                             00000005
+SLRCONA                           0000030C
+SPBRG                             0000019B
+SPBRGH                            0000019C
+SPBRGL                            0000019B
+SPEN                              00000007
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 23
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+SPLLEN                            00000007
+SREN                              00000005
+START                             00000000
+STATUS                            00000003
+STATUS_SHAD                       00000FE4
+STKOVF                            00000007
+STKPTR                            00000FED
+STKUNF                            00000006
+SWDTEN                            00000000
+SYNC                              00000004
+SYNC_OUT                          00000002
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0SE                              00000004
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000018
+T1GCON                            00000019
+T1GGO                             00000003
+T1GGO_NOT_DONE                    00000003
+T1GPOL                            00000006
+T1GSEL                            00000003
+T1GSPM                            00000004
+T1GSS0                            00000000
+T1GSS1                            00000001
+T1GTM                             00000005
+T1GVAL                            00000002
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             0000001C
+T2OUTPS0                          00000003
+T2OUTPS1                          00000004
+T2OUTPS2                          00000005
+T2OUTPS3                          00000006
+TMR0                              00000015
+TMR0CS                            00000005
+TMR0IE                            00000005
+TMR0IF                            00000002
+TMR0SE                            00000004
+TMR1                              00000016
+TMR1CS0                           00000006
+TMR1CS1                           00000007
+TMR1GE                            00000007
+TMR1GIE                           00000007
+TMR1GIF                           00000007
+TMR1H                             00000017
+TMR1IE                            00000000
+TMR1IF                            00000000
+TMR1L                             00000016
+TMR1ON                            00000000
+TMR2                              0000001A
+TMR2IE                            00000001
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 24
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TMR2IF                            00000001
+TMR2ON                            00000002
+TOS                               00000FEE
+TOSH                              00000FEF
+TOSL                              00000FEE
+TRIGSEL0                          00000004
+TRIGSEL1                          00000005
+TRIGSEL2                          00000006
+TRIGSEL3                          00000007
+TRISA                             0000008C
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISA5                            00000005
+TRMT                              00000001
+TSEN                              00000005
+TSRNG                             00000004
+TUN0                              00000000
+TUN1                              00000001
+TUN2                              00000002
+TUN3                              00000003
+TUN4                              00000004
+TUN5                              00000005
+TX9                               00000006
+TX9D                              00000000
+TXCKSEL                           00000002
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXREG                             0000019A
+TXSTA                             0000019E
+VIDEO_OUT                         00000004
+VREGCON                           00000197
+VREGPM                            00000001
+VSYNC_PULSE                       00000183
+W                                 00000000
+WDTCON                            00000097
+WDTPS0                            00000001
+WDTPS1                            00000002
+WDTPS2                            00000003
+WDTPS3                            00000004
+WDTPS4                            00000005
+WPUA                              0000020C
+WPUA0                             00000000
+WPUA1                             00000001
+WPUA2                             00000002
+WPUA3                             00000003
+WPUA4                             00000004
+WPUA5                             00000005
+WR                                00000001
+WREG                              00000009
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 25
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+WREG_SHAD                         00000FE5
+WREN                              00000002
+WRERR                             00000003
+WUE                               00000001
+Z                                 00000002
+Z_SHAD                            00000002
+_BOREN_NSLEEP                     00003DFF
+_BOREN_OFF                        000039FF
+_BOREN_ON                         00003FFF
+_BOREN_SBODEN                     00003BFF
+_BORV_19                          00003FFF
+_BORV_HI                          00003BFF
+_BORV_LO                          00003FFF
+_CLKOUTEN_OFF                     00003FFF
+_CLKOUTEN_ON                      000037FF
+_CONFIG1                          00008007
+_CONFIG2                          00008008
+_CP_OFF                           00003FFF
+_CP_ON                            00003F7F
+_DEVID1                           00008006
+_FOSC_ECH                         00003FFF
+_FOSC_ECL                         00003FFD
+_FOSC_ECM                         00003FFE
+_FOSC_INTOSC                      00003FFC
+_IDLOC0                           00008000
+_IDLOC1                           00008001
+_IDLOC2                           00008002
+_IDLOC3                           00008003
+_ISR_005A                         0000005A
+_ISR_005B                         0000005B
+_ISR_0060                         00000060
+_ISR_0069                         00000069
+_ISR_0070                         00000070
+_ISR_0077                         00000077
+_ISR_007F                         0000007F
+_LPBOREN_OFF                      00003FFF
+_LPBOREN_ON                       000037FF
+_LVP_OFF                          00001FFF
+_LVP_ON                           00003FFF
+_MAIN_PROG_0006                   00000006
+_MAIN_PROG_0037                   00000037
+_MCLRE_OFF                        00003FBF
+_MCLRE_ON                         00003FFF
+_PLLEN_OFF                        00003EFF
+_PLLEN_ON                         00003FFF
+_PWRTE_OFF                        00003FFF
+_PWRTE_ON                         00003FDF
+_STVREN_OFF                       00003DFF
+_STVREN_ON                        00003FFF
+_WDTE_NSLEEP                      00003FF7
+_WDTE_OFF                         00003FE7
+_WDTE_ON                          00003FFF
+_WDTE_SWDTEN                      00003FEF
+MPASM 5.83  /HOME/JACQUES/MPLABXPROJECTS/BRE   2-26-2019  20:19:22         PAGE 26
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_WRT_ALL                          00003FFC
+_WRT_BOOT                         00003FFE
+_WRT_HALF                         00003FFD
+_WRT_OFF                          00003FFF
+__12F1572                         00000001
+__DEBUG                           
+__MPLAB_DEBUGGER_PK3              1
+case                              
+even_field                        00000089
+field_end                         00000093
+flags                             00000000
+hi_line                           00000082
+isr                               00000004
+isr_exit                          00000098
+lcount                            00000001
+pe_last                           00000049
+post_equalization                 00000036
+pre_equalization                  0000000D
+set_presync                       00000019
+set_vsync                         0000002F
+state                             00000003
+video_lines                       00000059
+vsync                             00000023
+vsync_completed                   0000004C
+vsync_count                       00000002
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :    80 reported,     0 suppressed
+
+

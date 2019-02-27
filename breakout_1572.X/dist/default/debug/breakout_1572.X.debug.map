@@ -1,0 +1,90 @@
+MPLINK 5.09, LINKER
+Linker Map File - Created Wed Feb 27 01:19:23 2019
+
+                                 Section Info
+                  Section       Type    Address   Location Size(Bytes)
+                ---------  ---------  ---------  ---------  ---------
+                 RES_VECT       code   0x000000    program   0x000008
+                      ISR       code   0x000004    program   0x000132
+                   .cinit    romdata   0x00009d    program   0x000004
+                MAIN_PROG       code   0x00009f    program   0x000070
+.config_8007_BUILD/DEFAULT/DEBUG/BREAKOUT1572       code   0x008007    program   0x000002
+.config_8008_BUILD/DEFAULT/DEBUG/BREAKOUT1572       code   0x008008    program   0x000002
+               .udata_shr      udata   0x000070       data   0x000004
+
+
+
+                              Program Memory Usage 
+                               Start         End      
+                           ---------   ---------      
+                            0x000000    0x0000d6      
+                            0x008007    0x008008      
+            217 out of 2055 program addresses used, program memory utilization is 10%
+
+
+
+                              Symbols - Sorted by Name
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                    START   0x00009f    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                _ISR_005A   0x00005a    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                _ISR_005B   0x00005b    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                _ISR_0060   0x000060    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                _ISR_0069   0x000069    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                _ISR_0070   0x000070    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                _ISR_0077   0x000077    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                _ISR_007F   0x00007f    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+          _MAIN_PROG_0006   0x0000a5    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+          _MAIN_PROG_0037   0x0000d6    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+               even_field   0x000089    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                field_end   0x000093    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                  hi_line   0x000082    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                      isr   0x000004    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                 isr_exit   0x000098    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                  pe_last   0x000049    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+        post_equalization   0x000036    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+         pre_equalization   0x00000d    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+              set_presync   0x000019    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                set_vsync   0x00002f    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+              video_lines   0x000059    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                    vsync   0x000023    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+          vsync_completed   0x00004c    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                    flags   0x000070       data     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                   lcount   0x000071       data     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                    state   0x000073       data     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+              vsync_count   0x000072       data     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+
+
+
+                              Symbols - Sorted by Address
+                     Name    Address   Location    Storage File                     
+                ---------  ---------  ---------  --------- ---------                
+                      isr   0x000004    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+         pre_equalization   0x00000d    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+              set_presync   0x000019    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                    vsync   0x000023    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                set_vsync   0x00002f    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+        post_equalization   0x000036    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                  pe_last   0x000049    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+          vsync_completed   0x00004c    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+              video_lines   0x000059    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                _ISR_005A   0x00005a    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                _ISR_005B   0x00005b    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                _ISR_0060   0x000060    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                _ISR_0069   0x000069    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                _ISR_0070   0x000070    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                _ISR_0077   0x000077    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                _ISR_007F   0x00007f    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                  hi_line   0x000082    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+               even_field   0x000089    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                field_end   0x000093    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                 isr_exit   0x000098    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                    START   0x00009f    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+          _MAIN_PROG_0006   0x0000a5    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+          _MAIN_PROG_0037   0x0000d6    program     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                    flags   0x000070       data     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                   lcount   0x000071       data     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+              vsync_count   0x000072       data     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+                    state   0x000073       data     static /home/jacques/MPLABXProjects/breakout_1572.X/breakout1572.asm
+
+
