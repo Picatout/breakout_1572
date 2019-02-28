@@ -2,7 +2,7 @@
 
     include p12f1572.inc
     
-    __config _CONFIG1, _FOSC_ECH & _WDTE_OFF  & _MCLRE_OFF
+    __config _CONFIG1, _FOSC_ECH & _WDTE_OFF & _MCLRE_OFF
     __config _CONFIG2, _PLLEN_OFF
     
     radix dec
@@ -159,6 +159,7 @@ slice res 1 ; task slice counter, a task may use more than one slice.
 task res 1 ; where in video phase 
 temp res 1 ; temporary storage
 sound_timer res 1 ; duration in multiple of 16.7msec. 
+paddle_pos res 1 
  
 ;; code 
 RES_VECT  CODE    0x0000            ; processor reset vector
@@ -281,7 +282,7 @@ vsync_end
     movlw 9
     movwf lcount
     leave
-    
+
 ;task 4, read button and paddle position
 user_input
     incf task
@@ -302,6 +303,9 @@ read_paddle
     btfsc ADCON0,NOT_DONE
     goto $-1
     bcf ADCON0,ADON
+    lsrf ADRESH,W
+    movwf paddle_pos
+    lsrf paddle_pos
     banksel TRISA
     bcf TRISA, AUDIO
     leave
@@ -374,7 +378,7 @@ draw_row1
     tdelay 10
     set_color WHITE
     tdelay 2
-    set_color BLACK
+    set_color YELLOW
     tdelay 150
     set_color WHITE
     tdelay 2
@@ -386,7 +390,7 @@ draw_row2
     tdelay 10
     set_color WHITE
     tdelay 2
-    set_color BLACK
+    set_color BLUE
     tdelay 150
     set_color WHITE
     tdelay 2
@@ -398,7 +402,7 @@ draw_row3
     tdelay 10
     set_color WHITE
     tdelay 2
-    set_color BLACK
+    set_color GREEN
     tdelay 150
     set_color WHITE
     tdelay 2
@@ -410,7 +414,7 @@ draw_row4
     tdelay 10
     set_color WHITE
     tdelay 2
-    set_color BLACK
+    set_color MAGENTA
     tdelay 150
     set_color WHITE
     tdelay 2
@@ -422,7 +426,7 @@ draw_row5
     tdelay 10
     set_color WHITE
     tdelay 2
-    set_color BLACK
+    set_color WHITE
     tdelay 150
     set_color WHITE
     tdelay 2
@@ -440,20 +444,19 @@ draw_empty
     tdelay 2
     set_color BLACK
     next_task 118
+
     
 ; task 17, draw paddle at bottom screen    
 draw_paddle
-    tdelay 10
-    set_color WHITE
-    tdelay 2
-    set_color BLACK
-    tdelay 60
+    tdelay 9
+    movfw paddle_pos
+    skpnz
+    goto pos_left
+    decfsz WREG
+    goto $-1
+pos_left    
     set_color YELLOW
     tdelay 12
-    set_color BLACK
-    tdelay 68
-    set_color WHITE
-    tdelay 2
     set_color BLACK
     next_task 8
 

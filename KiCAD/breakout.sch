@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:breakout-cache
 EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
@@ -55,7 +56,7 @@ L device:POT RV1
 U 1 1 5C76F0E5
 P 6700 4400
 F 0 "RV1" H 6631 4354 50  0000 R CNN
-F 1 "1K (paddle)" H 6631 4445 50  0000 R CNN
+F 1 "2K (paddle)" H 6631 4445 50  0000 R CNN
 F 2 "" H 6700 4400 50  0001 C CNN
 F 3 "" H 6700 4400 50  0001 C CNN
 	1    6700 4400

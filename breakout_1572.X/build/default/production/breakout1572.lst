@@ -1,4 +1,4 @@
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE  1
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -18,7 +18,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00009 
                       01601         LIST
                       00004     
-8007   3FA7           00005     __config _CONFIG1, _FOSC_ECH & _WDTE_OFF  & _MCLRE_OFF
+8007   3FA7           00005     __config _CONFIG1, _FOSC_ECH & _WDTE_OFF & _MCLRE_OFF
 8008   3EFF           00006     __config _CONFIG2, _PLLEN_OFF
                       00007     
                       00008     radix dec
@@ -57,7 +57,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00041  
                       00042 ;colors
   00000000            00043 BLACK EQU 0
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE  2
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -116,7 +116,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00094     if (q)
                       00095     movlw q
                       00096     decfsz WREG
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE  3
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE  3
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -175,7 +175,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00147     banksel PWM1CON
                       00148     bcf PWM1CON,POL
                       00149     bsf PWM1CON,OE
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE  4
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE  4
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -193,22 +193,23 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0003                  00159 task res 1 ; where in video phase 
 0004                  00160 temp res 1 ; temporary storage
 0005                  00161 sound_timer res 1 ; duration in multiple of 16.7msec. 
-                      00162  
-                      00163 ;; code 
-                      00164 RES_VECT  CODE    0x0000            ; processor reset vector
-0000   2???           00165     GOTO    START                   ; go to beginning of program
-0001   0001           00166     reset
-0002   0001           00167     reset
-0003   0001           00168     reset
-                      00169 
-                      00170 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
-                      00171 ; interrupt service routine triggered by PWM3 period rollover
-                      00172 ISR CODE 0x0004
-0004                  00173 isr
-0004   1A80           00174     btfsc flags, F_SYNC
-0005   2???           00175     goto task_switch
-                      00176  ; chroma sync
-                      00177     tdelay 10
+0006                  00162 paddle_pos res 1 
+                      00163  
+                      00164 ;; code 
+                      00165 RES_VECT  CODE    0x0000            ; processor reset vector
+0000   2???           00166     GOTO    START                   ; go to beginning of program
+0001   0001           00167     reset
+0002   0001           00168     reset
+0003   0001           00169     reset
+                      00170 
+                      00171 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
+                      00172 ; interrupt service routine triggered by PWM3 period rollover
+                      00173 ISR CODE 0x0004
+0004                  00174 isr
+0004   1A80           00175     btfsc flags, F_SYNC
+0005   2???           00176     goto task_switch
+                      00177  ; chroma sync
+                      00178     tdelay 10
   0003                    M     variable q=(10)/3
   0001                    M     variable r=(10)%3
                           M     if (q)
@@ -223,23 +224,23 @@ Message[305]: Using default destination of 1 (file).
                           M     if (r==1)
 0009   0000               M     nop
                           M     endif
-000A   003B           00178     banksel PWM1CON
+000A   003B           00179     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-000B   171B           00179     bsf PWM1CON,OE
-                      00180     tdelay 5
+000B   171B           00180     bsf PWM1CON,OE
+                      00181     tdelay 5
   0001                    M     variable q=(5)/3
   0002                    M     variable r=(5)%3
                           M     if (q)
 000C   3001               M     movlw q
 Message[305]: Using default destination of 1 (file).
 000D   0B89               M     decfsz WREG
-000E   2???               M     goto $-1
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE  5
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE  5
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
+000E   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
 000F   2???               M     goto $+1
@@ -248,57 +249,57 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     nop
                           M     endif
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0010   131B           00181     bcf PWM1CON,OE
-0011                  00182 task_switch    
-0011   018A           00183     clrf PCLATH
-0012   08??           00184     movfw task
+0010   131B           00182     bcf PWM1CON,OE
+0011                  00183 task_switch    
+0011   018A           00184     clrf PCLATH
+0012   08??           00185     movfw task
 Message[305]: Using default destination of 1 (file).
-0013   0782           00185     addwf PCL
-0014   2???           00186     goto pre_vsync ;task 0, vertical pre-equalization pulses, 6 slices
-0015   2???           00187     goto vsync ;task 1, vertical sync pulses, 6 slices
-0016   2???           00188     goto post_vsync ;task 2, vertical post-equalization pulses, 6 slices
-0017   2???           00189     goto vsync_end ;task 3, return to normal video line, 1 slice
-0018   2???           00190     goto user_input ;task 4,  read button and paddle, 1 slice
-0019   2???           00191     goto sound ;task 5, check sound timer expiration, 1 slice
-001A   2???           00192     goto move_ball ;task 6, move recking ball and check collision, etc, 1 slice
-001B   2???           00193     goto video_first ; task 7, wait up to lcount==19
-001C   2???           00194     goto score ;task 8,  draw score en ball count, 6 slices
-001D   2???           00195     goto top_wall ;task 9,  draw top wall, 4 slices
-001E   2???           00196     goto draw_void ;task 10 draw void space between top wall and top brick row, 8 slices
-001F   2???           00197     goto draw_row1 ;task 11, 4 slices
-0020   2???           00198     goto draw_row2 ;task 12, 4 slices
-0021   2???           00199     goto draw_row3 ;task 13,  4 slices
-0022   2???           00200     goto draw_row4 ;task 14,  4 slices
-0023   2???           00201     goto draw_row5 ;task 15, 4 slices
-0024   2???           00202     goto draw_empty;task 16, 188 slices
-0025   2???           00203     goto draw_paddle ;task 17, 4 slices
-0026   2???           00204     goto wait_field_end ;task 18, player used all the available recking balls, 12/13 slices
-0027   0001           00205     reset ; error trap, task out of range
-0028                  00206 isr_exit  
-0028   003B           00207     banksel PWM3INTF
+0013   0782           00186     addwf PCL
+0014   2???           00187     goto pre_vsync ;task 0, vertical pre-equalization pulses, 6 slices
+0015   2???           00188     goto vsync ;task 1, vertical sync pulses, 6 slices
+0016   2???           00189     goto post_vsync ;task 2, vertical post-equalization pulses, 6 slices
+0017   2???           00190     goto vsync_end ;task 3, return to normal video line, 1 slice
+0018   2???           00191     goto user_input ;task 4,  read button and paddle, 1 slice
+0019   2???           00192     goto sound ;task 5, check sound timer expiration, 1 slice
+001A   2???           00193     goto move_ball ;task 6, move recking ball and check collision, etc, 1 slice
+001B   2???           00194     goto video_first ; task 7, wait up to lcount==19
+001C   2???           00195     goto score ;task 8,  draw score en ball count, 6 slices
+001D   2???           00196     goto top_wall ;task 9,  draw top wall, 4 slices
+001E   2???           00197     goto draw_void ;task 10 draw void space between top wall and top brick row, 8 slices
+001F   2???           00198     goto draw_row1 ;task 11, 4 slices
+0020   2???           00199     goto draw_row2 ;task 12, 4 slices
+0021   2???           00200     goto draw_row3 ;task 13,  4 slices
+0022   2???           00201     goto draw_row4 ;task 14,  4 slices
+0023   2???           00202     goto draw_row5 ;task 15, 4 slices
+0024   2???           00203     goto draw_empty;task 16, 188 slices
+0025   2???           00204     goto draw_paddle ;task 17, 4 slices
+0026   2???           00205     goto wait_field_end ;task 18, player used all the available recking balls, 12/13 slices
+0027   0001           00206     reset ; error trap, task out of range
+0028                  00207 isr_exit  
+0028   003B           00208     banksel PWM3INTF
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0029   103D           00208     bcf PWM3INTF,PRIF
-002A   0009           00209     retfie
-                      00210 
-                      00211 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                      00212 ;;  all tasks routine are here            ;;
-                      00213 ;;  each must be terminate by leave macro ;;    
-                      00214 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                      00215     
-                      00216 ; task 0, vertical synchronization pre equalization
-002B                  00217 pre_vsync
-002B   08??           00218     movfw slice
-002C   1903           00219     skpnz
-002D   2???           00220     goto set_presync
-                      00221     next_task 6
+0029   103D           00209     bcf PWM3INTF,PRIF
+002A   0009           00210     retfie
+                      00211 
+                      00212 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                      00213 ;;  all tasks routine are here            ;;
+                      00214 ;;  each must be terminate by leave macro ;;    
+                      00215 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                      00216     
+                      00217 ; task 0, vertical synchronization pre equalization
+002B                  00218 pre_vsync
+002B   08??           00219     movfw slice
+002C   1903           00220     skpnz
+002D   2???           00221     goto set_presync
+                      00222     next_task 6
 Message[305]: Using default destination of 1 (file).
-002E   0A??               M     incf slice
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE  6
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE  6
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
+002E   0A??               M     incf slice
 002F   3006               M     movlw 6
 0030   02??               M     subwf slice,W
 0031   1D03               M     skpz
@@ -312,32 +313,32 @@ Message[305]: Using default destination of 1 (file).
 0036   07??               M     addwf lcount
                           M     leave
 0037   2???               M     goto isr_exit
-0038                  00222 set_presync    
-0038   003B           00223     banksel PWM3DC
-0039   3020           00224     movlw HEQUAL
+0038                  00223 set_presync    
+0038   003B           00224     banksel PWM3DC
+0039   3020           00225     movlw HEQUAL
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-003A   00B3           00225     movwf PWM3DCL
+003A   00B3           00226     movwf PWM3DCL
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-003B   01B4           00226     clrf PWM3DCH
-003C   3001           00227     movlw high HALF_LINE
+003B   01B4           00227     clrf PWM3DCH
+003C   3001           00228     movlw high HALF_LINE
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-003D   00B6           00228     movwf PWM3PRH
-003E   30C6           00229     movlw low HALF_LINE
+003D   00B6           00229     movwf PWM3PRH
+003E   30C6           00230     movlw low HALF_LINE
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-003F   00B5           00230     movwf PWM3PRL
+003F   00B5           00231     movwf PWM3PRL
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0040   17BF           00231     bsf PWM3LDCON,7
+0040   17BF           00232     bsf PWM3LDCON,7
 Message[305]: Using default destination of 1 (file).
-0041   0A??           00232     incf slice
-                      00233     leave
+0041   0A??           00233     incf slice
+                      00234     leave
 0042   2???               M     goto isr_exit
-                      00234     
-                      00235 ; task 1, vertical synchronization pulses
-0043                  00236 vsync 
-0043   08??           00237     movfw slice
-0044   1903           00238     skpnz
-0045   2???           00239     goto set_vsync
-                      00240     next_task 6
+                      00235     
+                      00236 ; task 1, vertical synchronization pulses
+0043                  00237 vsync 
+0043   08??           00238     movfw slice
+0044   1903           00239     skpnz
+0045   2???           00240     goto set_vsync
+                      00241     next_task 6
 Message[305]: Using default destination of 1 (file).
 0046   0A??               M     incf slice
 0047   3006               M     movlw 6
@@ -351,199 +352,204 @@ Message[305]: Using default destination of 1 (file).
 004D   3006               M     movlw 6
 Message[305]: Using default destination of 1 (file).
 004E   07??               M     addwf lcount
-                          M     leave
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE  7
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE  7
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
+                          M     leave
 004F   2???               M     goto isr_exit
-0050                  00241 set_vsync
-0050   003B           00242     banksel PWM3DC
-0051   3083           00243     movlw low VSYNC_PULSE
+0050                  00242 set_vsync
+0050   003B           00243     banksel PWM3DC
+0051   3083           00244     movlw low VSYNC_PULSE
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0052   00B3           00244     movwf PWM3DCL
-0053   3001           00245     movlw high VSYNC_PULSE
+0052   00B3           00245     movwf PWM3DCL
+0053   3001           00246     movlw high VSYNC_PULSE
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0054   00B4           00246     movwf PWM3DCH
+0054   00B4           00247     movwf PWM3DCH
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0055   17BF           00247     bsf PWM3LDCON,7
+0055   17BF           00248     bsf PWM3LDCON,7
 Message[305]: Using default destination of 1 (file).
-0056   0A??           00248     incf slice
-                      00249     leave
+0056   0A??           00249     incf slice
+                      00250     leave
 0057   2???               M     goto isr_exit
-                      00250     
-                      00251 ; task 2, vertical synchronisation post equalization pulses
-0058                  00252 post_vsync
-0058   08??           00253     movfw slice
-0059   1903           00254     skpnz
-005A   2???           00255     goto set_presync
-005B   3006           00256     movlw 6
-005C   02??           00257     subwf slice,W
-005D   1903           00258     skpnz
-005E   2???           00259     goto post_last
+                      00251     
+                      00252 ; task 2, vertical synchronisation post equalization pulses
+0058                  00253 post_vsync
+0058   08??           00254     movfw slice
+0059   1903           00255     skpnz
+005A   2???           00256     goto set_presync
+005B   3006           00257     movlw 6
+005C   02??           00258     subwf slice,W
+005D   1903           00259     skpnz
+005E   2???           00260     goto post_last
 Message[305]: Using default destination of 1 (file).
-005F   0A??           00260     incf slice
-                      00261     leave
+005F   0A??           00261     incf slice
+                      00262     leave
 0060   2???               M     goto isr_exit
-0061                  00262 post_last    
+0061                  00263 post_last    
 Message[305]: Using default destination of 1 (file).
-0061   0A??           00263     incf task
-0062   01??           00264     clrf slice
-0063   1C80           00265     btfss flags, F_EVEN
-                      00266     leave
+0061   0A??           00264     incf task
+0062   01??           00265     clrf slice
+0063   1C80           00266     btfss flags, F_EVEN
+                      00267     leave
 0064   2???               M     goto isr_exit
-                      00267     
-                      00268 ; task 3, vertical synchronization completed, return to normal line
-0065                  00269 vsync_end
-0065   1280           00270     bcf flags, F_SYNC
-0066   003B           00271     banksel PWM3DC
-0067   3042           00272     movlw HSYNC
+                      00268     
+                      00269 ; task 3, vertical synchronization completed, return to normal line
+0065                  00270 vsync_end
+0065   1280           00271     bcf flags, F_SYNC
+0066   003B           00272     banksel PWM3DC
+0067   3042           00273     movlw HSYNC
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0068   00B3           00273     movwf PWM3DCL
+0068   00B3           00274     movwf PWM3DCL
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0069   01B4           00274     clrf PWM3DCH
-006A   3003           00275     movlw high HPERIOD
+0069   01B4           00275     clrf PWM3DCH
+006A   3003           00276     movlw high HPERIOD
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-006B   00B6           00276     movwf PWM3PRH
-006C   308D           00277     movlw low HPERIOD
+006B   00B6           00277     movwf PWM3PRH
+006C   308D           00278     movlw low HPERIOD
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-006D   00B5           00278     movwf PWM3PRL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE  8
+006D   00B5           00279     movwf PWM3PRL
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE  8
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-006E   17BF           00279     bsf PWM3LDCON,7
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+006E   17BF           00280     bsf PWM3LDCON,7
 Message[305]: Using default destination of 1 (file).
-006F   0A??           00280     incf task
-0070   3009           00281     movlw 9
-0071   00??           00282     movwf lcount
-                      00283     leave
+006F   0A??           00281     incf task
+0070   3009           00282     movlw 9
+0071   00??           00283     movwf lcount
+                      00284     leave
 0072   2???               M     goto isr_exit
-                      00284     
-                      00285 ;task 4, read button and paddle position
-0073                  00286 user_input
+                      00285 
+                      00286 ;task 4, read button and paddle position
+0073                  00287 user_input
 Message[305]: Using default destination of 1 (file).
-0073   0A??           00287     incf task
+0073   0A??           00288     incf task
 Message[305]: Using default destination of 1 (file).
-0074   0A??           00288     incf lcount
-0075   1900           00289     btfsc flags, F_START
-0076   2???           00290     goto read_paddle
-                      00291 ; read start button
-0077   0022           00292     banksel LATA
+0074   0A??           00289     incf lcount
+0075   1900           00290     btfsc flags, F_START
+0076   2???           00291     goto read_paddle
+                      00292 ; read start button
+0077   0022           00293     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0078   1D8C           00293     btfss LATA,START_BTN
-0079   1500           00294     bsf flags, F_START
-                      00295     leave
+0078   1D8C           00294     btfss LATA,START_BTN
+0079   1500           00295     bsf flags, F_START
+                      00296     leave
 007A   2???               M     goto isr_exit
-007B                  00296 read_paddle
-007B   0021           00297     banksel TRISA
+007B                  00297 read_paddle
+007B   0021           00298     banksel TRISA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-007C   140C           00298     bsf TRISA, PADDLE
-007D   0021           00299     banksel ADCON0
-007E   3003           00300     movlw 3
+007C   140C           00299     bsf TRISA, PADDLE
+007D   0021           00300     banksel ADCON0
+007E   3003           00301     movlw 3
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-007F   009D           00301     movwf ADCON0
+007F   009D           00302     movwf ADCON0
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0080   189D           00302     btfsc ADCON0,NOT_DONE
-0081   2???           00303     goto $-1
+0080   189D           00303     btfsc ADCON0,NOT_DONE
+0081   2???           00304     goto $-1
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0082   101D           00304     bcf ADCON0,ADON
-0083   0021           00305     banksel TRISA
+0082   101D           00305     bcf ADCON0,ADON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0084   100C           00306     bcf TRISA, AUDIO
-                      00307     leave
-0085   2???               M     goto isr_exit
-                      00308 
-                      00309 ; task 5,  sound timer
-0086                  00310 sound
+0083   361C           00306     lsrf ADRESH,W
+0084   00??           00307     movwf paddle_pos
 Message[305]: Using default destination of 1 (file).
-0086   0A??           00311     incf task
+0085   36??           00308     lsrf paddle_pos
+0086   0021           00309     banksel TRISA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0087   100C           00310     bcf TRISA, AUDIO
+                      00311     leave
+0088   2???               M     goto isr_exit
+                      00312 
+                      00313 ; task 5,  sound timer
+0089                  00314 sound
 Message[305]: Using default destination of 1 (file).
-0087   0A??           00312     incf lcount
-0088   1E00           00313     btfss flags, F_SOUND
-                      00314     leave
-0089   2???               M     goto isr_exit
+0089   0A??           00315     incf task
 Message[305]: Using default destination of 1 (file).
-008A   0B??           00315     decfsz sound_timer
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE  9
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE  9
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00316     leave
-008B   2???               M     goto isr_exit
-008C   003B           00317     banksel PWM2CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-008D   132B           00318     bcf PWM2CON,OE
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-008E   13AB           00319     bcf PWM2CON,EN
+008A   0A??           00316     incf lcount
+008B   1E00           00317     btfss flags, F_SOUND
+                      00318     leave
+008C   2???               M     goto isr_exit
+Message[305]: Using default destination of 1 (file).
+008D   0B??           00319     decfsz sound_timer
                       00320     leave
-008F   2???               M     goto isr_exit
-                      00321 
-                      00322    
-                      00323 ; task 6, move recking ball and check collision    
-0090                  00324 move_ball
-Message[305]: Using default destination of 1 (file).
-0090   0A??           00325     incf task
-Message[305]: Using default destination of 1 (file).
-0091   0A??           00326     incf lcount
-                      00327     leave
+008E   2???               M     goto isr_exit
+008F   003B           00321     banksel PWM2CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0090   132B           00322     bcf PWM2CON,OE
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0091   13AB           00323     bcf PWM2CON,EN
+                      00324     leave
 0092   2???               M     goto isr_exit
-                      00328 
-                      00329     
-                      00330 ; task 7, increment lcount up to 26
-0093                  00331 video_first
+                      00325 
+                      00326    
+                      00327 ; task 6, move recking ball and check collision    
+0093                  00328 move_ball
 Message[305]: Using default destination of 1 (file).
-0093   0A??           00332     incf lcount
-0094   301A           00333     movlw 26
-0095   02??           00334     subwf lcount,W
-0096   1D03           00335     skpz
-                      00336     leave
-0097   2???               M     goto isr_exit
-0098   01??           00337     clrf slice
+0093   0A??           00329     incf task
 Message[305]: Using default destination of 1 (file).
-0099   0A??           00338     incf task
-                      00339     leave
+0094   0A??           00330     incf lcount
+                      00331     leave
+0095   2???               M     goto isr_exit
+                      00332 
+                      00333     
+                      00334 ; task 7, increment lcount up to 26
+0096                  00335 video_first
+Message[305]: Using default destination of 1 (file).
+0096   0A??           00336     incf lcount
+0097   301A           00337     movlw 26
+0098   02??           00338     subwf lcount,W
+0099   1D03           00339     skpz
+                      00340     leave
 009A   2???               M     goto isr_exit
-                      00340     
-                      00341 ; task 8, draw score en ball count, 6 slices    
-009B                  00342 score
-                      00343     tdelay 10
+009B   01??           00341     clrf slice
+Message[305]: Using default destination of 1 (file).
+009C   0A??           00342     incf task
+                      00343     leave
+009D   2???               M     goto isr_exit
+                      00344     
+                      00345 ; task 8, draw score en ball count, 6 slices    
+009E                  00346 score
+                      00347     tdelay 10
   0003                    M     variable q=(10)/3
   0001                    M     variable r=(10)%3
                           M     if (q)
-009B   3003               M     movlw q
+009E   3003               M     movlw q
 Message[305]: Using default destination of 1 (file).
-009C   0B89               M     decfsz WREG
-009D   2???               M     goto $-1
+009F   0B89               M     decfsz WREG
+00A0   2???               M     goto $-1
                           M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-009E   0000               M     nop
-                          M     endif
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 10
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 10
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00344     set_color BLACK
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+00A1   0000               M     nop
+                          M     endif
+                      00348     set_color BLACK
                           M     if BLACK==BLACK
-009F   0022               M     banksel LATA
+00A2   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00A0   120C               M     bcf LATA, VIDEO_OUT
-00A1   003B               M     banksel PWM1CON
+00A3   120C               M     bcf LATA, VIDEO_OUT
+00A4   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00A2   131B               M     bcf PWM1CON,OE
-00A3   0000               M     nop
+00A5   131B               M     bcf PWM1CON,OE
+00A6   0000               M     nop
                           M     endif  
                           M     if BLACK==YELLOW
                           M     banksel LATA
@@ -580,36 +586,36 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00345     tdelay 164
+                      00349     tdelay 164
   0036                    M     variable q=(164)/3
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 11
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
   0002                    M     variable r=(164)%3
                           M     if (q)
-00A4   3036               M     movlw q
+00A7   3036               M     movlw q
 Message[305]: Using default destination of 1 (file).
-00A5   0B89               M     decfsz WREG
-00A6   2???               M     goto $-1
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 11
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
+00A8   0B89               M     decfsz WREG
+00A9   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-00A7   2???               M     goto $+1
+00AA   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00346     set_color BLACK
+                      00350     set_color BLACK
                           M     if BLACK==BLACK
-00A8   0022               M     banksel LATA
+00AB   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00A9   120C               M     bcf LATA, VIDEO_OUT
-00AA   003B               M     banksel PWM1CON
+00AC   120C               M     bcf LATA, VIDEO_OUT
+00AD   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00AB   131B               M     bcf PWM1CON,OE
-00AC   0000               M     nop
+00AE   131B               M     bcf PWM1CON,OE
+00AF   0000               M     nop
                           M     endif  
                           M     if BLACK==YELLOW
                           M     banksel LATA
@@ -641,54 +647,54 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     endif
                           M     if BLACK==GREEN
                           M     banksel LATA
-                          M     bcf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                      00347     
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 12
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 12
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-00AD                  00348 score_exit
-                      00349     next_task 6*4
+                          M     bcf LATA,VIDEO_OUT
+                          M     banksel PWM1CON
+                          M     bcf PWM1CON,POL
+                          M     bsf PWM1CON,OE
+                          M     endif
+                      00351     
+00B0                  00352 score_exit
+                      00353     next_task 6*4
 Message[305]: Using default destination of 1 (file).
-00AD   0A??               M     incf slice
-00AE   3018               M     movlw 6*4
-00AF   02??               M     subwf slice,W
-00B0   1D03               M     skpz
+00B0   0A??               M     incf slice
+00B1   3018               M     movlw 6*4
+00B2   02??               M     subwf slice,W
+00B3   1D03               M     skpz
                           M     leave
-00B1   2???               M     goto isr_exit
-00B2   01??               M     clrf slice
+00B4   2???               M     goto isr_exit
+00B5   01??               M     clrf slice
 Message[305]: Using default destination of 1 (file).
-00B3   0A??               M     incf task
-00B4   3018               M     movlw 6*4
+00B6   0A??               M     incf task
+00B7   3018               M     movlw 6*4
 Message[305]: Using default destination of 1 (file).
-00B5   07??               M     addwf lcount
+00B8   07??               M     addwf lcount
                           M     leave
-00B6   2???               M     goto isr_exit
-                      00350     
-                      00351 ; task 9,  draw top wall, 8 screen lines    
-00B7                  00352 top_wall
-                      00353     tdelay 10
+00B9   2???               M     goto isr_exit
+                      00354     
+                      00355 ; task 9,  draw top wall, 8 screen lines    
+00BA                  00356 top_wall
+                      00357     tdelay 10
   0003                    M     variable q=(10)/3
   0001                    M     variable r=(10)%3
                           M     if (q)
-00B7   3003               M     movlw q
+00BA   3003               M     movlw q
 Message[305]: Using default destination of 1 (file).
-00B8   0B89               M     decfsz WREG
-00B9   2???               M     goto $-1
+00BB   0B89               M     decfsz WREG
+00BC   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-00BA   0000               M     nop
+00BD   0000               M     nop
                           M     endif
-                      00354     set_color WHITE
+                      00358     set_color WHITE
                           M     if WHITE==BLACK
                           M     banksel LATA
                           M     bcf LATA, VIDEO_OUT
@@ -700,30 +706,30 @@ Message[305]: Using default destination of 1 (file).
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 13
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==BLUE
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 13
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     banksel PWM1CON
                           M     bsf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==WHITE
-00BB   0022               M     banksel LATA
+00BE   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00BC   160C               M     bsf LATA, VIDEO_OUT
-00BD   003B               M     banksel PWM1CON
+00BF   160C               M     bsf LATA, VIDEO_OUT
+00C0   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00BE   131B               M     bcf PWM1CON,OE
-00BF   0000               M     nop
+00C1   131B               M     bcf PWM1CON,OE
+00C2   0000               M     nop
                           M     endif
                           M     if WHITE==MAGENTA
                           M     banksel LATA
@@ -739,38 +745,38 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00355     tdelay 164
+                      00359     tdelay 164
   0036                    M     variable q=(164)/3
   0002                    M     variable r=(164)%3
                           M     if (q)
-00C0   3036               M     movlw q
+00C3   3036               M     movlw q
 Message[305]: Using default destination of 1 (file).
-00C1   0B89               M     decfsz WREG
-00C2   2???               M     goto $-1
+00C4   0B89               M     decfsz WREG
+00C5   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-00C3   2???               M     goto $+1
+00C6   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00356     set_color BLACK
+                      00360     set_color BLACK
                           M     if BLACK==BLACK
-00C4   0022               M     banksel LATA
+00C7   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00C5   120C               M     bcf LATA, VIDEO_OUT
-00C6   003B               M     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00C7   131B               M     bcf PWM1CON,OE
-00C8   0000               M     nop
-                          M     endif  
-                          M     if BLACK==YELLOW
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 14
+00C8   120C               M     bcf LATA, VIDEO_OUT
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 14
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
+00C9   003B               M     banksel PWM1CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+00CA   131B               M     bcf PWM1CON,OE
+00CB   0000               M     nop
+                          M     endif  
+                          M     if BLACK==YELLOW
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
@@ -805,177 +811,46 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-00C9                  00357 top_wall_exit
-                      00358     next_task 8
+00CC                  00361 top_wall_exit
+                      00362     next_task 8
 Message[305]: Using default destination of 1 (file).
-00C9   0A??               M     incf slice
-00CA   3008               M     movlw 8
-00CB   02??               M     subwf slice,W
-00CC   1D03               M     skpz
+00CC   0A??               M     incf slice
+00CD   3008               M     movlw 8
+00CE   02??               M     subwf slice,W
+00CF   1D03               M     skpz
                           M     leave
-00CD   2???               M     goto isr_exit
-00CE   01??               M     clrf slice
+00D0   2???               M     goto isr_exit
+00D1   01??               M     clrf slice
 Message[305]: Using default destination of 1 (file).
-00CF   0A??               M     incf task
-00D0   3008               M     movlw 8
-Message[305]: Using default destination of 1 (file).
-00D1   07??               M     addwf lcount
-                          M     leave
-00D2   2???               M     goto isr_exit
-                      00359 
-                      00360 ; task 10,  draw void space between top wall and top brick row, 8 slices    
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 15
+00D2   0A??               M     incf task
+00D3   3008               M     movlw 8
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 15
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-00D3                  00361 draw_void
-                      00362     tdelay 10
+Message[305]: Using default destination of 1 (file).
+00D4   07??               M     addwf lcount
+                          M     leave
+00D5   2???               M     goto isr_exit
+                      00363 
+                      00364 ; task 10,  draw void space between top wall and top brick row, 8 slices    
+00D6                  00365 draw_void
+                      00366     tdelay 10
   0003                    M     variable q=(10)/3
   0001                    M     variable r=(10)%3
                           M     if (q)
-00D3   3003               M     movlw q
+00D6   3003               M     movlw q
 Message[305]: Using default destination of 1 (file).
-00D4   0B89               M     decfsz WREG
-00D5   2???               M     goto $-1
+00D7   0B89               M     decfsz WREG
+00D8   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-00D6   0000               M     nop
-                          M     endif
-                      00363     set_color WHITE
-                          M     if WHITE==BLACK
-                          M     banksel LATA
-                          M     bcf LATA, VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,OE
-                          M     nop
-                          M     endif  
-                          M     if WHITE==YELLOW
-                          M     banksel LATA
-                          M     bsf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if WHITE==BLUE
-                          M     banksel LATA
-                          M     bcf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bsf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if WHITE==WHITE
-00D7   0022               M     banksel LATA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00D8   160C               M     bsf LATA, VIDEO_OUT
-00D9   003B               M     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00DA   131B               M     bcf PWM1CON,OE
-00DB   0000               M     nop
-                          M     endif
-                          M     if WHITE==MAGENTA
-                          M     banksel LATA
-                          M     bsf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bsf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 16
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-                          M     endif
-                          M     if WHITE==GREEN
-                          M     banksel LATA
-                          M     bcf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                      00364     tdelay 2
-  0000                    M     variable q=(2)/3
-  0002                    M     variable r=(2)%3
-                          M     if (q)
-                          M     movlw q
-                          M     decfsz WREG
-                          M     goto $-1
-                          M     endif
-                          M     if (r==2)
-00DC   2???               M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
-                      00365     set_color BLACK
-                          M     if BLACK==BLACK
-00DD   0022               M     banksel LATA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00DE   120C               M     bcf LATA, VIDEO_OUT
-00DF   003B               M     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00E0   131B               M     bcf PWM1CON,OE
-00E1   0000               M     nop
-                          M     endif  
-                          M     if BLACK==YELLOW
-                          M     banksel LATA
-                          M     bsf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if BLACK==BLUE
-                          M     banksel LATA
-                          M     bcf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bsf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if BLACK==WHITE
-                          M     banksel LATA
-                          M     bsf LATA, VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,OE
-                          M     nop
-                          M     endif
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 17
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-                          M     if BLACK==MAGENTA
-                          M     banksel LATA
-                          M     bsf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bsf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if BLACK==GREEN
-                          M     banksel LATA
-                          M     bcf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                      00366     tdelay 150
-  0032                    M     variable q=(150)/3
-  0000                    M     variable r=(150)%3
-                          M     if (q)
-00E2   3032               M     movlw q
-Message[305]: Using default destination of 1 (file).
-00E3   0B89               M     decfsz WREG
-00E4   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
+00D9   0000               M     nop
                           M     endif
                       00367     set_color WHITE
                           M     if WHITE==BLACK
@@ -1000,20 +875,20 @@ Message[305]: Using default destination of 1 (file).
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==WHITE
-00E5   0022               M     banksel LATA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 18
+00DA   0022               M     banksel LATA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+00DB   160C               M     bsf LATA, VIDEO_OUT
+00DC   003B               M     banksel PWM1CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+00DD   131B               M     bcf PWM1CON,OE
+00DE   0000               M     nop
+                          M     endif
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 16
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00E6   160C               M     bsf LATA, VIDEO_OUT
-00E7   003B               M     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00E8   131B               M     bcf PWM1CON,OE
-00E9   0000               M     nop
-                          M     endif
                           M     if WHITE==MAGENTA
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
@@ -1037,20 +912,20 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     goto $-1
                           M     endif
                           M     if (r==2)
-00EA   2???               M     goto $+1
+00DF   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
                       00369     set_color BLACK
                           M     if BLACK==BLACK
-00EB   0022               M     banksel LATA
+00E0   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00EC   120C               M     bcf LATA, VIDEO_OUT
-00ED   003B               M     banksel PWM1CON
+00E1   120C               M     bcf LATA, VIDEO_OUT
+00E2   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00EE   131B               M     bcf PWM1CON,OE
-00EF   0000               M     nop
+00E3   131B               M     bcf PWM1CON,OE
+00E4   0000               M     nop
                           M     endif  
                           M     if BLACK==YELLOW
                           M     banksel LATA
@@ -1060,12 +935,6 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if BLACK==BLUE
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 19
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
@@ -1073,6 +942,12 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if BLACK==WHITE
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 17
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     banksel LATA
                           M     bsf LATA, VIDEO_OUT
                           M     banksel PWM1CON
@@ -1093,47 +968,22 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00370     next_task 16
-Message[305]: Using default destination of 1 (file).
-00F0   0A??               M     incf slice
-00F1   3010               M     movlw 16
-00F2   02??               M     subwf slice,W
-00F3   1D03               M     skpz
-                          M     leave
-00F4   2???               M     goto isr_exit
-00F5   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-00F6   0A??               M     incf task
-00F7   3010               M     movlw 16
-Message[305]: Using default destination of 1 (file).
-00F8   07??               M     addwf lcount
-                          M     leave
-00F9   2???               M     goto isr_exit
-                      00371 
-                      00372 ; task 11, draw top brick row
-00FA                  00373 draw_row1
-                      00374     tdelay 10
-  0003                    M     variable q=(10)/3
-  0001                    M     variable r=(10)%3
+                      00370     tdelay 150
+  0032                    M     variable q=(150)/3
+  0000                    M     variable r=(150)%3
                           M     if (q)
-00FA   3003               M     movlw q
+00E5   3032               M     movlw q
 Message[305]: Using default destination of 1 (file).
-00FB   0B89               M     decfsz WREG
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 20
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-00FC   2???               M     goto $-1
+00E6   0B89               M     decfsz WREG
+00E7   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-00FD   0000               M     nop
+                          M     nop
                           M     endif
-                      00375     set_color WHITE
+                      00371     set_color WHITE
                           M     if WHITE==BLACK
                           M     banksel LATA
                           M     bcf LATA, VIDEO_OUT
@@ -1151,18 +1001,24 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     if WHITE==BLUE
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 18
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     banksel PWM1CON
                           M     bsf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==WHITE
-00FE   0022               M     banksel LATA
+00E8   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00FF   160C               M     bsf LATA, VIDEO_OUT
-0100   003B               M     banksel PWM1CON
+00E9   160C               M     bsf LATA, VIDEO_OUT
+00EA   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0101   131B               M     bcf PWM1CON,OE
-0102   0000               M     nop
+00EB   131B               M     bcf PWM1CON,OE
+00EC   0000               M     nop
                           M     endif
                           M     if WHITE==MAGENTA
                           M     banksel LATA
@@ -1178,13 +1034,7 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 21
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-                      00376     tdelay 2
+                      00372     tdelay 2
   0000                    M     variable q=(2)/3
   0002                    M     variable r=(2)%3
                           M     if (q)
@@ -1193,23 +1043,29 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     goto $-1
                           M     endif
                           M     if (r==2)
-0103   2???               M     goto $+1
+00ED   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00377     set_color BLACK
+                      00373     set_color BLACK
                           M     if BLACK==BLACK
-0104   0022               M     banksel LATA
+00EE   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0105   120C               M     bcf LATA, VIDEO_OUT
-0106   003B               M     banksel PWM1CON
+00EF   120C               M     bcf LATA, VIDEO_OUT
+00F0   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0107   131B               M     bcf PWM1CON,OE
-0108   0000               M     nop
+00F1   131B               M     bcf PWM1CON,OE
+00F2   0000               M     nop
                           M     endif  
                           M     if BLACK==YELLOW
                           M     banksel LATA
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 19
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,POL
@@ -1237,32 +1093,51 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if BLACK==GREEN
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 22
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00378     tdelay 150
-  0032                    M     variable q=(150)/3
-  0000                    M     variable r=(150)%3
-                          M     if (q)
-0109   3032               M     movlw q
+                      00374     next_task 16
 Message[305]: Using default destination of 1 (file).
-010A   0B89               M     decfsz WREG
-010B   2???               M     goto $-1
+00F3   0A??               M     incf slice
+00F4   3010               M     movlw 16
+00F5   02??               M     subwf slice,W
+00F6   1D03               M     skpz
+                          M     leave
+00F7   2???               M     goto isr_exit
+00F8   01??               M     clrf slice
+Message[305]: Using default destination of 1 (file).
+00F9   0A??               M     incf task
+00FA   3010               M     movlw 16
+Message[305]: Using default destination of 1 (file).
+00FB   07??               M     addwf lcount
+                          M     leave
+00FC   2???               M     goto isr_exit
+                      00375 
+                      00376 ; task 11, draw top brick row
+00FD                  00377 draw_row1
+                      00378     tdelay 10
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 20
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  0003                    M     variable q=(10)/3
+  0001                    M     variable r=(10)%3
+                          M     if (q)
+00FD   3003               M     movlw q
+Message[305]: Using default destination of 1 (file).
+00FE   0B89               M     decfsz WREG
+00FF   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-                          M     nop
+0100   0000               M     nop
                           M     endif
                       00379     set_color WHITE
                           M     if WHITE==BLACK
@@ -1287,21 +1162,15 @@ Message[305]: Using default destination of 1 (file).
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==WHITE
-010C   0022               M     banksel LATA
+0101   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-010D   160C               M     bsf LATA, VIDEO_OUT
-010E   003B               M     banksel PWM1CON
+0102   160C               M     bsf LATA, VIDEO_OUT
+0103   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-010F   131B               M     bcf PWM1CON,OE
-0110   0000               M     nop
+0104   131B               M     bcf PWM1CON,OE
+0105   0000               M     nop
                           M     endif
                           M     if WHITE==MAGENTA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 23
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
@@ -1309,6 +1178,12 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==GREEN
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 21
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
@@ -1324,103 +1199,79 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     goto $-1
                           M     endif
                           M     if (r==2)
-0111   2???               M     goto $+1
+0106   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00381     set_color BLACK
-                          M     if BLACK==BLACK
-0112   0022               M     banksel LATA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0113   120C               M     bcf LATA, VIDEO_OUT
-0114   003B               M     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0115   131B               M     bcf PWM1CON,OE
-0116   0000               M     nop
-                          M     endif  
-                          M     if BLACK==YELLOW
+                      00381     set_color YELLOW
+                          M     if YELLOW==BLACK
                           M     banksel LATA
-                          M     bsf LATA,VIDEO_OUT
+                          M     bcf LATA, VIDEO_OUT
                           M     banksel PWM1CON
-                          M     bcf PWM1CON,POL
-                          M     bsf PWM1CON,OE
+                          M     bcf PWM1CON,OE
+                          M     nop
+                          M     endif  
+                          M     if YELLOW==YELLOW
+0107   0022               M     banksel LATA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0108   160C               M     bsf LATA,VIDEO_OUT
+0109   003B               M     banksel PWM1CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+010A   121B               M     bcf PWM1CON,POL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+010B   171B               M     bsf PWM1CON,OE
                           M     endif
-                          M     if BLACK==BLUE
+                          M     if YELLOW==BLUE
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bsf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                          M     if BLACK==WHITE
+                          M     if YELLOW==WHITE
                           M     banksel LATA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 24
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     bsf LATA, VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,OE
                           M     nop
                           M     endif
-                          M     if BLACK==MAGENTA
+                          M     if YELLOW==MAGENTA
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 22
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bsf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                          M     if BLACK==GREEN
+                          M     if YELLOW==GREEN
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00382     next_task 8
-Message[305]: Using default destination of 1 (file).
-0117   0A??               M     incf slice
-0118   3008               M     movlw 8
-0119   02??               M     subwf slice,W
-011A   1D03               M     skpz
-                          M     leave
-011B   2???               M     goto isr_exit
-011C   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-011D   0A??               M     incf task
-011E   3008               M     movlw 8
-Message[305]: Using default destination of 1 (file).
-011F   07??               M     addwf lcount
-                          M     leave
-0120   2???               M     goto isr_exit
-                      00383     
-                      00384 ; task 12, draw 2nd brick row    
-0121                  00385 draw_row2
-                      00386     tdelay 10
-  0003                    M     variable q=(10)/3
-  0001                    M     variable r=(10)%3
+                      00382     tdelay 150
+  0032                    M     variable q=(150)/3
+  0000                    M     variable r=(150)%3
                           M     if (q)
-0121   3003               M     movlw q
+010C   3032               M     movlw q
 Message[305]: Using default destination of 1 (file).
-0122   0B89               M     decfsz WREG
-0123   2???               M     goto $-1
+010D   0B89               M     decfsz WREG
+010E   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-0124   0000               M     nop
+                          M     nop
                           M     endif
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 25
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-                      00387     set_color WHITE
+                      00383     set_color WHITE
                           M     if WHITE==BLACK
                           M     banksel LATA
                           M     bcf LATA, VIDEO_OUT
@@ -1443,13 +1294,19 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==WHITE
-0125   0022               M     banksel LATA
+010F   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0126   160C               M     bsf LATA, VIDEO_OUT
-0127   003B               M     banksel PWM1CON
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 23
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0110   160C               M     bsf LATA, VIDEO_OUT
+0111   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0128   131B               M     bcf PWM1CON,OE
-0129   0000               M     nop
+0112   131B               M     bcf PWM1CON,OE
+0113   0000               M     nop
                           M     endif
                           M     if WHITE==MAGENTA
                           M     banksel LATA
@@ -1465,7 +1322,7 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00388     tdelay 2
+                      00384     tdelay 2
   0000                    M     variable q=(2)/3
   0002                    M     variable r=(2)%3
                           M     if (q)
@@ -1473,27 +1330,21 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     decfsz WREG
                           M     goto $-1
                           M     endif
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 26
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     if (r==2)
-012A   2???               M     goto $+1
+0114   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00389     set_color BLACK
+                      00385     set_color BLACK
                           M     if BLACK==BLACK
-012B   0022               M     banksel LATA
+0115   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-012C   120C               M     bcf LATA, VIDEO_OUT
-012D   003B               M     banksel PWM1CON
+0116   120C               M     bcf LATA, VIDEO_OUT
+0117   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-012E   131B               M     bcf PWM1CON,OE
-012F   0000               M     nop
+0118   131B               M     bcf PWM1CON,OE
+0119   0000               M     nop
                           M     endif  
                           M     if BLACK==YELLOW
                           M     banksel LATA
@@ -1504,6 +1355,12 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     endif
                           M     if BLACK==BLUE
                           M     banksel LATA
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 24
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bsf PWM1CON,POL
@@ -1530,26 +1387,45 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00390     tdelay 150
-  0032                    M     variable q=(150)/3
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 27
+                      00386     next_task 8
+Message[305]: Using default destination of 1 (file).
+011A   0A??               M     incf slice
+011B   3008               M     movlw 8
+011C   02??               M     subwf slice,W
+011D   1D03               M     skpz
+                          M     leave
+011E   2???               M     goto isr_exit
+011F   01??               M     clrf slice
+Message[305]: Using default destination of 1 (file).
+0120   0A??               M     incf task
+0121   3008               M     movlw 8
+Message[305]: Using default destination of 1 (file).
+0122   07??               M     addwf lcount
+                          M     leave
+0123   2???               M     goto isr_exit
+                      00387     
+                      00388 ; task 12, draw 2nd brick row    
+0124                  00389 draw_row2
+                      00390     tdelay 10
+  0003                    M     variable q=(10)/3
+  0001                    M     variable r=(10)%3
+                          M     if (q)
+0124   3003               M     movlw q
+Message[305]: Using default destination of 1 (file).
+0125   0B89               M     decfsz WREG
+0126   2???               M     goto $-1
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 25
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-  0000                    M     variable r=(150)%3
-                          M     if (q)
-0130   3032               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0131   0B89               M     decfsz WREG
-0132   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-                          M     nop
+0127   0000               M     nop
                           M     endif
                       00391     set_color WHITE
                           M     if WHITE==BLACK
@@ -1574,13 +1450,13 @@ Message[305]: Using default destination of 1 (file).
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==WHITE
-0133   0022               M     banksel LATA
+0128   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0134   160C               M     bsf LATA, VIDEO_OUT
-0135   003B               M     banksel PWM1CON
+0129   160C               M     bsf LATA, VIDEO_OUT
+012A   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0136   131B               M     bcf PWM1CON,OE
-0137   0000               M     nop
+012B   131B               M     bcf PWM1CON,OE
+012C   0000               M     nop
                           M     endif
                           M     if WHITE==MAGENTA
                           M     banksel LATA
@@ -1591,18 +1467,18 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     endif
                           M     if WHITE==GREEN
                           M     banksel LATA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 28
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
                       00392     tdelay 2
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 26
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
   0000                    M     variable q=(2)/3
   0002                    M     variable r=(2)%3
                           M     if (q)
@@ -1611,97 +1487,79 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     goto $-1
                           M     endif
                           M     if (r==2)
-0138   2???               M     goto $+1
+012D   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00393     set_color BLACK
-                          M     if BLACK==BLACK
-0139   0022               M     banksel LATA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-013A   120C               M     bcf LATA, VIDEO_OUT
-013B   003B               M     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-013C   131B               M     bcf PWM1CON,OE
-013D   0000               M     nop
+                      00393     set_color BLUE
+                          M     if BLUE==BLACK
+                          M     banksel LATA
+                          M     bcf LATA, VIDEO_OUT
+                          M     banksel PWM1CON
+                          M     bcf PWM1CON,OE
+                          M     nop
                           M     endif  
-                          M     if BLACK==YELLOW
+                          M     if BLUE==YELLOW
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                          M     if BLACK==BLUE
-                          M     banksel LATA
-                          M     bcf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bsf PWM1CON,POL
-                          M     bsf PWM1CON,OE
+                          M     if BLUE==BLUE
+012E   0022               M     banksel LATA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+012F   120C               M     bcf LATA,VIDEO_OUT
+0130   003B               M     banksel PWM1CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0131   161B               M     bsf PWM1CON,POL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0132   171B               M     bsf PWM1CON,OE
                           M     endif
-                          M     if BLACK==WHITE
+                          M     if BLUE==WHITE
                           M     banksel LATA
                           M     bsf LATA, VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,OE
                           M     nop
                           M     endif
-                          M     if BLACK==MAGENTA
+                          M     if BLUE==MAGENTA
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 29
+                          M     banksel PWM1CON
+                          M     bsf PWM1CON,POL
+                          M     bsf PWM1CON,OE
+                          M     endif
+                          M     if BLUE==GREEN
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 27
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                          M     banksel PWM1CON
-                          M     bsf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if BLACK==GREEN
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00394     next_task 8
-Message[305]: Using default destination of 1 (file).
-013E   0A??               M     incf slice
-013F   3008               M     movlw 8
-0140   02??               M     subwf slice,W
-0141   1D03               M     skpz
-                          M     leave
-0142   2???               M     goto isr_exit
-0143   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-0144   0A??               M     incf task
-0145   3008               M     movlw 8
-Message[305]: Using default destination of 1 (file).
-0146   07??               M     addwf lcount
-                          M     leave
-0147   2???               M     goto isr_exit
-                      00395 
-                      00396 ; task 13, draw 3rd brick row    
-0148                  00397 draw_row3
-                      00398     tdelay 10
-  0003                    M     variable q=(10)/3
-  0001                    M     variable r=(10)%3
+                      00394     tdelay 150
+  0032                    M     variable q=(150)/3
+  0000                    M     variable r=(150)%3
                           M     if (q)
-0148   3003               M     movlw q
+0133   3032               M     movlw q
 Message[305]: Using default destination of 1 (file).
-0149   0B89               M     decfsz WREG
-014A   2???               M     goto $-1
+0134   0B89               M     decfsz WREG
+0135   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-014B   0000               M     nop
+                          M     nop
                           M     endif
-                      00399     set_color WHITE
+                      00395     set_color WHITE
                           M     if WHITE==BLACK
                           M     banksel LATA
                           M     bcf LATA, VIDEO_OUT
@@ -1709,12 +1567,6 @@ Message[305]: Using default destination of 1 (file).
                           M     bcf PWM1CON,OE
                           M     nop
                           M     endif  
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 30
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     if WHITE==YELLOW
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
@@ -1730,15 +1582,21 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==WHITE
-014C   0022               M     banksel LATA
+0136   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-014D   160C               M     bsf LATA, VIDEO_OUT
-014E   003B               M     banksel PWM1CON
+0137   160C               M     bsf LATA, VIDEO_OUT
+0138   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-014F   131B               M     bcf PWM1CON,OE
-0150   0000               M     nop
+0139   131B               M     bcf PWM1CON,OE
+013A   0000               M     nop
                           M     endif
                           M     if WHITE==MAGENTA
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 28
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
@@ -1752,7 +1610,7 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00400     tdelay 2
+                      00396     tdelay 2
   0000                    M     variable q=(2)/3
   0002                    M     variable r=(2)%3
                           M     if (q)
@@ -1761,26 +1619,20 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     goto $-1
                           M     endif
                           M     if (r==2)
-0151   2???               M     goto $+1
+013B   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00401     set_color BLACK
+                      00397     set_color BLACK
                           M     if BLACK==BLACK
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 31
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-0152   0022               M     banksel LATA
+013C   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0153   120C               M     bcf LATA, VIDEO_OUT
-0154   003B               M     banksel PWM1CON
+013D   120C               M     bcf LATA, VIDEO_OUT
+013E   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0155   131B               M     bcf PWM1CON,OE
-0156   0000               M     nop
+013F   131B               M     bcf PWM1CON,OE
+0140   0000               M     nop
                           M     endif  
                           M     if BLACK==YELLOW
                           M     banksel LATA
@@ -1798,6 +1650,12 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     endif
                           M     if BLACK==WHITE
                           M     banksel LATA
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 29
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     bsf LATA, VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,OE
@@ -1817,27 +1675,46 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00402     tdelay 150
-  0032                    M     variable q=(150)/3
-  0000                    M     variable r=(150)%3
-                          M     if (q)
-0157   3032               M     movlw q
+                      00398     next_task 8
 Message[305]: Using default destination of 1 (file).
-0158   0B89               M     decfsz WREG
-0159   2???               M     goto $-1
+0141   0A??               M     incf slice
+0142   3008               M     movlw 8
+0143   02??               M     subwf slice,W
+0144   1D03               M     skpz
+                          M     leave
+0145   2???               M     goto isr_exit
+0146   01??               M     clrf slice
+Message[305]: Using default destination of 1 (file).
+0147   0A??               M     incf task
+0148   3008               M     movlw 8
+Message[305]: Using default destination of 1 (file).
+0149   07??               M     addwf lcount
+                          M     leave
+014A   2???               M     goto isr_exit
+                      00399 
+                      00400 ; task 13, draw 3rd brick row    
+014B                  00401 draw_row3
+                      00402     tdelay 10
+  0003                    M     variable q=(10)/3
+  0001                    M     variable r=(10)%3
+                          M     if (q)
+014B   3003               M     movlw q
+Message[305]: Using default destination of 1 (file).
+014C   0B89               M     decfsz WREG
+014D   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 32
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+014E   0000               M     nop
+                          M     endif
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 30
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
                       00403     set_color WHITE
                           M     if WHITE==BLACK
                           M     banksel LATA
@@ -1861,13 +1738,13 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==WHITE
-015A   0022               M     banksel LATA
+014F   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-015B   160C               M     bsf LATA, VIDEO_OUT
-015C   003B               M     banksel PWM1CON
+0150   160C               M     bsf LATA, VIDEO_OUT
+0151   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-015D   131B               M     bcf PWM1CON,OE
-015E   0000               M     nop
+0152   131B               M     bcf PWM1CON,OE
+0153   0000               M     nop
                           M     endif
                           M     if WHITE==MAGENTA
                           M     banksel LATA
@@ -1886,109 +1763,91 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                       00404     tdelay 2
   0000                    M     variable q=(2)/3
   0002                    M     variable r=(2)%3
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 33
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     if (q)
                           M     movlw q
                           M     decfsz WREG
                           M     goto $-1
                           M     endif
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 31
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     if (r==2)
-015F   2???               M     goto $+1
+0154   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00405     set_color BLACK
-                          M     if BLACK==BLACK
-0160   0022               M     banksel LATA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0161   120C               M     bcf LATA, VIDEO_OUT
-0162   003B               M     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0163   131B               M     bcf PWM1CON,OE
-0164   0000               M     nop
+                      00405     set_color GREEN
+                          M     if GREEN==BLACK
+                          M     banksel LATA
+                          M     bcf LATA, VIDEO_OUT
+                          M     banksel PWM1CON
+                          M     bcf PWM1CON,OE
+                          M     nop
                           M     endif  
-                          M     if BLACK==YELLOW
+                          M     if GREEN==YELLOW
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                          M     if BLACK==BLUE
+                          M     if GREEN==BLUE
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bsf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                          M     if BLACK==WHITE
+                          M     if GREEN==WHITE
                           M     banksel LATA
                           M     bsf LATA, VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,OE
                           M     nop
                           M     endif
-                          M     if BLACK==MAGENTA
+                          M     if GREEN==MAGENTA
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bsf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                          M     if BLACK==GREEN
-                          M     banksel LATA
-                          M     bcf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 34
+                          M     if GREEN==GREEN
+0155   0022               M     banksel LATA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0156   120C               M     bcf LATA,VIDEO_OUT
+0157   003B               M     banksel PWM1CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0158   121B               M     bcf PWM1CON,POL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0159   171B               M     bsf PWM1CON,OE
+                          M     endif
+                      00406     tdelay 150
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 32
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                          M     bcf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                      00406     next_task 8
-Message[305]: Using default destination of 1 (file).
-0165   0A??               M     incf slice
-0166   3008               M     movlw 8
-0167   02??               M     subwf slice,W
-0168   1D03               M     skpz
-                          M     leave
-0169   2???               M     goto isr_exit
-016A   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-016B   0A??               M     incf task
-016C   3008               M     movlw 8
-Message[305]: Using default destination of 1 (file).
-016D   07??               M     addwf lcount
-                          M     leave
-016E   2???               M     goto isr_exit
-                      00407     
-                      00408 ; task 14, draw 4th brick row    
-016F                  00409 draw_row4
-                      00410     tdelay 10
-  0003                    M     variable q=(10)/3
-  0001                    M     variable r=(10)%3
+  0032                    M     variable q=(150)/3
+  0000                    M     variable r=(150)%3
                           M     if (q)
-016F   3003               M     movlw q
+015A   3032               M     movlw q
 Message[305]: Using default destination of 1 (file).
-0170   0B89               M     decfsz WREG
-0171   2???               M     goto $-1
+015B   0B89               M     decfsz WREG
+015C   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-0172   0000               M     nop
+                          M     nop
                           M     endif
-                      00411     set_color WHITE
+                      00407     set_color WHITE
                           M     if WHITE==BLACK
                           M     banksel LATA
                           M     bcf LATA, VIDEO_OUT
@@ -2004,12 +1863,6 @@ Message[305]: Using default destination of 1 (file).
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==BLUE
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 35
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
@@ -2017,13 +1870,13 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==WHITE
-0173   0022               M     banksel LATA
+015D   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0174   160C               M     bsf LATA, VIDEO_OUT
-0175   003B               M     banksel PWM1CON
+015E   160C               M     bsf LATA, VIDEO_OUT
+015F   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0176   131B               M     bcf PWM1CON,OE
-0177   0000               M     nop
+0160   131B               M     bcf PWM1CON,OE
+0161   0000               M     nop
                           M     endif
                           M     if WHITE==MAGENTA
                           M     banksel LATA
@@ -2033,13 +1886,19 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==GREEN
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 33
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00412     tdelay 2
+                      00408     tdelay 2
   0000                    M     variable q=(2)/3
   0002                    M     variable r=(2)%3
                           M     if (q)
@@ -2048,27 +1907,21 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     goto $-1
                           M     endif
                           M     if (r==2)
-0178   2???               M     goto $+1
+0162   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00413     set_color BLACK
+                      00409     set_color BLACK
                           M     if BLACK==BLACK
-0179   0022               M     banksel LATA
+0163   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-017A   120C               M     bcf LATA, VIDEO_OUT
-017B   003B               M     banksel PWM1CON
+0164   120C               M     bcf LATA, VIDEO_OUT
+0165   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-017C   131B               M     bcf PWM1CON,OE
-017D   0000               M     nop
+0166   131B               M     bcf PWM1CON,OE
+0167   0000               M     nop
                           M     endif  
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 36
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     if BLACK==YELLOW
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
@@ -2092,6 +1945,12 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     endif
                           M     if BLACK==MAGENTA
                           M     banksel LATA
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 34
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bsf PWM1CON,POL
@@ -2104,34 +1963,53 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00414     tdelay 150
-  0032                    M     variable q=(150)/3
-  0000                    M     variable r=(150)%3
-                          M     if (q)
-017E   3032               M     movlw q
+                      00410     next_task 8
 Message[305]: Using default destination of 1 (file).
-017F   0B89               M     decfsz WREG
-0180   2???               M     goto $-1
+0168   0A??               M     incf slice
+0169   3008               M     movlw 8
+016A   02??               M     subwf slice,W
+016B   1D03               M     skpz
+                          M     leave
+016C   2???               M     goto isr_exit
+016D   01??               M     clrf slice
+Message[305]: Using default destination of 1 (file).
+016E   0A??               M     incf task
+016F   3008               M     movlw 8
+Message[305]: Using default destination of 1 (file).
+0170   07??               M     addwf lcount
+                          M     leave
+0171   2???               M     goto isr_exit
+                      00411     
+                      00412 ; task 14, draw 4th brick row    
+0172                  00413 draw_row4
+                      00414     tdelay 10
+  0003                    M     variable q=(10)/3
+  0001                    M     variable r=(10)%3
+                          M     if (q)
+0172   3003               M     movlw q
+Message[305]: Using default destination of 1 (file).
+0173   0B89               M     decfsz WREG
+0174   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-                          M     nop
+0175   0000               M     nop
                           M     endif
                       00415     set_color WHITE
                           M     if WHITE==BLACK
                           M     banksel LATA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 37
+                          M     bcf LATA, VIDEO_OUT
+                          M     banksel PWM1CON
+                          M     bcf PWM1CON,OE
+                          M     nop
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 35
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                          M     bcf LATA, VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,OE
-                          M     nop
                           M     endif  
                           M     if WHITE==YELLOW
                           M     banksel LATA
@@ -2148,13 +2026,13 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==WHITE
-0181   0022               M     banksel LATA
+0176   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0182   160C               M     bsf LATA, VIDEO_OUT
-0183   003B               M     banksel PWM1CON
+0177   160C               M     bsf LATA, VIDEO_OUT
+0178   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0184   131B               M     bcf PWM1CON,OE
-0185   0000               M     nop
+0179   131B               M     bcf PWM1CON,OE
+017A   0000               M     nop
                           M     endif
                           M     if WHITE==MAGENTA
                           M     banksel LATA
@@ -2179,103 +2057,85 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     goto $-1
                           M     endif
                           M     if (r==2)
-0186   2???               M     goto $+1
+017B   2???               M     goto $+1
                           M     endif 
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 38
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+                      00417     set_color MAGENTA
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 36
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                          M     if (r==1)
+                          M     if MAGENTA==BLACK
+                          M     banksel LATA
+                          M     bcf LATA, VIDEO_OUT
+                          M     banksel PWM1CON
+                          M     bcf PWM1CON,OE
                           M     nop
-                          M     endif
-                      00417     set_color BLACK
-                          M     if BLACK==BLACK
-0187   0022               M     banksel LATA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0188   120C               M     bcf LATA, VIDEO_OUT
-0189   003B               M     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-018A   131B               M     bcf PWM1CON,OE
-018B   0000               M     nop
                           M     endif  
-                          M     if BLACK==YELLOW
+                          M     if MAGENTA==YELLOW
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                          M     if BLACK==BLUE
+                          M     if MAGENTA==BLUE
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bsf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                          M     if BLACK==WHITE
+                          M     if MAGENTA==WHITE
                           M     banksel LATA
                           M     bsf LATA, VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,OE
                           M     nop
                           M     endif
-                          M     if BLACK==MAGENTA
-                          M     banksel LATA
-                          M     bsf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bsf PWM1CON,POL
-                          M     bsf PWM1CON,OE
+                          M     if MAGENTA==MAGENTA
+017C   0022               M     banksel LATA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+017D   160C               M     bsf LATA,VIDEO_OUT
+017E   003B               M     banksel PWM1CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+017F   161B               M     bsf PWM1CON,POL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0180   171B               M     bsf PWM1CON,OE
                           M     endif
-                          M     if BLACK==GREEN
+                          M     if MAGENTA==GREEN
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00418     next_task 8
+                      00418     tdelay 150
+  0032                    M     variable q=(150)/3
+  0000                    M     variable r=(150)%3
+                          M     if (q)
+0181   3032               M     movlw q
 Message[305]: Using default destination of 1 (file).
-018C   0A??               M     incf slice
-018D   3008               M     movlw 8
-018E   02??               M     subwf slice,W
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 39
+0182   0B89               M     decfsz WREG
+0183   2???               M     goto $-1
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 37
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-018F   1D03               M     skpz
-                          M     leave
-0190   2???               M     goto isr_exit
-0191   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-0192   0A??               M     incf task
-0193   3008               M     movlw 8
-Message[305]: Using default destination of 1 (file).
-0194   07??               M     addwf lcount
-                          M     leave
-0195   2???               M     goto isr_exit
-                      00419 
-                      00420 ; task 15, draw 5th brick row    
-0196                  00421 draw_row5
-                      00422     tdelay 10
-  0003                    M     variable q=(10)/3
-  0001                    M     variable r=(10)%3
-                          M     if (q)
-0196   3003               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0197   0B89               M     decfsz WREG
-0198   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-0199   0000               M     nop
+                          M     nop
                           M     endif
-                      00423     set_color WHITE
+                      00419     set_color WHITE
                           M     if WHITE==BLACK
                           M     banksel LATA
                           M     bcf LATA, VIDEO_OUT
@@ -2298,19 +2158,13 @@ Message[305]: Using default destination of 1 (file).
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==WHITE
-019A   0022               M     banksel LATA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 40
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
+0184   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-019B   160C               M     bsf LATA, VIDEO_OUT
-019C   003B               M     banksel PWM1CON
+0185   160C               M     bsf LATA, VIDEO_OUT
+0186   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-019D   131B               M     bcf PWM1CON,OE
-019E   0000               M     nop
+0187   131B               M     bcf PWM1CON,OE
+0188   0000               M     nop
                           M     endif
                           M     if WHITE==MAGENTA
                           M     banksel LATA
@@ -2326,7 +2180,13 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00424     tdelay 2
+                      00420     tdelay 2
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 38
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
   0000                    M     variable q=(2)/3
   0002                    M     variable r=(2)%3
                           M     if (q)
@@ -2335,20 +2195,20 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     goto $-1
                           M     endif
                           M     if (r==2)
-019F   2???               M     goto $+1
+0189   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00425     set_color BLACK
+                      00421     set_color BLACK
                           M     if BLACK==BLACK
-01A0   0022               M     banksel LATA
+018A   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01A1   120C               M     bcf LATA, VIDEO_OUT
-01A2   003B               M     banksel PWM1CON
+018B   120C               M     bcf LATA, VIDEO_OUT
+018C   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01A3   131B               M     bcf PWM1CON,OE
-01A4   0000               M     nop
+018D   131B               M     bcf PWM1CON,OE
+018E   0000               M     nop
                           M     endif  
                           M     if BLACK==YELLOW
                           M     banksel LATA
@@ -2358,12 +2218,6 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if BLACK==BLUE
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 41
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
@@ -2386,25 +2240,50 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     endif
                           M     if BLACK==GREEN
                           M     banksel LATA
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 39
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00426     tdelay 150
-  0032                    M     variable q=(150)/3
-  0000                    M     variable r=(150)%3
-                          M     if (q)
-01A5   3032               M     movlw q
+                      00422     next_task 8
 Message[305]: Using default destination of 1 (file).
-01A6   0B89               M     decfsz WREG
-01A7   2???               M     goto $-1
+018F   0A??               M     incf slice
+0190   3008               M     movlw 8
+0191   02??               M     subwf slice,W
+0192   1D03               M     skpz
+                          M     leave
+0193   2???               M     goto isr_exit
+0194   01??               M     clrf slice
+Message[305]: Using default destination of 1 (file).
+0195   0A??               M     incf task
+0196   3008               M     movlw 8
+Message[305]: Using default destination of 1 (file).
+0197   07??               M     addwf lcount
+                          M     leave
+0198   2???               M     goto isr_exit
+                      00423 
+                      00424 ; task 15, draw 5th brick row    
+0199                  00425 draw_row5
+                      00426     tdelay 10
+  0003                    M     variable q=(10)/3
+  0001                    M     variable r=(10)%3
+                          M     if (q)
+0199   3003               M     movlw q
+Message[305]: Using default destination of 1 (file).
+019A   0B89               M     decfsz WREG
+019B   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-                          M     nop
+019C   0000               M     nop
                           M     endif
                       00427     set_color WHITE
                           M     if WHITE==BLACK
@@ -2417,15 +2296,15 @@ Message[305]: Using default destination of 1 (file).
                           M     if WHITE==YELLOW
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 42
+                          M     banksel PWM1CON
+                          M     bcf PWM1CON,POL
+                          M     bsf PWM1CON,OE
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 40
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,POL
-                          M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==BLUE
                           M     banksel LATA
@@ -2435,13 +2314,13 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==WHITE
-01A8   0022               M     banksel LATA
+019D   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01A9   160C               M     bsf LATA, VIDEO_OUT
-01AA   003B               M     banksel PWM1CON
+019E   160C               M     bsf LATA, VIDEO_OUT
+019F   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01AB   131B               M     bcf PWM1CON,OE
-01AC   0000               M     nop
+01A0   131B               M     bcf PWM1CON,OE
+01A1   0000               M     nop
                           M     endif
                           M     if WHITE==MAGENTA
                           M     banksel LATA
@@ -2466,103 +2345,84 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     goto $-1
                           M     endif
                           M     if (r==2)
-01AD   2???               M     goto $+1
+01A2   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00429     set_color BLACK
-                          M     if BLACK==BLACK
-01AE   0022               M     banksel LATA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01AF   120C               M     bcf LATA, VIDEO_OUT
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 43
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-01B0   003B               M     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01B1   131B               M     bcf PWM1CON,OE
-01B2   0000               M     nop
-                          M     endif  
-                          M     if BLACK==YELLOW
+                      00429     set_color WHITE
+                          M     if WHITE==BLACK
                           M     banksel LATA
-                          M     bsf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if BLACK==BLUE
-                          M     banksel LATA
-                          M     bcf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bsf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if BLACK==WHITE
-                          M     banksel LATA
-                          M     bsf LATA, VIDEO_OUT
+                          M     bcf LATA, VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,OE
                           M     nop
+                          M     endif  
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 41
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M     if WHITE==YELLOW
+                          M     banksel LATA
+                          M     bsf LATA,VIDEO_OUT
+                          M     banksel PWM1CON
+                          M     bcf PWM1CON,POL
+                          M     bsf PWM1CON,OE
                           M     endif
-                          M     if BLACK==MAGENTA
+                          M     if WHITE==BLUE
+                          M     banksel LATA
+                          M     bcf LATA,VIDEO_OUT
+                          M     banksel PWM1CON
+                          M     bsf PWM1CON,POL
+                          M     bsf PWM1CON,OE
+                          M     endif
+                          M     if WHITE==WHITE
+01A3   0022               M     banksel LATA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+01A4   160C               M     bsf LATA, VIDEO_OUT
+01A5   003B               M     banksel PWM1CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+01A6   131B               M     bcf PWM1CON,OE
+01A7   0000               M     nop
+                          M     endif
+                          M     if WHITE==MAGENTA
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bsf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                          M     if BLACK==GREEN
+                          M     if WHITE==GREEN
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00430     next_task 8
-Message[305]: Using default destination of 1 (file).
-01B3   0A??               M     incf slice
-01B4   3008               M     movlw 8
-01B5   02??               M     subwf slice,W
-01B6   1D03               M     skpz
-                          M     leave
-01B7   2???               M     goto isr_exit
-01B8   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-01B9   0A??               M     incf task
-01BA   3008               M     movlw 8
-Message[305]: Using default destination of 1 (file).
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 44
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-01BB   07??               M     addwf lcount
-                          M     leave
-01BC   2???               M     goto isr_exit
-                      00431 
-                      00432 ; task 16,draw all rows between paddle and lower brick row    
-01BD                  00433 draw_empty
-                      00434     tdelay 10
-  0003                    M     variable q=(10)/3
-  0001                    M     variable r=(10)%3
+                      00430     tdelay 150
+  0032                    M     variable q=(150)/3
+  0000                    M     variable r=(150)%3
                           M     if (q)
-01BD   3003               M     movlw q
+01A8   3032               M     movlw q
 Message[305]: Using default destination of 1 (file).
-01BE   0B89               M     decfsz WREG
-01BF   2???               M     goto $-1
+01A9   0B89               M     decfsz WREG
+01AA   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-01C0   0000               M     nop
+                          M     nop
                           M     endif
-                      00435     set_color WHITE
+                      00431     set_color WHITE
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 42
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     if WHITE==BLACK
                           M     banksel LATA
                           M     bcf LATA, VIDEO_OUT
@@ -2585,21 +2445,15 @@ Message[305]: Using default destination of 1 (file).
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==WHITE
-01C1   0022               M     banksel LATA
+01AB   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01C2   160C               M     bsf LATA, VIDEO_OUT
-01C3   003B               M     banksel PWM1CON
+01AC   160C               M     bsf LATA, VIDEO_OUT
+01AD   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01C4   131B               M     bcf PWM1CON,OE
-01C5   0000               M     nop
+01AE   131B               M     bcf PWM1CON,OE
+01AF   0000               M     nop
                           M     endif
                           M     if WHITE==MAGENTA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 45
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
@@ -2613,7 +2467,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00436     tdelay 2
+                      00432     tdelay 2
   0000                    M     variable q=(2)/3
   0002                    M     variable r=(2)%3
                           M     if (q)
@@ -2622,20 +2476,26 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     goto $-1
                           M     endif
                           M     if (r==2)
-01C6   2???               M     goto $+1
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 43
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+01B0   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00437     set_color BLACK
+                      00433     set_color BLACK
                           M     if BLACK==BLACK
-01C7   0022               M     banksel LATA
+01B1   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01C8   120C               M     bcf LATA, VIDEO_OUT
-01C9   003B               M     banksel PWM1CON
+01B2   120C               M     bcf LATA, VIDEO_OUT
+01B3   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01CA   131B               M     bcf PWM1CON,OE
-01CB   0000               M     nop
+01B4   131B               M     bcf PWM1CON,OE
+01B5   0000               M     nop
                           M     endif  
                           M     if BLACK==YELLOW
                           M     banksel LATA
@@ -2653,12 +2513,6 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     endif
                           M     if BLACK==WHITE
                           M     banksel LATA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 46
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     bsf LATA, VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,OE
@@ -2678,20 +2532,45 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00438     tdelay 150
-  0032                    M     variable q=(150)/3
-  0000                    M     variable r=(150)%3
-                          M     if (q)
-01CC   3032               M     movlw q
+                      00434     next_task 8
 Message[305]: Using default destination of 1 (file).
-01CD   0B89               M     decfsz WREG
-01CE   2???               M     goto $-1
+01B6   0A??               M     incf slice
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 44
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+01B7   3008               M     movlw 8
+01B8   02??               M     subwf slice,W
+01B9   1D03               M     skpz
+                          M     leave
+01BA   2???               M     goto isr_exit
+01BB   01??               M     clrf slice
+Message[305]: Using default destination of 1 (file).
+01BC   0A??               M     incf task
+01BD   3008               M     movlw 8
+Message[305]: Using default destination of 1 (file).
+01BE   07??               M     addwf lcount
+                          M     leave
+01BF   2???               M     goto isr_exit
+                      00435 
+                      00436 ; task 16,draw all rows between paddle and lower brick row    
+01C0                  00437 draw_empty
+                      00438     tdelay 10
+  0003                    M     variable q=(10)/3
+  0001                    M     variable r=(10)%3
+                          M     if (q)
+01C0   3003               M     movlw q
+Message[305]: Using default destination of 1 (file).
+01C1   0B89               M     decfsz WREG
+01C2   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-                          M     nop
+01C3   0000               M     nop
                           M     endif
                       00439     set_color WHITE
                           M     if WHITE==BLACK
@@ -2712,23 +2591,23 @@ Message[305]: Using default destination of 1 (file).
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 47
+                          M     bsf PWM1CON,POL
+                          M     bsf PWM1CON,OE
+                          M     endif
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 45
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                          M     bsf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
                           M     if WHITE==WHITE
-01CF   0022               M     banksel LATA
+01C4   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01D0   160C               M     bsf LATA, VIDEO_OUT
-01D1   003B               M     banksel PWM1CON
+01C5   160C               M     bsf LATA, VIDEO_OUT
+01C6   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01D2   131B               M     bcf PWM1CON,OE
-01D3   0000               M     nop
+01C7   131B               M     bcf PWM1CON,OE
+01C8   0000               M     nop
                           M     endif
                           M     if WHITE==MAGENTA
                           M     banksel LATA
@@ -2753,33 +2632,33 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     goto $-1
                           M     endif
                           M     if (r==2)
-01D4   2???               M     goto $+1
+01C9   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
                       00441     set_color BLACK
                           M     if BLACK==BLACK
-01D5   0022               M     banksel LATA
+01CA   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01D6   120C               M     bcf LATA, VIDEO_OUT
-01D7   003B               M     banksel PWM1CON
+01CB   120C               M     bcf LATA, VIDEO_OUT
+01CC   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01D8   131B               M     bcf PWM1CON,OE
-01D9   0000               M     nop
+01CD   131B               M     bcf PWM1CON,OE
+01CE   0000               M     nop
                           M     endif  
                           M     if BLACK==YELLOW
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 48
+                          M     banksel PWM1CON
+                          M     bcf PWM1CON,POL
+                          M     bsf PWM1CON,OE
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 46
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,POL
-                          M     bsf PWM1CON,OE
                           M     endif
                           M     if BLACK==BLUE
                           M     banksel LATA
@@ -2809,47 +2688,22 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00442     next_task 118
-Message[305]: Using default destination of 1 (file).
-01DA   0A??               M     incf slice
-01DB   3076               M     movlw 118
-01DC   02??               M     subwf slice,W
-01DD   1D03               M     skpz
-                          M     leave
-01DE   2???               M     goto isr_exit
-01DF   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-01E0   0A??               M     incf task
-01E1   3076               M     movlw 118
-Message[305]: Using default destination of 1 (file).
-01E2   07??               M     addwf lcount
-                          M     leave
-01E3   2???               M     goto isr_exit
-                      00443     
-                      00444 ; task 17, draw paddle at bottom screen    
-01E4                  00445 draw_paddle
-                      00446     tdelay 10
-  0003                    M     variable q=(10)/3
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 49
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-  0001                    M     variable r=(10)%3
+                      00442     tdelay 150
+  0032                    M     variable q=(150)/3
+  0000                    M     variable r=(150)%3
                           M     if (q)
-01E4   3003               M     movlw q
+01CF   3032               M     movlw q
 Message[305]: Using default destination of 1 (file).
-01E5   0B89               M     decfsz WREG
-01E6   2???               M     goto $-1
+01D0   0B89               M     decfsz WREG
+01D1   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-01E7   0000               M     nop
+                          M     nop
                           M     endif
-                      00447     set_color WHITE
+                      00443     set_color WHITE
                           M     if WHITE==BLACK
                           M     banksel LATA
                           M     bcf LATA, VIDEO_OUT
@@ -2858,6 +2712,12 @@ Message[305]: Using default destination of 1 (file).
                           M     nop
                           M     endif  
                           M     if WHITE==YELLOW
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 47
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
@@ -2872,13 +2732,13 @@ Message[305]: Using default destination of 1 (file).
                           M     bsf PWM1CON,OE
                           M     endif
                           M     if WHITE==WHITE
-01E8   0022               M     banksel LATA
+01D2   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01E9   160C               M     bsf LATA, VIDEO_OUT
-01EA   003B               M     banksel PWM1CON
+01D3   160C               M     bsf LATA, VIDEO_OUT
+01D4   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01EB   131B               M     bcf PWM1CON,OE
-01EC   0000               M     nop
+01D5   131B               M     bcf PWM1CON,OE
+01D6   0000               M     nop
                           M     endif
                           M     if WHITE==MAGENTA
                           M     banksel LATA
@@ -2889,18 +2749,12 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     endif
                           M     if WHITE==GREEN
                           M     banksel LATA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 50
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00448     tdelay 2
+                      00444     tdelay 2
   0000                    M     variable q=(2)/3
   0002                    M     variable r=(2)%3
                           M     if (q)
@@ -2909,20 +2763,26 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     goto $-1
                           M     endif
                           M     if (r==2)
-01ED   2???               M     goto $+1
+01D7   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00449     set_color BLACK
+                      00445     set_color BLACK
                           M     if BLACK==BLACK
-01EE   0022               M     banksel LATA
+01D8   0022               M     banksel LATA
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 48
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01EF   120C               M     bcf LATA, VIDEO_OUT
-01F0   003B               M     banksel PWM1CON
+01D9   120C               M     bcf LATA, VIDEO_OUT
+01DA   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01F1   131B               M     bcf PWM1CON,OE
-01F2   0000               M     nop
+01DB   131B               M     bcf PWM1CON,OE
+01DC   0000               M     nop
                           M     endif  
                           M     if BLACK==YELLOW
                           M     banksel LATA
@@ -2948,12 +2808,6 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     if BLACK==MAGENTA
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 51
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     banksel PWM1CON
                           M     bsf PWM1CON,POL
                           M     bsf PWM1CON,OE
@@ -2965,14 +2819,40 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00450     tdelay 60
-  0014                    M     variable q=(60)/3
-  0000                    M     variable r=(60)%3
-                          M     if (q)
-01F3   3014               M     movlw q
+                      00446     next_task 118
 Message[305]: Using default destination of 1 (file).
-01F4   0B89               M     decfsz WREG
-01F5   2???               M     goto $-1
+01DD   0A??               M     incf slice
+01DE   3076               M     movlw 118
+01DF   02??               M     subwf slice,W
+01E0   1D03               M     skpz
+                          M     leave
+01E1   2???               M     goto isr_exit
+01E2   01??               M     clrf slice
+Message[305]: Using default destination of 1 (file).
+01E3   0A??               M     incf task
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 49
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+01E4   3076               M     movlw 118
+Message[305]: Using default destination of 1 (file).
+01E5   07??               M     addwf lcount
+                          M     leave
+01E6   2???               M     goto isr_exit
+                      00447 
+                      00448     
+                      00449 ; task 17, draw paddle at bottom screen    
+01E7                  00450 draw_paddle
+                      00451     tdelay 9
+  0003                    M     variable q=(9)/3
+  0000                    M     variable r=(9)%3
+                          M     if (q)
+01E7   3003               M     movlw q
+Message[305]: Using default destination of 1 (file).
+01E8   0B89               M     decfsz WREG
+01E9   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
@@ -2980,7 +2860,14 @@ Message[305]: Using default destination of 1 (file).
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00451     set_color YELLOW
+01EA   08??           00452     movfw paddle_pos
+01EB   1903           00453     skpnz
+01EC   2???           00454     goto pos_left
+Message[305]: Using default destination of 1 (file).
+01ED   0B89           00455     decfsz WREG
+01EE   2???           00456     goto $-1
+01EF                  00457 pos_left    
+                      00458     set_color YELLOW
                           M     if YELLOW==BLACK
                           M     banksel LATA
                           M     bcf LATA, VIDEO_OUT
@@ -2989,30 +2876,30 @@ Message[305]: Using default destination of 1 (file).
                           M     nop
                           M     endif  
                           M     if YELLOW==YELLOW
-01F6   0022               M     banksel LATA
+01EF   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01F7   160C               M     bsf LATA,VIDEO_OUT
-01F8   003B               M     banksel PWM1CON
+01F0   160C               M     bsf LATA,VIDEO_OUT
+01F1   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01F9   121B               M     bcf PWM1CON,POL
+01F2   121B               M     bcf PWM1CON,POL
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01FA   171B               M     bsf PWM1CON,OE
+01F3   171B               M     bsf PWM1CON,OE
                           M     endif
                           M     if YELLOW==BLUE
                           M     banksel LATA
                           M     bcf LATA,VIDEO_OUT
                           M     banksel PWM1CON
-                          M     bsf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if YELLOW==WHITE
-                          M     banksel LATA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 52
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 50
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
+                          M     bsf PWM1CON,POL
+                          M     bsf PWM1CON,OE
+                          M     endif
+                          M     if YELLOW==WHITE
+                          M     banksel LATA
                           M     bsf LATA, VIDEO_OUT
                           M     banksel PWM1CON
                           M     bcf PWM1CON,OE
@@ -3032,14 +2919,14 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00452     tdelay 12
+                      00459     tdelay 12
   0004                    M     variable q=(12)/3
   0000                    M     variable r=(12)%3
                           M     if (q)
-01FB   3004               M     movlw q
+01F4   3004               M     movlw q
 Message[305]: Using default destination of 1 (file).
-01FC   0B89               M     decfsz WREG
-01FD   2???               M     goto $-1
+01F5   0B89               M     decfsz WREG
+01F6   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
@@ -3047,157 +2934,26 @@ Message[305]: Using default destination of 1 (file).
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00453     set_color BLACK
+                      00460     set_color BLACK
                           M     if BLACK==BLACK
-01FE   0022               M     banksel LATA
+01F7   0022               M     banksel LATA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01FF   120C               M     bcf LATA, VIDEO_OUT
-0200   003B               M     banksel PWM1CON
+01F8   120C               M     bcf LATA, VIDEO_OUT
+01F9   003B               M     banksel PWM1CON
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0201   131B               M     bcf PWM1CON,OE
-0202   0000               M     nop
+01FA   131B               M     bcf PWM1CON,OE
+01FB   0000               M     nop
                           M     endif  
                           M     if BLACK==YELLOW
                           M     banksel LATA
                           M     bsf LATA,VIDEO_OUT
                           M     banksel PWM1CON
-                          M     bcf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if BLACK==BLUE
-                          M     banksel LATA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 53
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 51
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                          M     bcf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bsf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if BLACK==WHITE
-                          M     banksel LATA
-                          M     bsf LATA, VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,OE
-                          M     nop
-                          M     endif
-                          M     if BLACK==MAGENTA
-                          M     banksel LATA
-                          M     bsf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bsf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if BLACK==GREEN
-                          M     banksel LATA
-                          M     bcf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                      00454     tdelay 68
-  0016                    M     variable q=(68)/3
-  0002                    M     variable r=(68)%3
-                          M     if (q)
-0203   3016               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0204   0B89               M     decfsz WREG
-0205   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-0206   2???               M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
-                      00455     set_color WHITE
-                          M     if WHITE==BLACK
-                          M     banksel LATA
-                          M     bcf LATA, VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,OE
-                          M     nop
-                          M     endif  
-                          M     if WHITE==YELLOW
-                          M     banksel LATA
-                          M     bsf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 54
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-                          M     bcf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if WHITE==BLUE
-                          M     banksel LATA
-                          M     bcf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bsf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if WHITE==WHITE
-0207   0022               M     banksel LATA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0208   160C               M     bsf LATA, VIDEO_OUT
-0209   003B               M     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-020A   131B               M     bcf PWM1CON,OE
-020B   0000               M     nop
-                          M     endif
-                          M     if WHITE==MAGENTA
-                          M     banksel LATA
-                          M     bsf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bsf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                          M     if WHITE==GREEN
-                          M     banksel LATA
-                          M     bcf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
-                          M     bcf PWM1CON,POL
-                          M     bsf PWM1CON,OE
-                          M     endif
-                      00456     tdelay 2
-  0000                    M     variable q=(2)/3
-  0002                    M     variable r=(2)%3
-                          M     if (q)
-                          M     movlw q
-                          M     decfsz WREG
-                          M     goto $-1
-                          M     endif
-                          M     if (r==2)
-020C   2???               M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
-                      00457     set_color BLACK
-                          M     if BLACK==BLACK
-020D   0022               M     banksel LATA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-020E   120C               M     bcf LATA, VIDEO_OUT
-020F   003B               M     banksel PWM1CON
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 55
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0210   131B               M     bcf PWM1CON,OE
-0211   0000               M     nop
-                          M     endif  
-                          M     if BLACK==YELLOW
-                          M     banksel LATA
-                          M     bsf LATA,VIDEO_OUT
-                          M     banksel PWM1CON
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
@@ -3229,236 +2985,236 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                           M     bcf PWM1CON,POL
                           M     bsf PWM1CON,OE
                           M     endif
-                      00458     next_task 8
+                      00461     next_task 8
 Message[305]: Using default destination of 1 (file).
-0212   0A??               M     incf slice
-0213   3008               M     movlw 8
-0214   02??               M     subwf slice,W
-0215   1D03               M     skpz
+01FC   0A??               M     incf slice
+01FD   3008               M     movlw 8
+01FE   02??               M     subwf slice,W
+01FF   1D03               M     skpz
                           M     leave
+0200   2???               M     goto isr_exit
+0201   01??               M     clrf slice
+Message[305]: Using default destination of 1 (file).
+0202   0A??               M     incf task
+0203   3008               M     movlw 8
+Message[305]: Using default destination of 1 (file).
+0204   07??               M     addwf lcount
+                          M     leave
+0205   2???               M     goto isr_exit
+                      00462 
+                      00463 ; task 18,  wait end of this field, reset task to zero    
+0206                  00464 wait_field_end
+Message[305]: Using default destination of 1 (file).
+0206   0A??           00465     incf lcount
+0207   1903           00466     skpnz
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 52
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0208   1400           00467     bsf flags, F_HI_LINE
+0209   1800           00468     btfsc flags, F_HI_LINE
+020A   2???           00469     goto hi_line
+                      00470     leave
+020B   2???               M     goto isr_exit
+020C                  00471 hi_line
+020C   1880           00472     btfsc flags,F_EVEN
+020D   2???           00473     goto even_field
+020E   3005           00474     movlw 5
+020F   02??           00475     subwf lcount,W
+0210   1D03           00476     skpz
+                      00477     leave
+0211   2???               M     goto isr_exit
+0212   2???           00478     goto field_end
+0213                  00479 even_field
+0213   3006           00480     movlw 6
+0214   02??           00481     subwf lcount,W
+0215   1D03           00482     skpz
+                      00483     leave
 0216   2???               M     goto isr_exit
-0217   01??               M     clrf slice
+                      00484 ; even field last line is half_line    
+                      00485 ; set PWM3 for line 263 half-line
+0217   003B           00486     banksel PWM3DC
+0218   3001           00487     movlw high HALF_LINE
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0219   00B6           00488     movwf PWM3PRH
+021A   30C6           00489     movlw low HALF_LINE
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+021B   00B5           00490     movwf PWM3PRL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+021C   17BF           00491     bsf PWM3LDCON,7
+021D                  00492 field_end
+021D   01??           00493     clrf task
+021E   01??           00494     clrf slice
+021F   01??           00495     clrf lcount
+0220   1000           00496     bcf flags, F_HI_LINE
+0221   1680           00497     bsf flags, F_SYNC
+                      00498 ; toggle odd/even field flag    
+0222   3002           00499     movlw 1<<F_EVEN
 Message[305]: Using default destination of 1 (file).
-0218   0A??               M     incf task
-0219   3008               M     movlw 8
+0223   06??           00500     xorwf flags
+                      00501     leave
+0224   2???               M     goto isr_exit
+                      00502     
+                      00503 MAIN_PROG CODE                      ; let linker place main program
+                      00504 
+0000                  00505 START
+                      00506 ; reset common ram 0x70-0x7f
+0000   3070           00507     movlw 0x70
+0001   0084           00508     movwf FSR0L
+0002   0185           00509     clrf FSR0H
+0003   0180           00510     clrf INDF0
 Message[305]: Using default destination of 1 (file).
-021A   07??               M     addwf lcount
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 56
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 53
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                          M     leave
-021B   2???               M     goto isr_exit
-                      00459 
-                      00460 ; task 18,  wait end of this field, reset task to zero    
-021C                  00461 wait_field_end
-Message[305]: Using default destination of 1 (file).
-021C   0A??           00462     incf lcount
-021D   1903           00463     skpnz
-021E   1400           00464     bsf flags, F_HI_LINE
-021F   1800           00465     btfsc flags, F_HI_LINE
-0220   2???           00466     goto hi_line
-                      00467     leave
-0221   2???               M     goto isr_exit
-0222                  00468 hi_line
-0222   1880           00469     btfsc flags,F_EVEN
-0223   2???           00470     goto even_field
-0224   3005           00471     movlw 5
-0225   02??           00472     subwf lcount,W
-0226   1D03           00473     skpz
-                      00474     leave
-0227   2???               M     goto isr_exit
-0228   2???           00475     goto field_end
-0229                  00476 even_field
-0229   3006           00477     movlw 6
-022A   02??           00478     subwf lcount,W
-022B   1D03           00479     skpz
-                      00480     leave
-022C   2???               M     goto isr_exit
-                      00481 ; even field last line is half_line    
-                      00482 ; set PWM3 for line 263 half-line
-022D   003B           00483     banksel PWM3DC
-022E   3001           00484     movlw high HALF_LINE
+0004   0A84           00511     incf FSR0L
+0005   1F84           00512     btfss FSR0L,7
+0006   2???           00513     goto $-3
+                      00514 ; disable analog inputs, except AN0
+0007   0023           00515     banksel ANSELA
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-022F   00B6           00485     movwf PWM3PRH
-0230   30C6           00486     movlw low HALF_LINE
+0008   018C           00516     clrf ANSELA
+                      00517 ; paddle potentiometer input     
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0231   00B5           00487     movwf PWM3PRL
+0009   140C           00518     bsf ANSELA,PADDLE
+000A   0021           00519     banksel ADCON1
+000B   3020           00520     movlw (2<<ADCS0)
 Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0232   17BF           00488     bsf PWM3LDCON,7
-0233                  00489 field_end
-0233   01??           00490     clrf task
-0234   01??           00491     clrf slice
-0235   01??           00492     clrf lcount
-0236   1000           00493     bcf flags, F_HI_LINE
-0237   1680           00494     bsf flags, F_SYNC
-                      00495 ; toggle odd/even field flag    
-0238   3002           00496     movlw 1<<F_EVEN
-Message[305]: Using default destination of 1 (file).
-0239   06??           00497     xorwf flags
-                      00498     leave
-023A   2???               M     goto isr_exit
-                      00499     
-                      00500 MAIN_PROG CODE                      ; let linker place main program
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 57
+000C   009E           00521     movwf ADCON1
+                      00522 ; pin setup   
+000D   0021           00523     banksel TRISA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000E   108C           00524     bcf TRISA,CHROMA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+000F   110C           00525     bcf TRISA,SYNC_OUT
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0010   120C           00526     bcf TRISA,VIDEO_OUT
+0011   0022           00527     banksel LATA
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0012   120C           00528     bcf LATA, VIDEO_OUT
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0013   150C           00529     bsf LATA, SYNC_OUT
+                      00530 ; PWM1 chroma signal on RA1
+0014   003B           00531     banksel PWM1CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0015   019F           00532     clrf PWM1LDCON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0016   0191           00533     clrf PWM1PHL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0017   0192           00534     clrf PWM1PHH
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0018   0197           00535     clrf PWM1OFL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0019   0198           00536     clrf PWM1OFH
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001A   0196           00537     clrf PWM1PRH
+001B   3003           00538     movlw 3
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001C   0095           00539     movwf PWM1PRL
+001D   3002           00540     movlw 2
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001E   0093           00541     movwf PWM1DCL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+001F   0194           00542     clrf PWM1DCH
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0020   179F           00543     bsf PWM1LDCON,7
+0021   3080           00544     movlw (1<<EN)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 54
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00501 
-0000                  00502 START
-                      00503 ; reset common ram 0x70-0x7f
-0000   3070           00504     movlw 0x70
-0001   0084           00505     movwf FSR0L
-0002   0185           00506     clrf FSR0H
-0003   0180           00507     clrf INDF0
+0022   009B           00545     movwf PWM1CON
+                      00546 ; PWM3 set to horizontal period 15734 hertz, output on RA2
+0023   003B           00547     banksel PWM3CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0024   01BF           00548     clrf PWM3LDCON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0025   01B1           00549     clrf PWM3PHL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0026   01B2           00550     clrf PWM3PHH
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0027   01B7           00551     clrf PWM3OFL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0028   01B8           00552     clrf PWM3OFH
+0029   308D           00553     movlw low HPERIOD
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002A   00B5           00554     movwf PWM3PRL
+002B   3003           00555     movlw high HPERIOD
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002C   00B6           00556     movwf PWM3PRH
+002D   3042           00557     movlw HSYNC
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002E   00B3           00558     movwf PWM3DCL
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+002F   01B4           00559     clrf PWM3DCH
+0030   30D0           00560     movlw (1<<EN)|(1<<OE)|(1<<POL)
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0031   00BB           00561     movwf PWM3CON
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0032   17BF           00562     bsf PWM3LDCON,7
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0033   143C           00563     bsf PWM3INTE,PRIE
+0034   0020           00564     banksel PIR3
+0035   1313           00565     bcf PIR3,PWM3IF
+0036   0021           00566     banksel PIE3
+Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
+0037   1713           00567     bsf PIE3,PWM3IE
+0038   170B           00568     bsf INTCON,PEIE
+0039   178B           00569     bsf INTCON,GIE
+003A   1480           00570     bsf flags, F_EVEN
+003B   1680           00571     bsf flags, F_SYNC
+                      00572     
+                      00573  ; all processing done in ISR    
+003C   2???           00574     goto $
+                      00575 
+                      00576 ; delay for each position    
+                      00577 ; there is 18 horizontal position
+  00000004            00578 PIXEL_DLY equ 4
+003D                  00579 delay_table
+003D   00??           00580     movwf temp
+003E   30??           00581     movlw high delay_table
+003F   008A           00582     movwf PCLATH
+0040   08??           00583     movfw temp
 Message[305]: Using default destination of 1 (file).
-0004   0A84           00508     incf FSR0L
-0005   1F84           00509     btfss FSR0L,7
-0006   2???           00510     goto $-3
-                      00511 ; disable analog inputs, except AN0
-0007   0023           00512     banksel ANSELA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0008   018C           00513     clrf ANSELA
-                      00514 ; paddle potentiometer input     
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0009   140C           00515     bsf ANSELA,PADDLE
-000A   0021           00516     banksel ADCON1
-000B   3020           00517     movlw (2<<ADCS0)
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-000C   009E           00518     movwf ADCON1
-                      00519 ; pin setup   
-000D   0021           00520     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-000E   108C           00521     bcf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-000F   110C           00522     bcf TRISA,SYNC_OUT
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0010   120C           00523     bcf TRISA,VIDEO_OUT
-0011   0022           00524     banksel LATA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0012   120C           00525     bcf LATA, VIDEO_OUT
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0013   150C           00526     bsf LATA, SYNC_OUT
-                      00527 ; PWM1 chroma signal on RA1
-0014   003B           00528     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0015   019F           00529     clrf PWM1LDCON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0016   0191           00530     clrf PWM1PHL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0017   0192           00531     clrf PWM1PHH
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0018   0197           00532     clrf PWM1OFL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0019   0198           00533     clrf PWM1OFH
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-001A   0196           00534     clrf PWM1PRH
-001B   3003           00535     movlw 3
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-001C   0095           00536     movwf PWM1PRL
-001D   3002           00537     movlw 2
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 58
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 55
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-001E   0093           00538     movwf PWM1DCL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-001F   0194           00539     clrf PWM1DCH
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0020   179F           00540     bsf PWM1LDCON,7
-0021   3080           00541     movlw (1<<EN)
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0022   009B           00542     movwf PWM1CON
-                      00543 ; PWM3 set to horizontal period 15734 hertz, output on RA2
-0023   003B           00544     banksel PWM3CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0024   01BF           00545     clrf PWM3LDCON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0025   01B1           00546     clrf PWM3PHL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0026   01B2           00547     clrf PWM3PHH
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0027   01B7           00548     clrf PWM3OFL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0028   01B8           00549     clrf PWM3OFH
-0029   308D           00550     movlw low HPERIOD
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-002A   00B5           00551     movwf PWM3PRL
-002B   3003           00552     movlw high HPERIOD
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-002C   00B6           00553     movwf PWM3PRH
-002D   3042           00554     movlw HSYNC
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-002E   00B3           00555     movwf PWM3DCL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-002F   01B4           00556     clrf PWM3DCH
-0030   30D0           00557     movlw (1<<EN)|(1<<OE)|(1<<POL)
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0031   00BB           00558     movwf PWM3CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0032   17BF           00559     bsf PWM3LDCON,7
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0033   143C           00560     bsf PWM3INTE,PRIE
-0034   0020           00561     banksel PIR3
-0035   1313           00562     bcf PIR3,PWM3IF
-0036   0021           00563     banksel PIE3
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0037   1713           00564     bsf PIE3,PWM3IE
-0038   170B           00565     bsf INTCON,PEIE
-0039   178B           00566     bsf INTCON,GIE
-003A   1480           00567     bsf flags, F_EVEN
-003B   1680           00568     bsf flags, F_SYNC
-                      00569     
-                      00570  ; all processing done in ISR    
-003C   2???           00571     goto $
-                      00572 
-                      00573 ; delay for each position    
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 59
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-                      00574 ; there is 18 horizontal position
-  00000004            00575 PIXEL_DLY equ 4
-003D                  00576 delay_table
-003D   00??           00577     movwf temp
-003E   30??           00578     movlw high delay_table
-003F   008A           00579     movwf PCLATH
-0040   08??           00580     movfw temp
-Message[305]: Using default destination of 1 (file).
-0041   0782           00581     addwf PCL
-0042   3400           00582     dt 0*PIXEL_DLY
-0043   3404           00583     dt 1*PIXEL_DLY
-0044   3408           00584     dt 2*PIXEL_DLY
-0045   340C           00585     dt 3*PIXEL_DLY
-0046   3410           00586     dt 4*PIXEL_DLY
-0047   3414           00587     dt 5*PIXEL_DLY
-0048   3418           00588     dt 6*PIXEL_DLY
-0049   341C           00589     dt 7*PIXEL_DLY
-004A   3420           00590     dt 8*PIXEL_DLY
-004B   3424           00591     dt 9*PIXEL_DLY
-004C   3428           00592     dt 10*PIXEL_DLY
-004D   342C           00593     dt 11*PIXEL_DLY
-004E   3430           00594     dt 12*PIXEL_DLY
-004F   3434           00595     dt 13*PIXEL_DLY
-0050   3438           00596     dt 14*PIXEL_DLY
-0051   343C           00597     dt 15*PIXEL_DLY
-0052   3440           00598     dt 16*PIXEL_DLY
-0053   3444           00599     dt 17*PIXEL_DLY
-                      00600     
-                      00601 eeprom org (PROG_SIZE-EEPROM_SIZE)
-0780                  00602 max_score 
-                      00603  
-3FA7 3EFF             00604     END
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 60
+0041   0782           00584     addwf PCL
+0042   3400           00585     dt 0*PIXEL_DLY
+0043   3404           00586     dt 1*PIXEL_DLY
+0044   3408           00587     dt 2*PIXEL_DLY
+0045   340C           00588     dt 3*PIXEL_DLY
+0046   3410           00589     dt 4*PIXEL_DLY
+0047   3414           00590     dt 5*PIXEL_DLY
+0048   3418           00591     dt 6*PIXEL_DLY
+0049   341C           00592     dt 7*PIXEL_DLY
+004A   3420           00593     dt 8*PIXEL_DLY
+004B   3424           00594     dt 9*PIXEL_DLY
+004C   3428           00595     dt 10*PIXEL_DLY
+004D   342C           00596     dt 11*PIXEL_DLY
+004E   3430           00597     dt 12*PIXEL_DLY
+004F   3434           00598     dt 13*PIXEL_DLY
+0050   3438           00599     dt 14*PIXEL_DLY
+0051   343C           00600     dt 15*PIXEL_DLY
+0052   3440           00601     dt 16*PIXEL_DLY
+0053   3444           00602     dt 17*PIXEL_DLY
+                      00603     
+                      00604 eeprom org (PROG_SIZE-EEPROM_SIZE)
+0780                  00605 max_score 
+                      00606  
+3FA7 3EFF             00607     END
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 56
 
 
 SYMBOL TABLE
@@ -3517,7 +3273,7 @@ C1INTP                            00000007
 C1NCH0                            00000000
 C1NCH1                            00000001
 C1NCH2                            00000002
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 61
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 57
 
 
 SYMBOL TABLE
@@ -3576,7 +3332,7 @@ DACOE                             00000005
 DACPSS0                           00000002
 DACPSS1                           00000003
 DACR0                             00000000
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 62
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 58
 
 
 SYMBOL TABLE
@@ -3635,7 +3391,7 @@ G1IS2                             00000002
 G1OEA                             00000005
 G1OEB                             00000006
 G1POLA                            00000003
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 63
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 59
 
 
 SYMBOL TABLE
@@ -3694,7 +3450,7 @@ IRCF1                             00000004
 IRCF2                             00000005
 IRCF3                             00000006
 LATA                              0000010C
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 64
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 60
 
 
 SYMBOL TABLE
@@ -3753,7 +3509,7 @@ OFS1                              00000001
 OPTION_REG                        00000095
 OSCCON                            00000099
 OSCSTAT                           0000009A
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 65
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 61
 
 
 SYMBOL TABLE
@@ -3812,7 +3568,7 @@ PWM1CON                           00000D9B
 PWM1CS0                           00000000
 PWM1CS1                           00000001
 PWM1DC                            00000D93
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 66
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 62
 
 
 SYMBOL TABLE
@@ -3871,7 +3627,7 @@ PWM1OFIF                          00000003
 PWM1OFL                           00000D97
 PWM1OFL0                          00000000
 PWM1OFL1                          00000001
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 67
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 63
 
 
 SYMBOL TABLE
@@ -3930,7 +3686,7 @@ PWM1PRL1                          00000001
 PWM1PRL2                          00000002
 PWM1PRL3                          00000003
 PWM1PRL4                          00000004
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 68
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 64
 
 
 SYMBOL TABLE
@@ -3989,7 +3745,7 @@ PWM2DCL7                          00000007
 PWM2EN                            00000007
 PWM2EN_A                          00000001
 PWM2IE                            00000005
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 69
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 65
 
 
 SYMBOL TABLE
@@ -4048,7 +3804,7 @@ PWM2PHH4                          00000004
 PWM2PHH5                          00000005
 PWM2PHH6                          00000006
 PWM2PHH7                          00000007
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 70
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 66
 
 
 SYMBOL TABLE
@@ -4107,7 +3863,7 @@ PWM2TMRL2                         00000002
 PWM2TMRL3                         00000003
 PWM2TMRL4                         00000004
 PWM2TMRL5                         00000005
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 71
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 67
 
 
 SYMBOL TABLE
@@ -4166,7 +3922,7 @@ PWM3OFH2                          00000002
 PWM3OFH3                          00000003
 PWM3OFH4                          00000004
 PWM3OFH5                          00000005
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 72
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 68
 
 
 SYMBOL TABLE
@@ -4225,7 +3981,7 @@ PWM3PRH5                          00000005
 PWM3PRH6                          00000006
 PWM3PRH7                          00000007
 PWM3PRIE                          00000000
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 73
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 69
 
 
 SYMBOL TABLE
@@ -4284,7 +4040,7 @@ RXDTSEL                           00000007
 SBOREN                            00000007
 SCKP                              00000004
 SCS0                              00000000
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 74
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 70
 
 
 SYMBOL TABLE
@@ -4343,7 +4099,7 @@ TMR0CS                            00000005
 TMR0IE                            00000005
 TMR0IF                            00000002
 TMR0SE                            00000004
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 75
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 71
 
 
 SYMBOL TABLE
@@ -4402,7 +4158,7 @@ VSYNC_PULSE                       00000183
 W                                 00000000
 WDTCON                            00000097
 WDTPS0                            00000001
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 76
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 72
 
 
 SYMBOL TABLE
@@ -4455,53 +4211,49 @@ _ISR_0008                         00000008
 _ISR_000E                         0000000E
 _ISR_000F                         0000000F
 _ISR_0081                         00000081
-_ISR_009D                         0000009D
-_ISR_00A6                         000000A6
-_ISR_00A7                         000000A7
-_ISR_00B9                         000000B9
-_ISR_00C2                         000000C2
-_ISR_00C3                         000000C3
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 77
+_ISR_00A0                         000000A0
+_ISR_00A9                         000000A9
+_ISR_00AA                         000000AA
+_ISR_00BC                         000000BC
+_ISR_00C5                         000000C5
+_ISR_00C6                         000000C6
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 73
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
-_ISR_00D5                         000000D5
-_ISR_00DC                         000000DC
-_ISR_00E4                         000000E4
-_ISR_00EA                         000000EA
-_ISR_00FC                         000000FC
-_ISR_0103                         00000103
-_ISR_010B                         0000010B
-_ISR_0111                         00000111
-_ISR_0123                         00000123
-_ISR_012A                         0000012A
-_ISR_0132                         00000132
-_ISR_0138                         00000138
-_ISR_014A                         0000014A
-_ISR_0151                         00000151
-_ISR_0159                         00000159
-_ISR_015F                         0000015F
-_ISR_0171                         00000171
-_ISR_0178                         00000178
-_ISR_0180                         00000180
-_ISR_0186                         00000186
-_ISR_0198                         00000198
-_ISR_019F                         0000019F
-_ISR_01A7                         000001A7
-_ISR_01AD                         000001AD
-_ISR_01BF                         000001BF
-_ISR_01C6                         000001C6
-_ISR_01CE                         000001CE
-_ISR_01D4                         000001D4
-_ISR_01E6                         000001E6
-_ISR_01ED                         000001ED
-_ISR_01F5                         000001F5
-_ISR_01FD                         000001FD
-_ISR_0205                         00000205
-_ISR_0206                         00000206
-_ISR_020C                         0000020C
+_ISR_00D8                         000000D8
+_ISR_00DF                         000000DF
+_ISR_00E7                         000000E7
+_ISR_00ED                         000000ED
+_ISR_00FF                         000000FF
+_ISR_0106                         00000106
+_ISR_010E                         0000010E
+_ISR_0114                         00000114
+_ISR_0126                         00000126
+_ISR_012D                         0000012D
+_ISR_0135                         00000135
+_ISR_013B                         0000013B
+_ISR_014D                         0000014D
+_ISR_0154                         00000154
+_ISR_015C                         0000015C
+_ISR_0162                         00000162
+_ISR_0174                         00000174
+_ISR_017B                         0000017B
+_ISR_0183                         00000183
+_ISR_0189                         00000189
+_ISR_019B                         0000019B
+_ISR_01A2                         000001A2
+_ISR_01AA                         000001AA
+_ISR_01B0                         000001B0
+_ISR_01C2                         000001C2
+_ISR_01C9                         000001C9
+_ISR_01D1                         000001D1
+_ISR_01D7                         000001D7
+_ISR_01E9                         000001E9
+_ISR_01EE                         000001EE
+_ISR_01F6                         000001F6
 _LPBOREN_OFF                      00003FFF
 _LPBOREN_ON                       000037FF
 _LVP_OFF                          00001FFF
@@ -4520,66 +4272,68 @@ _WDTE_NSLEEP                      00003FF7
 _WDTE_OFF                         00003FE7
 _WDTE_ON                          00003FFF
 _WDTE_SWDTEN                      00003FEF
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 78
+_WRT_ALL                          00003FFC
+_WRT_BOOT                         00003FFE
+_WRT_HALF                         00003FFD
+_WRT_OFF                          00003FFF
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 74
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
-_WRT_ALL                          00003FFC
-_WRT_BOOT                         00003FFE
-_WRT_HALF                         00003FFD
-_WRT_OFF                          00003FFF
 __12F1572                         00000001
 case                              
 delay_table                       0000003D
-draw_empty                        000001BD
-draw_paddle                       000001E4
-draw_row1                         000000FA
-draw_row2                         00000121
-draw_row3                         00000148
-draw_row4                         0000016F
-draw_row5                         00000196
-draw_void                         000000D3
+draw_empty                        000001C0
+draw_paddle                       000001E7
+draw_row1                         000000FD
+draw_row2                         00000124
+draw_row3                         0000014B
+draw_row4                         00000172
+draw_row5                         00000199
+draw_void                         000000D6
 eeprom                            00000780
-even_field                        00000229
-field_end                         00000233
+even_field                        00000213
+field_end                         0000021D
 flags                             00000000
-hi_line                           00000222
+hi_line                           0000020C
 isr                               00000004
 isr_exit                          00000028
 lcount                            00000001
 leave                             
 max_score                         00000780
-move_ball                         00000090
+move_ball                         00000093
 next_task                         
+paddle_pos                        00000006
+pos_left                          000001EF
 post_last                         00000061
 post_vsync                        00000058
 pre_vsync                         0000002B
-q                                 00000000
-r                                 00000002
+q                                 00000004
+r                                 00000000
 read_paddle                       0000007B
-score                             0000009B
-score_exit                        000000AD
+score                             0000009E
+score_exit                        000000B0
 set_color                         
 set_presync                       00000038
 set_vsync                         00000050
 slice                             00000002
-sound                             00000086
+sound                             00000089
 sound_timer                       00000005
 task                              00000003
 task_switch                       00000011
 tdelay                            
 temp                              00000004
-top_wall                          000000B7
-top_wall_exit                     000000C9
+top_wall                          000000BA
+top_wall_exit                     000000CC
 user_input                        00000073
-video_first                       00000093
+video_first                       00000096
 vsync                             00000043
 vsync_end                         00000065
-wait_field_end                    0000021C
+wait_field_end                    00000206
 
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-27-2019  21:59:21         PAGE 79
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   2-28-2019  11:40:02         PAGE 75
 
 
 
@@ -4587,6 +4341,6 @@ wait_field_end                    0000021C
 
 Errors   :     0
 Warnings :     0 reported,     0 suppressed
-Messages :   215 reported,     0 suppressed
+Messages :   212 reported,     0 suppressed
 
 

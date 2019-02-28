@@ -1,58 +1,61 @@
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 179 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 180 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 181 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 185 : Using default destination of 1 (file).
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 208 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 182 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 186 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 209 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 63 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 69 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 71 : Using default destination of 1 (file).
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 225 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 226 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 228 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 230 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 227 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 229 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 231 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 232 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 232 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 233 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 63 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 69 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 71 : Using default destination of 1 (file).
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 244 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 246 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 245 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 247 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 248 : Using default destination of 1 (file).
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 253 : Using default destination of 1 (file).
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 255 : Using default destination of 1 (file).
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 268 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 270 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 271 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 275 : Using default destination of 1 (file).
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 278 : Using default destination of 1 (file).
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 286 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 287 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 289 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 291 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 292 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 293 : Using default destination of 1 (file).
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 300 : Using default destination of 1 (file).
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 301 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 248 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 249 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 261 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 264 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 274 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 275 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 277 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 279 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 280 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 281 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 289 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 290 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 295 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 300 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 303 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 304 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 306 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 311 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 314 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 315 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 317 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 319 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 324 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 307 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 316 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 321 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 322 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 325 : Using default destination of 1 (file).
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 328 : Using default destination of 1 (file).
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 331 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 332 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 338 : Using default destination of 1 (file).
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 339 : Using default destination of 1 (file).
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 345 : Using default destination of 1 (file).
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 351 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 328 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 329 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 335 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 336 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 342 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 348 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 63 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 69 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 71 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
 Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
@@ -61,66 +64,144 @@ Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 63 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 69 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 71 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 63 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 69 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 71 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 63 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 69 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 71 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 63 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 69 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 71 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 63 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 69 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 71 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 63 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 69 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 71 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 63 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 69 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 71 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 132 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 134 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 63 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 69 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 71 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 461 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 118 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 120 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 121 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 96 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 113 : Register in operand not in bank 0.  Ensure that bank bits are correct.
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 63 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 69 : Using default destination of 1 (file).
 Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 71 : Using default destination of 1 (file).
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 402 : Using default destination of 1 (file).
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 425 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 427 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 428 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 437 : Using default destination of 1 (file).
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 448 : Using default destination of 1 (file).
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 453 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 455 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 458 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 461 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 462 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 463 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 465 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 466 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 469 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 470 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 471 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 472 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 473 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 474 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 476 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 478 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 479 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 480 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 482 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 485 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 486 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 487 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 488 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 489 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 491 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 493 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 495 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 496 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 498 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 499 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 500 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 504 : Register in operand not in bank 0.  Ensure that bank bits are correct.
-Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 521 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 496 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 519 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 521 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 522 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 531 : Using default destination of 1 (file).
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 542 : Using default destination of 1 (file).
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 547 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 549 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 552 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 555 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 556 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 557 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 559 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 560 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 563 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 564 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 565 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 566 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 567 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 568 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 570 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 572 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 573 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 574 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 576 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 579 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 580 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 581 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 582 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 583 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 585 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 587 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 589 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 590 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 592 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 593 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 594 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 598 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[305] /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm 615 : Using default destination of 1 (file).
