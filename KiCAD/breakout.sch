@@ -1,0 +1,356 @@
+EESchema Schematic File Version 4
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Personal_KiCAD:PIC12F1572 U1
+U 1 1 5C76EC79
+P 5550 4450
+F 0 "U1" H 5550 4815 60  0000 C CNN
+F 1 "PIC12F1572" H 5550 4725 39  0000 C CNN
+F 2 "" H 5550 4250 60  0001 C CNN
+F 3 "" H 5550 4250 60  0001 C CNN
+	1    5550 4450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Oscillators:ASE-xxxMHz X1
+U 1 1 5C76ED76
+P 4300 4400
+F 0 "X1" H 4525 4300 50  0000 L CNN
+F 1 "28.636Mhz" H 4350 4650 50  0000 L CNN
+F 2 "Oscillators:Oscillator_SMD_Abracon_ASE-4pin_3.2x2.5mm" H 5000 4050 50  0001 C CNN
+F 3 "http://www.abracon.com/Oscillators/ASV.pdf" H 4200 4400 50  0001 C CNN
+	1    4300 4400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4600 4400 5100 4400
+$Comp
+L power:GND #PWR08
+U 1 1 5C76F026
+P 4300 4700
+F 0 "#PWR08" H 4300 4450 50  0001 C CNN
+F 1 "GND" H 4305 4527 50  0000 C CNN
+F 2 "" H 4300 4700 50  0001 C CNN
+F 3 "" H 4300 4700 50  0001 C CNN
+	1    4300 4700
+	1    0    0    -1  
+$EndComp
+Text GLabel 4300 4100 1    50   Input ~ 0
++5v
+$Comp
+L device:POT RV1
+U 1 1 5C76F0E5
+P 6700 4400
+F 0 "RV1" H 6631 4354 50  0000 R CNN
+F 1 "1K (paddle)" H 6631 4445 50  0000 R CNN
+F 2 "" H 6700 4400 50  0001 C CNN
+F 3 "" H 6700 4400 50  0001 C CNN
+	1    6700 4400
+	-1   0    0    1   
+$EndComp
+$Comp
+L device:R R6
+U 1 1 5C76F165
+P 6400 4400
+F 0 "R6" V 6275 4400 50  0000 C CNN
+F 1 "1K" V 6400 4400 50  0000 C CNN
+F 2 "" V 6330 4400 50  0001 C CNN
+F 3 "" H 6400 4400 50  0001 C CNN
+	1    6400 4400
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR07
+U 1 1 5C76F1C8
+P 6700 4550
+F 0 "#PWR07" H 6700 4300 50  0001 C CNN
+F 1 "GND" H 6705 4377 50  0000 C CNN
+F 2 "" H 6700 4550 50  0001 C CNN
+F 3 "" H 6700 4550 50  0001 C CNN
+	1    6700 4550
+	1    0    0    -1  
+$EndComp
+Text GLabel 6700 4250 1    50   Input ~ 0
++5v
+Text GLabel 5100 4300 1    50   Input ~ 0
++5v
+$Comp
+L power:GND #PWR06
+U 1 1 5C76F233
+P 6000 4100
+F 0 "#PWR06" H 6000 3850 50  0001 C CNN
+F 1 "GND" V 6005 3972 50  0000 R CNN
+F 2 "" H 6000 4100 50  0001 C CNN
+F 3 "" H 6000 4100 50  0001 C CNN
+	1    6000 4100
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	6000 4100 6000 4300
+Text Label 6000 4400 0    50   ~ 0
+audio
+Wire Wire Line
+	6000 4400 6250 4400
+$Comp
+L conn:Conn_Coaxial J2
+U 1 1 5C76F2F8
+P 6600 3375
+F 0 "J2" H 6699 3351 50  0000 L CNN
+F 1 "audio_out" H 6699 3260 50  0000 L CNN
+F 2 "" H 6600 3375 50  0001 C CNN
+F 3 "" H 6600 3375 50  0001 C CNN
+	1    6600 3375
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR04
+U 1 1 5C76F361
+P 6600 3575
+F 0 "#PWR04" H 6600 3325 50  0001 C CNN
+F 1 "GND" H 6605 3402 50  0000 C CNN
+F 2 "" H 6600 3575 50  0001 C CNN
+F 3 "" H 6600 3575 50  0001 C CNN
+	1    6600 3575
+	1    0    0    -1  
+$EndComp
+$Comp
+L device:R R5
+U 1 1 5C76F376
+P 6325 3525
+F 0 "R5" V 6200 3525 50  0000 C CNN
+F 1 "1K" V 6325 3525 50  0000 C CNN
+F 2 "" V 6255 3525 50  0001 C CNN
+F 3 "" H 6325 3525 50  0001 C CNN
+	1    6325 3525
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR05
+U 1 1 5C76F3E4
+P 6325 3675
+F 0 "#PWR05" H 6325 3425 50  0001 C CNN
+F 1 "GND" H 6330 3502 50  0000 C CNN
+F 2 "" H 6325 3675 50  0001 C CNN
+F 3 "" H 6325 3675 50  0001 C CNN
+	1    6325 3675
+	1    0    0    -1  
+$EndComp
+$Comp
+L device:R R4
+U 1 1 5C76F3FB
+P 6050 3375
+F 0 "R4" V 5925 3375 50  0000 C CNN
+F 1 "10K" V 6050 3375 50  0000 C CNN
+F 2 "" V 5980 3375 50  0001 C CNN
+F 3 "" H 6050 3375 50  0001 C CNN
+	1    6050 3375
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	6200 3375 6325 3375
+Wire Wire Line
+	6325 3375 6450 3375
+Connection ~ 6325 3375
+Text Label 5900 3375 2    50   ~ 0
+audio
+Text Label 6000 4500 0    50   ~ 0
+chroma
+Text Label 6000 4600 0    50   ~ 0
+sync
+Text Label 5100 4500 2    50   ~ 0
+video_y
+$Comp
+L switches:SW_Push_45deg SW2
+U 1 1 5C76F596
+P 4950 4950
+F 0 "SW2" V 4996 4809 50  0000 R CNN
+F 1 "start" V 4900 4900 50  0000 R CNN
+F 2 "" H 4950 4950 50  0001 C CNN
+F 3 "" H 4950 4950 50  0001 C CNN
+	1    4950 4950
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:GND #PWR09
+U 1 1 5C76F6D6
+P 4850 5050
+F 0 "#PWR09" H 4850 4800 50  0001 C CNN
+F 1 "GND" H 4855 4877 50  0000 C CNN
+F 2 "" H 4850 5050 50  0001 C CNN
+F 3 "" H 4850 5050 50  0001 C CNN
+	1    4850 5050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5050 4850 5050 4600
+Wire Wire Line
+	5050 4600 5100 4600
+$Comp
+L conn:Conn_Coaxial J1
+U 1 1 5C76F7FB
+P 6575 2775
+F 0 "J1" H 6674 2751 50  0000 L CNN
+F 1 "video_out" H 6674 2660 50  0000 L CNN
+F 2 "" H 6575 2775 50  0001 C CNN
+F 3 "" H 6575 2775 50  0001 C CNN
+	1    6575 2775
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR01
+U 1 1 5C76F8AD
+P 6575 2975
+F 0 "#PWR01" H 6575 2725 50  0001 C CNN
+F 1 "GND" H 6580 2802 50  0000 C CNN
+F 2 "" H 6575 2975 50  0001 C CNN
+F 3 "" H 6575 2975 50  0001 C CNN
+	1    6575 2975
+	1    0    0    -1  
+$EndComp
+$Comp
+L device:R R2
+U 1 1 5C76F8CA
+P 6150 2775
+F 0 "R2" V 6050 2775 50  0000 C CNN
+F 1 "150" V 6150 2775 50  0000 C CNN
+F 2 "" V 6080 2775 50  0001 C CNN
+F 3 "" H 6150 2775 50  0001 C CNN
+	1    6150 2775
+	0    -1   -1   0   
+$EndComp
+$Comp
+L device:R R3
+U 1 1 5C76F93C
+P 6150 3025
+F 0 "R3" V 6050 3025 50  0000 C CNN
+F 1 "680" V 6150 3025 50  0000 C CNN
+F 2 "" V 6080 3025 50  0001 C CNN
+F 3 "" H 6150 3025 50  0001 C CNN
+	1    6150 3025
+	0    -1   -1   0   
+$EndComp
+$Comp
+L device:R R1
+U 1 1 5C76F9A1
+P 6150 2550
+F 0 "R1" V 6050 2550 50  0000 C CNN
+F 1 "1k2" V 6150 2550 50  0000 C CNN
+F 2 "" V 6080 2550 50  0001 C CNN
+F 3 "" H 6150 2550 50  0001 C CNN
+	1    6150 2550
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	6300 2550 6300 2775
+Wire Wire Line
+	6300 2775 6300 3025
+Connection ~ 6300 2775
+Wire Wire Line
+	6300 2775 6425 2775
+Text Label 6000 2550 2    50   ~ 0
+chroma
+Text Label 5700 2775 2    50   ~ 0
+video_y
+Text Label 6000 3025 2    50   ~ 0
+sync
+$Comp
+L device:D_ALT D1
+U 1 1 5C770167
+P 5850 2775
+F 0 "D1" H 5850 2875 50  0000 C CNN
+F 1 "1N4148" H 5875 2675 50  0000 C CNN
+F 2 "" H 5850 2775 50  0001 C CNN
+F 3 "" H 5850 2775 50  0001 C CNN
+	1    5850 2775
+	-1   0    0    1   
+$EndComp
+$Comp
+L device:Battery BT1
+U 1 1 5C7703E9
+P 3750 3300
+F 0 "BT1" H 3858 3346 50  0000 L CNN
+F 1 "6V" H 3858 3255 50  0000 L CNN
+F 2 "" V 3750 3360 50  0001 C CNN
+F 3 "~" V 3750 3360 50  0001 C CNN
+	1    3750 3300
+	1    0    0    -1  
+$EndComp
+$Comp
+L device:D_ALT D2
+U 1 1 5C770637
+P 4400 3100
+F 0 "D2" H 4400 3200 50  0000 C CNN
+F 1 "1N4001" H 4425 3000 50  0000 C CNN
+F 2 "" H 4400 3100 50  0001 C CNN
+F 3 "" H 4400 3100 50  0001 C CNN
+	1    4400 3100
+	-1   0    0    1   
+$EndComp
+$Comp
+L switches:SW_SPST SW1
+U 1 1 5C770789
+P 4050 3100
+F 0 "SW1" H 4050 3335 50  0000 C CNN
+F 1 "power" H 4050 3244 50  0000 C CNN
+F 2 "" H 4050 3100 50  0001 C CNN
+F 3 "" H 4050 3100 50  0001 C CNN
+	1    4050 3100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3750 3100 3850 3100
+Text GLabel 4775 3100 2    50   Input ~ 0
++5v
+$Comp
+L power:GND #PWR03
+U 1 1 5C77092A
+P 3750 3500
+F 0 "#PWR03" H 3750 3250 50  0001 C CNN
+F 1 "GND" H 3755 3327 50  0000 C CNN
+F 2 "" H 3750 3500 50  0001 C CNN
+F 3 "" H 3750 3500 50  0001 C CNN
+	1    3750 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L device:CP C1
+U 1 1 5C770A3C
+P 4650 3250
+F 0 "C1" H 4768 3296 50  0000 L CNN
+F 1 "10µF/25v" H 4768 3205 50  0000 L CNN
+F 2 "" H 4688 3100 50  0001 C CNN
+F 3 "" H 4650 3250 50  0001 C CNN
+	1    4650 3250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4550 3100 4650 3100
+Wire Wire Line
+	4650 3100 4775 3100
+Connection ~ 4650 3100
+$Comp
+L power:GND #PWR02
+U 1 1 5C770C55
+P 4650 3400
+F 0 "#PWR02" H 4650 3150 50  0001 C CNN
+F 1 "GND" H 4655 3227 50  0000 C CNN
+F 2 "" H 4650 3400 50  0001 C CNN
+F 3 "" H 4650 3400 50  0001 C CNN
+	1    4650 3400
+	1    0    0    -1  
+$EndComp
+NoConn ~ 4000 4400
+$EndSCHEMATC
