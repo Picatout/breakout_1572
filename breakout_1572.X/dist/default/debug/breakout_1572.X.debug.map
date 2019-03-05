@@ -1,5 +1,5 @@
 MPLINK 5.09, LINKER
-Linker Map File - Created Tue Mar  5 15:31:23 2019
+Linker Map File - Created Tue Mar  5 15:03:23 2019
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
@@ -7,10 +7,10 @@ Linker Map File - Created Tue Mar  5 15:31:23 2019
                  RES_VECT       code   0x000000    program   0x000008
                       ISR       code   0x000004    program   0x000618
                    .cinit    romdata   0x000310    program   0x000004
-                MAIN_PROG       code   0x000312    program   0x000114
+                MAIN_PROG       code   0x000312    program   0x000110
                    .org_0       code   0x000780    program   0x000000
-.config_8007_BUILD/DEFAULT/PRODUCTION/BREAKOU       code   0x008007    program   0x000002
-.config_8008_BUILD/DEFAULT/PRODUCTION/BREAKOU       code   0x008008    program   0x000002
+.config_8007_BUILD/DEFAULT/DEBUG/BREAKOUT1572       code   0x008007    program   0x000002
+.config_8008_BUILD/DEFAULT/DEBUG/BREAKOUT1572       code   0x008008    program   0x000002
                    .udata      udata   0x000020       data   0x000015
                .udata_shr      udata   0x000070       data   0x00000f
                   v_array      udata   0x0000a0       data   0x000005
@@ -20,9 +20,9 @@ Linker Map File - Created Tue Mar  5 15:31:23 2019
                               Program Memory Usage 
                                Start         End      
                            ---------   ---------      
-                            0x000000    0x00039b      
+                            0x000000    0x000399      
                             0x008007    0x008008      
-            926 out of 2055 program addresses used, program memory utilization is 45%
+            924 out of 2055 program addresses used, program memory utilization is 44%
 
 
 
@@ -108,12 +108,12 @@ Linker Map File - Created Tue Mar  5 15:31:23 2019
           _MAIN_PROG_0006   0x000318    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
           _MAIN_PROG_000D   0x00031f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
           _MAIN_PROG_0052   0x000364    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          _MAIN_PROG_0056   0x000368    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+          _MAIN_PROG_0054   0x000366    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                   at_left   0x00029c    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                   bcd_add   0x0002dc    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
              digit_offset   0x0002f9    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                 digit_row   0x0000de    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                   digits   0x000369    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                   digits   0x000367    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                draw_empty   0x000264    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
               draw_paddle   0x000289    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                 draw_row1   0x00012d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
@@ -139,7 +139,6 @@ Linker Map File - Created Tue Mar  5 15:31:23 2019
                post_vsync   0x00005b    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                 pre_vsync   0x00002e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
               read_paddle   0x00007e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                row3_exit   0x0001dd    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                score_exit   0x0000d4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
               set_presync   0x00003b    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                 set_vsync   0x000053    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
@@ -252,7 +251,6 @@ Linker Map File - Created Tue Mar  5 15:31:23 2019
                 _ISR_01CA   0x0001ca    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                 _ISR_01D4   0x0001d4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                 _ISR_01DA   0x0001da    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                row3_exit   0x0001dd    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                 draw_row4   0x0001e7    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                 _ISR_01EE   0x0001ee    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                 _ISR_01EF   0x0001ef    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
@@ -304,8 +302,8 @@ Linker Map File - Created Tue Mar  5 15:31:23 2019
           _MAIN_PROG_000D   0x00031f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                 test_loop   0x00035f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
           _MAIN_PROG_0052   0x000364    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          _MAIN_PROG_0056   0x000368    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                   digits   0x000369    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+          _MAIN_PROG_0054   0x000366    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                   digits   0x000367    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                    eeprom   0x000780    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                 max_score   0x000780    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                     stack   0x000020       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm

@@ -296,16 +296,20 @@ row2 res 1
 row3 res 1
 row4 res 1
 row5 res 1
-score_array res 16
- 
- 
+
+v_array   udata 0xA0
+d1 res 1 ; score msd digit pixels
+d2 res 1 ; score 2nd digit pixels
+d3 res 1 ; score lsd digit pixels
+balls res 1 ; number of recking balls available 
+sound_timer res 1 ; duration in multiple of 16.7msec. 
+  
     udata_shr
 flags  res 1 ; boolean variables
 lcount res 1 ; video field line counter
 slice res 1 ; task slice counter, a task may use more than one slice.
 task res 1 ; where in video phase 
-temp res 1 ; temporary storage
-sound_timer res 1 ; duration in multiple of 16.7msec. 
+temp res 2 ; temporary storage
 paddle_pos res 1 
 ball_x res 1
 ball_y res 1
@@ -480,8 +484,10 @@ sound
     incf lcount
     btfss flags, F_SOUND
     leave
+    banksel sound_timer
     decfsz sound_timer
     leave
+    bcf flags, F_SOUND
     banksel PWM2CON
     bcf PWM2CON,OE
     bcf PWM2CON,EN
@@ -516,15 +522,71 @@ LEFT_MARGIN equ 16
 TOP_LINE_WIDTH equ 330
 BRICK_HEIGHT equ 8
 BORDER_WIDTH equ 4
+FIRST_VIDEO_LINE equ 26
  
 ; task 8, draw score en ball count, 6 slices    
 draw_score
-    tdelay LEFT_MARGIN
-    black
-    
-    black
+    banksel TRISA
+    movfw slice
+    lsrf WREG
+    lsrf WREG
+    pushw
+    movlw 0xf
+    andwf score+1,W
+    call digit_offset
+    addwf T,W
+    call digits
+    movwf d3
+    swapf score+1,W
+    andlw 0xf
+    call digit_offset
+    addwf T,W
+    call digits
+    movwf d2
+    movlw 0xf
+    andwf score,W
+    call digit_offset
+    addwf T,W
+    call digits
+    call digit_row
+    movfw d2
+    call digit_row
+    movfw d3
+    call digit_row
+    tdelay 60
+    bcf TRISA,VIDEO_OUT
+    tdelay 5
+    bsf TRISA,VIDEO_OUT
+    tdelay 30
+    movfw balls
+    call digit_offset
+    addwf T,W
+    call digits
+    call digit_row
 score_exit
-    next_task 6*4
+    next_task 5*4
+
+; display digit row    
+digit_row
+    rlf WREG
+    skpnc
+    bcf TRISA,VIDEO_OUT
+    skpc
+    bsf TRISA,VIDEO_OUT
+    rlf WREG
+    skpnc
+    bcf TRISA,VIDEO_OUT
+    skpc
+    bsf TRISA,VIDEO_OUT
+    rlf WREG
+    skpnc
+    bcf TRISA,VIDEO_OUT
+    skpc
+    bsf TRISA,VIDEO_OUT
+    bra $+1
+    bra $+1
+    bsf TRISA,VIDEO_OUT
+    return
     
 ; task 9,  draw top wall, 8 screen lines    
 draw_top_wall
@@ -574,6 +636,8 @@ draw_row2 ;cyan
 
 ; task 13, draw 3rd brick row    
 draw_row3 ; green
+;    btfss flags, F_EVEN
+;    bra row3_exit
     chroma_ref
     banksel row3
     movfw row3
@@ -584,6 +648,7 @@ draw_row3 ; green
     black
     tdelay 3
     draw_border BORDER_WIDTH
+row3_exit    
     next_task BRICK_HEIGHT
     
 ; task 14, draw 4th brick row    
@@ -739,6 +804,21 @@ inc_score
     dropn 1
     return
     
+;***********************************
+; digit_offset, compute digit position in 'digits' table
+;   position = digit * 5
+; 
+; input: WREG -> digit value {0..9}
+;         
+; output: WREG -> displacement in table
+;***********************************
+digit_offset    
+    pushw 
+    lslf WREG
+    lslf WREG
+    addwf T
+    popw
+    return
     
 init_brick_wall
     movlw high brick_wall
@@ -857,46 +937,37 @@ START
 ;    movwf score+1
 ;    movlw 9
 ;    call inc_score
+    banksel balls
+    movlw 3
+    movwf balls
+test_loop
+    movlw 60
+    banksel sound_timer
+    movwf sound_timer
+    bsf flags, F_SOUND
+    btfsc flags, F_SOUND
+    bra $-1
+    movlw 1
+    call inc_score
+    bra test_loop
 ; end test code    
  ; all processing done in ISR    
     goto $
 
 ; digits character table
-; 2 rows packed per byte
-; 5 nibbles per character
 digits
-    movlp high (digits+2)
     brw
-    dt  H'44',H'AC',H'A4',H'A4',H'4E' ; 0, 1
-    dt  H'EE',H'22',H'CC',H'82',H'EE' ; 2, 3
-    dt  H'AE',H'A8',H'EE',H'22',H'2E' ; 4, 5
-    dt  H'CE',H'82',H'E2',H'A2',H'E2' ; 6, 7
-    dt  H'EE',H'AA',H'EE',H'A2',H'E6' ; 8, 9
+    dt  0x40,0xA0,0xA0,0xA0,0x40 ; 0
+    dt  0x40,0xC0,0x40,0x40,0xE0 ; 1
+    dt  0xE0,0x20,0xC0,0x80,0xE0 ; 2
+    dt  0xE0,0x20,0xC0,0x20,0xE0 ; 3
+    dt  0xA0,0xA0,0xE0,0x20,0x20 ; 4
+    dt  0xE0,0x80,0xE0,0x20,0xE0 ; 5
+    dt  0xC0,0x80,0xE0,0xA0,0xE0 ; 6
+    dt  0xE0,0x20,0x20,0x20,0x20 ; 7
+    dt  0xE0,0xA0,0xE0,0xA0,0xE0 ; 8
+    dt  0xE0,0xA0,0xE0,0x20,0x60 ; 9
     
-; delay for each position    
-; there is 18 horizontal position
-PIXEL_DLY equ 4
-delay_table
-    movlp high (delay_table+2)
-    addwf PCL
-    dt 0*PIXEL_DLY
-    dt 1*PIXEL_DLY
-    dt 2*PIXEL_DLY
-    dt 3*PIXEL_DLY
-    dt 4*PIXEL_DLY
-    dt 5*PIXEL_DLY
-    dt 6*PIXEL_DLY
-    dt 7*PIXEL_DLY
-    dt 8*PIXEL_DLY
-    dt 9*PIXEL_DLY
-    dt 10*PIXEL_DLY
-    dt 11*PIXEL_DLY
-    dt 12*PIXEL_DLY
-    dt 13*PIXEL_DLY
-    dt 14*PIXEL_DLY
-    dt 15*PIXEL_DLY
-    dt 16*PIXEL_DLY
-    dt 17*PIXEL_DLY
     
 eeprom org (PROG_SIZE-EEPROM_SIZE)
 max_score 
