@@ -98,7 +98,7 @@ ${OBJECTDIR}/breakout1572.o: breakout1572.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/breakout1572.o.d 
 	@${RM} ${OBJECTDIR}/breakout1572.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/breakout1572.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_PK3=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/breakout1572.lst\\\" -e\\\"${OBJECTDIR}/breakout1572.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/breakout1572.o\\\" \\\"breakout1572.asm\\\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/breakout1572.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_PK3=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/breakout1572.lst\\\" -e\\\"${OBJECTDIR}/breakout1572.err\\\" $(ASM_OPTIONS) -w2   -o\\\"${OBJECTDIR}/breakout1572.o\\\" \\\"breakout1572.asm\\\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/breakout1572.o"
 	@${FIXDEPS} "${OBJECTDIR}/breakout1572.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -107,7 +107,7 @@ ${OBJECTDIR}/breakout1572.o: breakout1572.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/breakout1572.o.d 
 	@${RM} ${OBJECTDIR}/breakout1572.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/breakout1572.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/breakout1572.lst\\\" -e\\\"${OBJECTDIR}/breakout1572.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/breakout1572.o\\\" \\\"breakout1572.asm\\\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/breakout1572.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/breakout1572.lst\\\" -e\\\"${OBJECTDIR}/breakout1572.err\\\" $(ASM_OPTIONS) -w2   -o\\\"${OBJECTDIR}/breakout1572.o\\\" \\\"breakout1572.asm\\\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/breakout1572.o"
 	@${FIXDEPS} "${OBJECTDIR}/breakout1572.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	

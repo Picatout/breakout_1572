@@ -445,8 +445,13 @@ vsync_end
 
 ;task 4, read button and paddle position
 PADDLE_WIDTH equ 32
-PADDLE_LIMIT equ 92
-
+PADDLE_LIMIT equ 93
+BALL_LEFT_BOUND equ 0
+BALL_RIGHT_BOUND equ 100
+BALL_TOP_BOUND equ 54
+BALL_BOTTOM_BOUND equ 240 ;(BALL_TOP_BOUND+7*BRICK_HEIGHT+118)
+ 
+ 
 user_input
     incf task
     incf lcount
@@ -496,6 +501,7 @@ sound
    
 ; task 6, move recking ball and check collision    
 move_ball
+    
     incf task
     incf lcount
     leave
@@ -518,13 +524,13 @@ video_first
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
 ; constants used in video display
-LEFT_MARGIN equ 16
-TOP_LINE_WIDTH equ 330
+LEFT_MARGIN equ 24
+COURT_WIDTH equ 304
 BRICK_HEIGHT equ 8
 BORDER_WIDTH equ 4
 FIRST_VIDEO_LINE equ 26
  
-; task 8, draw score en ball count, 6 slices    
+; task 8, draw score en ball count
 draw_score
     banksel TRISA
     movfw slice
@@ -590,34 +596,99 @@ digit_row
     
 ; task 9,  draw top wall, 8 screen lines    
 draw_top_wall
-    tdelay LEFT_MARGIN
+    btfss flags, F_EVEN
+    bra top_wall_exit
+    tdelay LEFT_MARGIN-2
     white
-    tdelay TOP_LINE_WIDTH
+    tdelay COURT_WIDTH+3*BORDER_WIDTH+1
     black
 top_wall_exit
     next_task BRICK_HEIGHT
 
-; task 10,  draw void space between top wall and top brick row, 8 slices    
+; task 10,  only on even field draw vertical side bands.    
 draw_void
-    tdelay LEFT_MARGIN
+    btfss flags, F_EVEN
+    bra no_wall_draw
+    movfw ball_y
+    subwf lcount,W
+    skpc
+    bra no_ball_dly
+    movlw 8
+    addwf ball_y,W
+    subwf lcount,W
+    skpc
+    bra yes_ball
+    bra no_ball
+no_ball_dly
+    tdelay 6
+no_ball    
+    tdelay LEFT_MARGIN-13
     draw_border BORDER_WIDTH
     black
-    tdelay 317
+    tdelay COURT_WIDTH
     draw_border BORDER_WIDTH
+    bra draw_void_exit
+yes_ball
+    tdelay LEFT_MARGIN-11
+    banksel TRISA
+    bcf TRISA, VIDEO_OUT
+    movfw ball_x
+    skpz
+    bra ball_delayed
+    tdelay 8
+    bsf TRISA,VIDEO_OUT
+    nop
+    bra after_ball
+ball_delayed
+    bsf TRISA,VIDEO_OUT
+    movfw ball_x
+    decfsz WREG
+    bra $-1
+    bcf TRISA,VIDEO_OUT
+    tdelay 8
+    bsf TRISA, VIDEO_OUT
+after_ball
+;    movlw PADDLE_LIMIT
+;    subwf ball_x,W
+    movfw ball_x
+    sublw BALL_RIGHT_BOUND-3
+    skpnz
+    bcf TRISA,VIDEO_OUT
+    addlw 1
+    decfsz WREG
+    bra $-1
+    nop
+draw_border_no_dly    
+    bcf TRISA, VIDEO_OUT
+    tdelay 4
+    bsf TRISA, VIDEO_OUT
+draw_void_exit    
+    incf slice
+    incf lcount
+    movlw 8*BRICK_HEIGHT+118
+    subwf slice,W
+    skpz
+    leave
+    movlw 18
+    clrf slice
+    movwf task
+    leave
+    ;    next_task 125*BRICK_HEIGHT
+no_wall_draw
     next_task 2*BRICK_HEIGHT
-
+    
 ; task 11, draw top brick row
 draw_row1 ; yellow
     chroma_ref
     banksel row1
     movfw row1
     movwf temp
-    tdelay LEFT_MARGIN-5
-    draw_border BORDER_WIDTH
+    tdelay LEFT_MARGIN-4
+;    draw_border BORDER_WIDTH
     draw_wall yellow
     black
     tdelay 3
-    draw_border BORDER_WIDTH
+;    draw_border BORDER_WIDTH
     next_task BRICK_HEIGHT
     
 ; task 12, draw 2nd brick row    
@@ -626,12 +697,12 @@ draw_row2 ;cyan
     banksel row2
     movfw row2
     movwf temp
-    tdelay LEFT_MARGIN-5
-    draw_border BORDER_WIDTH
+    tdelay LEFT_MARGIN-4
+;    draw_border BORDER_WIDTH
     draw_wall cyan
     black
     tdelay 3
-    draw_border BORDER_WIDTH
+;    draw_border BORDER_WIDTH
     next_task BRICK_HEIGHT
 
 ; task 13, draw 3rd brick row    
@@ -642,12 +713,12 @@ draw_row3 ; green
     banksel row3
     movfw row3
     movwf temp
-    tdelay LEFT_MARGIN-5
-    draw_border BORDER_WIDTH
+    tdelay LEFT_MARGIN-4
+;    draw_border BORDER_WIDTH
     draw_wall green
     black
     tdelay 3
-    draw_border BORDER_WIDTH
+;    draw_border BORDER_WIDTH
 row3_exit    
     next_task BRICK_HEIGHT
     
@@ -657,12 +728,12 @@ draw_row4 ; dark blue
     banksel row4
     movfw row4
     movwf temp
-    tdelay LEFT_MARGIN-5
-    draw_border BORDER_WIDTH
+    tdelay LEFT_MARGIN-4
+;    draw_border BORDER_WIDTH
     draw_wall dark_blue
     black
     tdelay 3
-    draw_border BORDER_WIDTH
+;    draw_border BORDER_WIDTH
     next_task BRICK_HEIGHT
 
 ; task 15, draw 5th brick row    
@@ -671,49 +742,58 @@ draw_row5 ; white
     movfw row5
     movwf temp
     tdelay LEFT_MARGIN-3
-    draw_border BORDER_WIDTH
+;    draw_border BORDER_WIDTH
     draw_wall white
     black
     tdelay 3
-    draw_border BORDER_WIDTH
+;    draw_border BORDER_WIDTH
     black
     next_task BRICK_HEIGHT
 
 ; task 16,draw all rows between paddle and lower brick row    
 draw_empty
     tdelay LEFT_MARGIN
-    draw_border BORDER_WIDTH
+;    draw_border BORDER_WIDTH
     tdelay 320
-    draw_border BORDER_WIDTH
+;    draw_border BORDER_WIDTH
     black
     next_task 118
 
     
 ; task 17, draw paddle at bottom screen    
 draw_paddle
-    tdelay LEFT_MARGIN
-    draw_border BORDER_WIDTH
+    tdelay LEFT_MARGIN+2
     movfw paddle_pos
     skpnz
-    bcf TRISA,VIDEO_OUT
-    skpnz
-    bra at_left+2
+    bra $+3
     decfsz WREG
     bra $-1
-at_left
-    nop
+    banksel TRISA
     bcf TRISA,VIDEO_OUT
     tdelay PADDLE_WIDTH
-    movfw paddle_pos
-    sublw PADDLE_LIMIT
-    nop
-    skpnz
-    bra $+5
-    nop
     bsf TRISA,VIDEO_OUT
-    decfsz WREG
-    bra $-1
-    draw_border BORDER_WIDTH
+;    draw_border BORDER_WIDTH
+;    movfw paddle_pos
+;    skpnz
+;    bcf TRISA,VIDEO_OUT
+;    skpnz
+;    bra at_left+2
+;    decfsz WREG
+;    bra $-1
+;at_left
+;    nop
+;    bcf TRISA,VIDEO_OUT
+;    tdelay PADDLE_WIDTH
+;    movfw paddle_pos
+;    sublw PADDLE_LIMIT
+;    nop
+;    skpnz
+;    bra $+5
+;    nop
+;    bsf TRISA,VIDEO_OUT
+;    decfsz WREG
+;    bra $-1
+;    draw_border BORDER_WIDTH
     next_task 8
 
 ; task 18,  wait end of this field, reset task to zero    
@@ -933,13 +1013,14 @@ START
     bsf flags, F_EVEN
     bsf flags, F_SYNC
 ; test code
-;    movlw 0x98
-;    movwf score+1
-;    movlw 9
-;    call inc_score
     banksel balls
     movlw 3
     movwf balls
+    movlw BALL_RIGHT_BOUND-3
+    movwf ball_x
+;    clrf ball_x
+    movlw BALL_BOTTOM_BOUND-40
+    movwf ball_y
 test_loop
     movlw 60
     banksel sound_timer

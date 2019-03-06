@@ -1,4 +1,4 @@
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE  1
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -57,7 +57,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00041  
                       00042 
                       00043 ;;;;;;;;;;;;;;;;;;;;;;
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE  2
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -116,7 +116,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00094     variable r=(T)%3
                       00095     if (q)
                       00096     movlw q
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE  3
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE  3
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -175,7 +175,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00147 ;   colors macros
                       00148 ; each one take 5 T 
                       00149 ;;;;;;;;;;;;;;;;;;;;;;
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE  4
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE  4
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -234,7 +234,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00200 ; draw a brick
                       00201 ; use 6T+BRICK_WIDTH
                       00202 ; if carry is 1 draw in color else draw black    
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE  5
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE  5
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -293,7 +293,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00253 pushw  macro
                       00254     movwi --SP
                       00255     endm
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE  6
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE  6
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -336,7 +336,6 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00290     
                       00291     udata 0x20
 0020                  00292 stack res 16 ; arguments stack
-Warning[231]: No memory has been reserved by this instruction
 0030                  00293 brick_wall res 0  ; bricks data 1 byte per brick row.
 0030                  00294 row1 res 1; brick wall row1
 0031                  00295 row2 res 1
@@ -352,13 +351,13 @@ Warning[231]: No memory has been reserved by this instruction
 00A4                  00305 sound_timer res 1 ; duration in multiple of 16.7msec. 
                       00306   
                       00307     udata_shr
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE  7
+0000                  00308 flags  res 1 ; boolean variables
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE  7
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0000                  00308 flags  res 1 ; boolean variables
 0001                  00309 lcount res 1 ; video field line counter
 0002                  00310 slice res 1 ; task slice counter, a task may use more than one slice.
 0003                  00311 task res 1 ; where in video phase 
@@ -391,7 +390,6 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
   0000                    M     variable r=(30)%3
                           M     if (q)
 0006   300A               M     movlw q
-Message[305]: Using default destination of 1 (file).
 0007   0B89               M     decfsz WREG
 0008   2???               M     goto $-1
                           M     endif
@@ -402,39 +400,34 @@ Message[305]: Using default destination of 1 (file).
                           M     nop
                           M     endif
 0009   0021           00337     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 000A   108C           00338     bcf TRISA,CHROMA
                       00339     tdelay 16
   0005                    M     variable q=(16)/3
   0001                    M     variable r=(16)%3
                           M     if (q)
 000B   3005               M     movlw q
-Message[305]: Using default destination of 1 (file).
 000C   0B89               M     decfsz WREG
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE  8
+000D   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE  8
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-000D   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
                           M     endif 
                           M     if (r==1)
 000E   0000               M     nop
                           M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 000F   148C           00340     bsf TRISA,CHROMA
                       00341     porch_on
 0010   0024               M     banksel WPUA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 0011   160C               M     bsf WPUA,VIDEO_OUT
 0012                  00342 task_switch    
 0012   018A           00343     clrf PCLATH
 0013   08??           00344     movfw task
-Message[305]: Using default destination of 1 (file).
 0014   0782           00345     addwf PCL
 0015   2???           00346     goto pre_vsync ;task 0, vertical pre-equalization pulses, 6 slices
 0016   2???           00347     goto vsync ;task 1, vertical sync pulses, 6 slices
@@ -459,10 +452,8 @@ Message[305]: Using default destination of 1 (file).
 0029                  00366 isr_exit  
                       00367     porch_off
 0029   0024               M     banksel WPUA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 002A   120C               M     bcf WPUA,VIDEO_OUT
 002B   003B           00368     banksel PWM3INTF
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 002C   103D           00369     bcf PWM3INTF,PRIF
 002D   0009           00370     retfie
                       00371 
@@ -470,12 +461,6 @@ Message[302]: Register in operand not in bank 0.  Ensure that bank bits are corr
                       00373 ;;  all tasks routine are here            ;;
                       00374 ;;  each must be terminate by leave macro ;;    
                       00375 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE  9
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                       00376     
                       00377 ; task 0, vertical synchronization pre equalization
 002E                  00378 pre_vsync
@@ -483,37 +468,34 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 002F   1903           00380     skpnz
 0030   2???           00381     goto set_presync
                       00382     next_task 6
-Message[305]: Using default destination of 1 (file).
 0031   0A??               M     incf slice
 0032   3006               M     movlw 6
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE  9
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
 0033   02??               M     subwf slice,W
 0034   1D03               M     skpz
                           M     leave
 0035   2???               M     goto isr_exit
 0036   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
 0037   0A??               M     incf task
 0038   3006               M     movlw 6
-Message[305]: Using default destination of 1 (file).
 0039   07??               M     addwf lcount
                           M     leave
 003A   2???               M     goto isr_exit
 003B                  00383 set_presync    
 003B   003B           00384     banksel PWM3DC
 003C   3041           00385     movlw HEQUAL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 003D   00B3           00386     movwf PWM3DCL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 003E   01B4           00387     clrf PWM3DCH
 003F   3003           00388     movlw high HALF_LINE
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 0040   00B6           00389     movwf PWM3PRH
 0041   308D           00390     movlw low HALF_LINE
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 0042   00B5           00391     movwf PWM3PRL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 0043   17BF           00392     bsf PWM3LDCON,7
-Message[305]: Using default destination of 1 (file).
 0044   0A??           00393     incf slice
                       00394     leave
 0045   2???               M     goto isr_exit
@@ -524,42 +506,35 @@ Message[305]: Using default destination of 1 (file).
 0047   1903           00399     skpnz
 0048   2???           00400     goto set_vsync
                       00401     next_task 6
-Message[305]: Using default destination of 1 (file).
 0049   0A??               M     incf slice
 004A   3006               M     movlw 6
 004B   02??               M     subwf slice,W
 004C   1D03               M     skpz
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 10
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     leave
 004D   2???               M     goto isr_exit
 004E   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
 004F   0A??               M     incf task
 0050   3006               M     movlw 6
-Message[305]: Using default destination of 1 (file).
 0051   07??               M     addwf lcount
                           M     leave
 0052   2???               M     goto isr_exit
 0053                  00402 set_vsync
 0053   003B           00403     banksel PWM3DC
 0054   3008           00404     movlw low VSYNC_PULSE
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 0055   00B3           00405     movwf PWM3DCL
 0056   3003           00406     movlw high VSYNC_PULSE
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 0057   00B4           00407     movwf PWM3DCH
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 0058   17BF           00408     bsf PWM3LDCON,7
-Message[305]: Using default destination of 1 (file).
 0059   0A??           00409     incf slice
                       00410     leave
 005A   2???               M     goto isr_exit
                       00411     
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 10
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                       00412 ; task 2, vertical synchronisation post equalization pulses
 005B                  00413 post_vsync
 005B   08??           00414     movfw slice
@@ -569,12 +544,10 @@ Message[305]: Using default destination of 1 (file).
 005F   02??           00418     subwf slice,W
 0060   1903           00419     skpnz
 0061   2???           00420     goto post_last
-Message[305]: Using default destination of 1 (file).
 0062   0A??           00421     incf slice
                       00422     leave
 0063   2???               M     goto isr_exit
 0064                  00423 post_last    
-Message[305]: Using default destination of 1 (file).
 0064   0A??           00424     incf task
 0065   01??           00425     clrf slice
 0066   1C80           00426     btfss flags, F_EVEN
@@ -586,25 +559,13 @@ Message[305]: Using default destination of 1 (file).
 0068   1280           00431     bcf flags, F_SYNC
 0069   003B           00432     banksel PWM3DC
 006A   3086           00433     movlw HSYNC
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 006B   00B3           00434     movwf PWM3DCL
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 11
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 006C   01B4           00435     clrf PWM3DCH
 006D   3007           00436     movlw high HPERIOD
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 006E   00B6           00437     movwf PWM3PRH
 006F   301B           00438     movlw low HPERIOD
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 0070   00B5           00439     movwf PWM3PRL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 0071   17BF           00440     bsf PWM3LDCON,7
-Message[305]: Using default destination of 1 (file).
 0072   0A??           00441     incf task
 0073   3009           00442     movlw 9
 0074   00??           00443     movwf lcount
@@ -613,167 +574,152 @@ Message[305]: Using default destination of 1 (file).
                       00445 
                       00446 ;task 4, read button and paddle position
   00000020            00447 PADDLE_WIDTH equ 32
-  0000005C            00448 PADDLE_LIMIT equ 92
-                      00449 
-0076                  00450 user_input
-Message[305]: Using default destination of 1 (file).
-0076   0A??           00451     incf task
-Message[305]: Using default destination of 1 (file).
-0077   0A??           00452     incf lcount
-0078   1900           00453     btfsc flags, F_START
-0079   2???           00454     goto read_paddle
-                      00455 ; read start button
-007A   0022           00456     banksel LATA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-007B   1D8C           00457     btfss LATA,START_BTN
-007C   1500           00458     bsf flags, F_START
-                      00459     leave
+  0000005D            00448 PADDLE_LIMIT equ 93
+  00000020            00449 BALL_LEFT_BOUND equ 32
+  00000136            00450 BALL_RIGHT_BOUND equ 310
+  00000036            00451 BALL_TOP_BOUND equ 54
+  000000F0            00452 BALL_BOTTOM_BOUND equ 240 ;(BALL_TOP_BOUND+7*BRICK_HEIGHT+118)
+                      00453  
+                      00454  
+0076                  00455 user_input
+0076   0A??           00456     incf task
+0077   0A??           00457     incf lcount
+0078   1900           00458     btfsc flags, F_START
+0079   2???           00459     goto read_paddle
+                      00460 ; read start button
+007A   0022           00461     banksel LATA
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 11
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+007B   1D8C           00462     btfss LATA,START_BTN
+007C   1500           00463     bsf flags, F_START
+                      00464     leave
 007D   2???               M     goto isr_exit
-007E                  00460 read_paddle
-007E   0021           00461     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-007F   140C           00462     bsf TRISA, PADDLE
-0080   0021           00463     banksel ADCON0
-0081   3003           00464     movlw 3
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0082   009D           00465     movwf ADCON0
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0083   189D           00466     btfsc ADCON0,NOT_DONE
-0084   2???           00467     goto $-1
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0085   101D           00468     bcf ADCON0,ADON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0086   081C           00469     movfw ADRESH
-0087   00??           00470     movwf paddle_pos
-0088   305C           00471     movlw PADDLE_LIMIT
-0089   02??           00472     subwf paddle_pos,W
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 12
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-008A   1C03           00473     skpc
-008B   3???           00474     bra $+3
-008C   305C           00475     movlw PADDLE_LIMIT
-008D   00??           00476     movwf paddle_pos
-008E   0021           00477     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-008F   100C           00478     bcf TRISA, AUDIO
-                      00479     leave
+007E                  00465 read_paddle
+007E   0021           00466     banksel TRISA
+007F   140C           00467     bsf TRISA, PADDLE
+0080   0021           00468     banksel ADCON0
+0081   3003           00469     movlw 3
+0082   009D           00470     movwf ADCON0
+0083   189D           00471     btfsc ADCON0,NOT_DONE
+0084   2???           00472     goto $-1
+0085   101D           00473     bcf ADCON0,ADON
+0086   081C           00474     movfw ADRESH
+0087   00??           00475     movwf paddle_pos
+0088   305D           00476     movlw PADDLE_LIMIT
+0089   02??           00477     subwf paddle_pos,W
+008A   1C03           00478     skpc
+008B   3???           00479     bra $+3
+008C   305D           00480     movlw PADDLE_LIMIT
+008D   00??           00481     movwf paddle_pos
+008E   0021           00482     banksel TRISA
+008F   100C           00483     bcf TRISA, AUDIO
+                      00484     leave
 0090   2???               M     goto isr_exit
-                      00480 
-                      00481 ; task 5,  sound timer
-0091                  00482 sound
-Message[305]: Using default destination of 1 (file).
-0091   0A??           00483     incf task
-Message[305]: Using default destination of 1 (file).
-0092   0A??           00484     incf lcount
-0093   1E00           00485     btfss flags, F_SOUND
-                      00486     leave
+                      00485 
+                      00486 ; task 5,  sound timer
+0091                  00487 sound
+0091   0A??           00488     incf task
+0092   0A??           00489     incf lcount
+0093   1E00           00490     btfss flags, F_SOUND
+                      00491     leave
 0094   2???               M     goto isr_exit
-0095   002?           00487     banksel sound_timer
-Message[305]: Using default destination of 1 (file).
-0096   0B??           00488     decfsz sound_timer
-                      00489     leave
-0097   2???               M     goto isr_exit
-0098   1200           00490     bcf flags, F_SOUND
-0099   003B           00491     banksel PWM2CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-009A   132B           00492     bcf PWM2CON,OE
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-009B   13AB           00493     bcf PWM2CON,EN
+0095   002?           00492     banksel sound_timer
+0096   0B??           00493     decfsz sound_timer
                       00494     leave
+0097   2???               M     goto isr_exit
+0098   1200           00495     bcf flags, F_SOUND
+0099   003B           00496     banksel PWM2CON
+009A   132B           00497     bcf PWM2CON,OE
+009B   13AB           00498     bcf PWM2CON,EN
+                      00499     leave
 009C   2???               M     goto isr_exit
-                      00495 
-                      00496    
-                      00497 ; task 6, move recking ball and check collision    
-009D                  00498 move_ball
-Message[305]: Using default destination of 1 (file).
-009D   0A??           00499     incf task
-Message[305]: Using default destination of 1 (file).
-009E   0A??           00500     incf lcount
-                      00501     leave
+                      00500 
+                      00501    
+                      00502 ; task 6, move recking ball and check collision    
+009D                  00503 move_ball
+                      00504     
+009D   0A??           00505     incf task
+009E   0A??           00506     incf lcount
+                      00507     leave
 009F   2???               M     goto isr_exit
-                      00502 
-                      00503     
-                      00504 ; task 7, wait for lcount==26, First visible video line is 27
-00A0                  00505 video_first
-Message[305]: Using default destination of 1 (file).
-00A0   0A??           00506     incf lcount
-00A1   301A           00507     movlw 26
-00A2   02??           00508     subwf lcount,W
-00A3   1D03           00509     skpz
-                      00510     leave
-00A4   2???               M     goto isr_exit
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 13
+                      00508 
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 12
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-00A5   01??           00511     clrf slice
-Message[305]: Using default destination of 1 (file).
-00A6   0A??           00512     incf task
-                      00513     leave
+                      00509     
+                      00510 ; task 7, wait for lcount==26, First visible video line is 27
+00A0                  00511 video_first
+00A0   0A??           00512     incf lcount
+00A1   301A           00513     movlw 26
+00A2   02??           00514     subwf lcount,W
+00A3   1D03           00515     skpz
+                      00516     leave
+00A4   2???               M     goto isr_exit
+00A5   01??           00517     clrf slice
+00A6   0A??           00518     incf task
+                      00519     leave
 00A7   2???               M     goto isr_exit
-                      00514    
-                      00515 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                      00516 ; The following tasks are responsible to render video display.
-                      00517 ; Each video line must be completed by setting color to black.
-                      00518 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                      00519     
-                      00520 ; constants used in video display
-  00000010            00521 LEFT_MARGIN equ 16
-  0000014A            00522 TOP_LINE_WIDTH equ 330
-  00000008            00523 BRICK_HEIGHT equ 8
-  00000004            00524 BORDER_WIDTH equ 4
-  0000001A            00525 FIRST_VIDEO_LINE equ 26
-                      00526  
-                      00527 ; task 8, draw score en ball count, 6 slices    
-00A8                  00528 draw_score
-00A8   0021           00529     banksel TRISA
-00A9   08??           00530     movfw slice
-Message[305]: Using default destination of 1 (file).
-00AA   3689           00531     lsrf WREG
-Message[305]: Using default destination of 1 (file).
-00AB   3689           00532     lsrf WREG
-                      00533     pushw
+                      00520    
+                      00521 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                      00522 ; The following tasks are responsible to render video display.
+                      00523 ; Each video line must be completed by setting color to black.
+                      00524 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                      00525     
+                      00526 ; constants used in video display
+  00000018            00527 LEFT_MARGIN equ 24
+  00000130            00528 COURT_WIDTH equ 304
+  00000008            00529 BRICK_HEIGHT equ 8
+  00000004            00530 BORDER_WIDTH equ 4
+  0000001A            00531 FIRST_VIDEO_LINE equ 26
+                      00532  
+                      00533 ; task 8, draw score en ball count
+00A8                  00534 draw_score
+00A8   0021           00535     banksel TRISA
+00A9   08??           00536     movfw slice
+00AA   3689           00537     lsrf WREG
+00AB   3689           00538     lsrf WREG
+                      00539     pushw
 00AC   0019               M     movwi --SP
-00AD   300F           00534     movlw 0xf
-00AE   05??           00535     andwf score+1,W
-00AF   2???           00536     call digit_offset
-00B0   0700           00537     addwf T,W
-00B1   2???           00538     call digits
-00B2   00??           00539     movwf d3
-00B3   0E??           00540     swapf score+1,W
-00B4   390F           00541     andlw 0xf
-00B5   2???           00542     call digit_offset
-00B6   0700           00543     addwf T,W
-00B7   2???           00544     call digits
-00B8   00??           00545     movwf d2
-00B9   300F           00546     movlw 0xf
-00BA   05??           00547     andwf score,W
-00BB   2???           00548     call digit_offset
-00BC   0700           00549     addwf T,W
-00BD   2???           00550     call digits
-00BE   2???           00551     call digit_row
-00BF   08??           00552     movfw d2
-00C0   2???           00553     call digit_row
-00C1   08??           00554     movfw d3
-00C2   2???           00555     call digit_row
-                      00556     tdelay 60
+00AD   300F           00540     movlw 0xf
+00AE   05??           00541     andwf score+1,W
+00AF   2???           00542     call digit_offset
+00B0   0700           00543     addwf T,W
+00B1   2???           00544     call digits
+00B2   00??           00545     movwf d3
+00B3   0E??           00546     swapf score+1,W
+00B4   390F           00547     andlw 0xf
+00B5   2???           00548     call digit_offset
+00B6   0700           00549     addwf T,W
+00B7   2???           00550     call digits
+00B8   00??           00551     movwf d2
+00B9   300F           00552     movlw 0xf
+00BA   05??           00553     andwf score,W
+00BB   2???           00554     call digit_offset
+00BC   0700           00555     addwf T,W
+00BD   2???           00556     call digits
+00BE   2???           00557     call digit_row
+00BF   08??           00558     movfw d2
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 13
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+00C0   2???           00559     call digit_row
+00C1   08??           00560     movfw d3
+00C2   2???           00561     call digit_row
+                      00562     tdelay 60
   0014                    M     variable q=(60)/3
   0000                    M     variable r=(60)%3
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 14
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
                           M     if (q)
 00C3   3014               M     movlw q
-Message[305]: Using default destination of 1 (file).
 00C4   0B89               M     decfsz WREG
 00C5   2???               M     goto $-1
                           M     endif
@@ -783,14 +729,12 @@ Message[305]: Using default destination of 1 (file).
                           M     if (r==1)
                           M     nop
                           M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00C6   120C           00557     bcf TRISA,VIDEO_OUT
-                      00558     tdelay 5
+00C6   120C           00563     bcf TRISA,VIDEO_OUT
+                      00564     tdelay 5
   0001                    M     variable q=(5)/3
   0002                    M     variable r=(5)%3
                           M     if (q)
 00C7   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
 00C8   0B89               M     decfsz WREG
 00C9   2???               M     goto $-1
                           M     endif
@@ -800,14 +744,12 @@ Message[305]: Using default destination of 1 (file).
                           M     if (r==1)
                           M     nop
                           M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00CB   160C           00559     bsf TRISA,VIDEO_OUT
-                      00560     tdelay 30
+00CB   160C           00565     bsf TRISA,VIDEO_OUT
+                      00566     tdelay 30
   000A                    M     variable q=(30)/3
   0000                    M     variable r=(30)%3
                           M     if (q)
 00CC   300A               M     movlw q
-Message[305]: Using default destination of 1 (file).
 00CD   0B89               M     decfsz WREG
 00CE   2???               M     goto $-1
                           M     endif
@@ -817,20 +759,19 @@ Message[305]: Using default destination of 1 (file).
                           M     if (r==1)
                           M     nop
                           M     endif
-00CF   08??           00561     movfw balls
-00D0   2???           00562     call digit_offset
-00D1   0700           00563     addwf T,W
-00D2   2???           00564     call digits
-00D3   2???           00565     call digit_row
-00D4                  00566 score_exit
-                      00567     next_task 5*4
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 15
+00CF   08??           00567     movfw balls
+00D0   2???           00568     call digit_offset
+00D1   0700           00569     addwf T,W
+00D2   2???           00570     call digits
+00D3   2???           00571     call digit_row
+00D4                  00572 score_exit
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 14
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-Message[305]: Using default destination of 1 (file).
+                      00573     next_task 5*4
 00D4   0A??               M     incf slice
 00D5   3014               M     movlw 5*4
 00D6   02??               M     subwf slice,W
@@ -838,251 +779,201 @@ Message[305]: Using default destination of 1 (file).
                           M     leave
 00D8   2???               M     goto isr_exit
 00D9   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
 00DA   0A??               M     incf task
 00DB   3014               M     movlw 5*4
-Message[305]: Using default destination of 1 (file).
 00DC   07??               M     addwf lcount
                           M     leave
 00DD   2???               M     goto isr_exit
-                      00568 
-                      00569 ; display digit row    
-00DE                  00570 digit_row
-Message[305]: Using default destination of 1 (file).
-00DE   0D89           00571     rlf WREG
-00DF   1803           00572     skpnc
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00E0   120C           00573     bcf TRISA,VIDEO_OUT
-00E1   1C03           00574     skpc
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00E2   160C           00575     bsf TRISA,VIDEO_OUT
-Message[305]: Using default destination of 1 (file).
-00E3   0D89           00576     rlf WREG
-00E4   1803           00577     skpnc
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00E5   120C           00578     bcf TRISA,VIDEO_OUT
-00E6   1C03           00579     skpc
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00E7   160C           00580     bsf TRISA,VIDEO_OUT
-Message[305]: Using default destination of 1 (file).
-00E8   0D89           00581     rlf WREG
-00E9   1803           00582     skpnc
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00EA   120C           00583     bcf TRISA,VIDEO_OUT
-00EB   1C03           00584     skpc
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00EC   160C           00585     bsf TRISA,VIDEO_OUT
-00ED   3???           00586     bra $+1
-00EE   3???           00587     bra $+1
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00EF   160C           00588     bsf TRISA,VIDEO_OUT
-00F0   0008           00589     return
-                      00590     
-                      00591 ; task 9,  draw top wall, 8 screen lines    
-00F1                  00592 draw_top_wall
-                      00593     tdelay LEFT_MARGIN
-  0005                    M     variable q=(LEFT_MARGIN)/3
-  0001                    M     variable r=(LEFT_MARGIN)%3
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 16
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
+                      00574 
+                      00575 ; display digit row    
+00DE                  00576 digit_row
+00DE   0D89           00577     rlf WREG
+00DF   1803           00578     skpnc
+00E0   120C           00579     bcf TRISA,VIDEO_OUT
+00E1   1C03           00580     skpc
+00E2   160C           00581     bsf TRISA,VIDEO_OUT
+00E3   0D89           00582     rlf WREG
+00E4   1803           00583     skpnc
+00E5   120C           00584     bcf TRISA,VIDEO_OUT
+00E6   1C03           00585     skpc
+00E7   160C           00586     bsf TRISA,VIDEO_OUT
+00E8   0D89           00587     rlf WREG
+00E9   1803           00588     skpnc
+00EA   120C           00589     bcf TRISA,VIDEO_OUT
+00EB   1C03           00590     skpc
+00EC   160C           00591     bsf TRISA,VIDEO_OUT
+00ED   3???           00592     bra $+1
+00EE   3???           00593     bra $+1
+00EF   160C           00594     bsf TRISA,VIDEO_OUT
+00F0   0008           00595     return
+                      00596     
+                      00597 ; task 9,  draw top wall, 8 screen lines    
+00F1                  00598 draw_top_wall
+00F1   1C80           00599     btfss flags, F_EVEN
+00F2   3???           00600     bra top_wall_exit
+                      00601     tdelay LEFT_MARGIN-2
+  0007                    M     variable q=(LEFT_MARGIN-2)/3
+  0001                    M     variable r=(LEFT_MARGIN-2)%3
                           M     if (q)
-00F1   3005               M     movlw q
-Message[305]: Using default destination of 1 (file).
-00F2   0B89               M     decfsz WREG
-00F3   2???               M     goto $-1
+00F3   3007               M     movlw q
+00F4   0B89               M     decfsz WREG
+00F5   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-00F4   0000               M     nop
+00F6   0000               M     nop
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 15
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     endif
-                      00594     white
-00F5   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00F6   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00F7   120C               M     bcf TRISA,VIDEO_OUT
+                      00602     white
+00F7   0021               M     banksel TRISA
+00F8   148C               M     bsf TRISA,CHROMA
+00F9   120C               M     bcf TRISA,VIDEO_OUT
                           M ;    goto $+1
-                      00595     tdelay TOP_LINE_WIDTH
-  006E                    M     variable q=(TOP_LINE_WIDTH)/3
-  0000                    M     variable r=(TOP_LINE_WIDTH)%3
+                      00603     tdelay COURT_WIDTH+3*BORDER_WIDTH+1
+  0069                    M     variable q=(COURT_WIDTH+3*BORDER_WIDTH+1)/3
+  0002                    M     variable r=(COURT_WIDTH+3*BORDER_WIDTH+1)%3
                           M     if (q)
-00F8   306E               M     movlw q
-Message[305]: Using default destination of 1 (file).
-00F9   0B89               M     decfsz WREG
-00FA   2???               M     goto $-1
+00FA   3069               M     movlw q
+00FB   0B89               M     decfsz WREG
+00FC   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-                          M     goto $+1
+00FD   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00596     black
-00FB   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00FC   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-00FD   160C               M     bsf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-00FE                  00597 top_wall_exit
-                      00598     next_task BRICK_HEIGHT
-Message[305]: Using default destination of 1 (file).
-00FE   0A??               M     incf slice
-00FF   3008               M     movlw BRICK_HEIGHT
-0100   02??               M     subwf slice,W
-0101   1D03               M     skpz
-                          M     leave
-0102   2???               M     goto isr_exit
-0103   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-0104   0A??               M     incf task
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 17
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-0105   3008               M     movlw BRICK_HEIGHT
-Message[305]: Using default destination of 1 (file).
-0106   07??               M     addwf lcount
-                          M     leave
-0107   2???               M     goto isr_exit
-                      00599 
-                      00600 ; task 10,  draw void space between top wall and top brick row, 8 slices    
-0108                  00601 draw_void
-                      00602     tdelay LEFT_MARGIN
-  0005                    M     variable q=(LEFT_MARGIN)/3
-  0001                    M     variable r=(LEFT_MARGIN)%3
-                          M     if (q)
-0108   3005               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0109   0B89               M     decfsz WREG
-010A   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-010B   0000               M     nop
-                          M     endif
-                      00603     draw_border BORDER_WIDTH
-010C   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-010D   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-010E   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
-                          M     if (q)
-010F   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0110   0B89               M     decfsz WREG
-0111   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-0112   0000               M     nop
-                          M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0113   160C               M     bsf TRISA,VIDEO_OUT
                       00604     black
-0114   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0115   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0116   160C               M     bsf TRISA,VIDEO_OUT
+00FE   0021               M     banksel TRISA
+00FF   148C               M     bsf TRISA,CHROMA
+0100   160C               M     bsf TRISA,VIDEO_OUT
                           M ;    goto $+1
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 18
+0101                  00605 top_wall_exit
+                      00606     next_task BRICK_HEIGHT
+0101   0A??               M     incf slice
+0102   3008               M     movlw BRICK_HEIGHT
+0103   02??               M     subwf slice,W
+0104   1D03               M     skpz
+                          M     leave
+0105   2???               M     goto isr_exit
+0106   01??               M     clrf slice
+0107   0A??               M     incf task
+0108   3008               M     movlw BRICK_HEIGHT
+0109   07??               M     addwf lcount
+                          M     leave
+010A   2???               M     goto isr_exit
+                      00607 
+                      00608 ; task 10,  only on even field draw vertical side bands.    
+010B                  00609 draw_void
+010B   1C80           00610     btfss flags, F_EVEN
+010C   3???           00611     bra no_wall_draw
+010D   08??           00612     movfw ball_y
+010E   02??           00613     subwf lcount,W
+010F   1C03           00614     skpc
+0110   3???           00615     bra no_ball
+0111   3008           00616     movlw 8
+0112   07??           00617     addwf ball_y,W
+0113   02??           00618     subwf lcount,W
+0114   1C03           00619     skpc
+0115   3???           00620     bra yes_ball
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 16
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00605     tdelay 317
-  0069                    M     variable q=(317)/3
-  0002                    M     variable r=(317)%3
+0116                  00621 no_ball    
+                      00622     tdelay LEFT_MARGIN-7
+  0005                    M     variable q=(LEFT_MARGIN-7)/3
+  0002                    M     variable r=(LEFT_MARGIN-7)%3
                           M     if (q)
-0117   3069               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0118   0B89               M     decfsz WREG
-0119   2???               M     goto $-1
+0116   3005               M     movlw q
+0117   0B89               M     decfsz WREG
+0118   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-011A   2???               M     goto $+1
+0119   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00606     draw_border BORDER_WIDTH
-011B   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-011C   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-011D   120C               M     bcf TRISA,VIDEO_OUT
+                      00623     draw_border BORDER_WIDTH
+011A   0021               M     banksel TRISA
+011B   148C               M     bsf TRISA,CHROMA
+011C   120C               M     bcf TRISA,VIDEO_OUT
                           M     tdelay BORDER_WIDTH
   0001                    M     variable q=(BORDER_WIDTH)/3
   0001                    M     variable r=(BORDER_WIDTH)%3
                           M     if (q)
-011E   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-011F   0B89               M     decfsz WREG
-0120   2???               M     goto $-1
+011D   3001               M     movlw q
+011E   0B89               M     decfsz WREG
+011F   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-0121   0000               M     nop
+0120   0000               M     nop
                           M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0122   160C               M     bsf TRISA,VIDEO_OUT
-                      00607     next_task 2*BRICK_HEIGHT
-Message[305]: Using default destination of 1 (file).
-0123   0A??               M     incf slice
-0124   3010               M     movlw 2*BRICK_HEIGHT
-0125   02??               M     subwf slice,W
-0126   1D03               M     skpz
-                          M     leave
-0127   2???               M     goto isr_exit
-0128   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-0129   0A??               M     incf task
-012A   3010               M     movlw 2*BRICK_HEIGHT
-Message[305]: Using default destination of 1 (file).
-012B   07??               M     addwf lcount
-                          M     leave
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 19
+0121   160C               M     bsf TRISA,VIDEO_OUT
+                      00624     black
+0122   0021               M     banksel TRISA
+0123   148C               M     bsf TRISA,CHROMA
+0124   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+                      00625     tdelay COURT_WIDTH
+  0065                    M     variable q=(COURT_WIDTH)/3
+  0001                    M     variable r=(COURT_WIDTH)%3
+                          M     if (q)
+0125   3065               M     movlw q
+0126   0B89               M     decfsz WREG
+0127   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+0128   0000               M     nop
+                          M     endif
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 17
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-012C   2???               M     goto isr_exit
-                      00608 
-                      00609 ; task 11, draw top brick row
-012D                  00610 draw_row1 ; yellow
-                      00611     chroma_ref
-012D   003B               M     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-012E   121B               M     bcf PWM1CON,POL
-012F   002?           00612     banksel row1
-0130   08??           00613     movfw row1
-0131   00??           00614     movwf temp
-                      00615     tdelay LEFT_MARGIN-5
-  0003                    M     variable q=(LEFT_MARGIN-5)/3
-  0002                    M     variable r=(LEFT_MARGIN-5)%3
+                      00626     draw_border BORDER_WIDTH
+0129   0021               M     banksel TRISA
+012A   148C               M     bsf TRISA,CHROMA
+012B   120C               M     bcf TRISA,VIDEO_OUT
+                          M     tdelay BORDER_WIDTH
+  0001                    M     variable q=(BORDER_WIDTH)/3
+  0001                    M     variable r=(BORDER_WIDTH)%3
                           M     if (q)
-0132   3003               M     movlw q
-Message[305]: Using default destination of 1 (file).
+012C   3001               M     movlw q
+012D   0B89               M     decfsz WREG
+012E   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+012F   0000               M     nop
+                          M     endif
+0130   160C               M     bsf TRISA,VIDEO_OUT
+0131   3???           00627     bra draw_void_exit
+0132                  00628 yes_ball
+                      00629     tdelay LEFT_MARGIN-16
+  0002                    M     variable q=(LEFT_MARGIN-16)/3
+  0002                    M     variable r=(LEFT_MARGIN-16)%3
+                          M     if (q)
+0132   3002               M     movlw q
 0133   0B89               M     decfsz WREG
 0134   2???               M     goto $-1
                           M     endif
@@ -1092,18 +983,15 @@ Message[305]: Using default destination of 1 (file).
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00616     draw_border BORDER_WIDTH
+                      00630     draw_border BORDER_WIDTH
 0136   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 0137   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
 0138   120C               M     bcf TRISA,VIDEO_OUT
                           M     tdelay BORDER_WIDTH
   0001                    M     variable q=(BORDER_WIDTH)/3
   0001                    M     variable r=(BORDER_WIDTH)%3
                           M     if (q)
 0139   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
 013A   0B89               M     decfsz WREG
 013B   2???               M     goto $-1
                           M     endif
@@ -1113,231 +1001,193 @@ Message[305]: Using default destination of 1 (file).
                           M     if (r==1)
 013C   0000               M     nop
                           M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-013D   160C               M     bsf TRISA,VIDEO_OUT
-                      00617     draw_wall yellow
-  0000                    M     local next_brick
-013E   3008               M     movlw 8
-                          M     pushw
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 20
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 18
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-013F   0019               M     movwi --SP
-0140                      M next_brick    
-Message[305]: Using default destination of 1 (file).
-0140   35??               M     lslf temp
+013D   160C               M     bsf TRISA,VIDEO_OUT
+013E   08??           00631     movfw ball_x
+013F   1903           00632     skpnz
+0140   3???           00633     bra ball_left
+0141   0B89           00634     decfsz WREG
+0142   3???           00635     bra $-1
+0143                  00636 ball_left
+0143   120C           00637     bcf TRISA, VIDEO_OUT
+                      00638     tdelay 4
+  0001                    M     variable q=(4)/3
+  0001                    M     variable r=(4)%3
+                          M     if (q)
+0144   3001               M     movlw q
+0145   0B89               M     decfsz WREG
+0146   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+0147   0000               M     nop
+                          M     endif
+0148   160C           00639     bsf TRISA,VIDEO_OUT
+                      00640     tdelay 10
+  0003                    M     variable q=(10)/3
+  0001                    M     variable r=(10)%3
+                          M     if (q)
+0149   3003               M     movlw q
+014A   0B89               M     decfsz WREG
+014B   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+014C   0000               M     nop
+                          M     endif
+                      00641     draw_border BORDER_WIDTH
+014D   0021               M     banksel TRISA
+014E   148C               M     bsf TRISA,CHROMA
+014F   120C               M     bcf TRISA,VIDEO_OUT
+                          M     tdelay BORDER_WIDTH
+  0001                    M     variable q=(BORDER_WIDTH)/3
+  0001                    M     variable r=(BORDER_WIDTH)%3
+                          M     if (q)
+0150   3001               M     movlw q
+0151   0B89               M     decfsz WREG
+0152   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 19
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0153   0000               M     nop
+                          M     endif
+0154   160C               M     bsf TRISA,VIDEO_OUT
+0155                  00642 draw_void_exit    
+0155   0A??           00643     incf slice
+0156   0A??           00644     incf lcount
+0157   30B6           00645     movlw 8*BRICK_HEIGHT+118
+0158   02??           00646     subwf slice,W
+0159   1D03           00647     skpz
+                      00648     leave
+015A   2???               M     goto isr_exit
+015B   3012           00649     movlw 18
+015C   01??           00650     clrf slice
+015D   00??           00651     movwf task
+                      00652     leave
+015E   2???               M     goto isr_exit
+                      00653     ;    next_task 125*BRICK_HEIGHT
+015F                  00654 no_wall_draw
+                      00655     next_task 2*BRICK_HEIGHT
+015F   0A??               M     incf slice
+0160   3010               M     movlw 2*BRICK_HEIGHT
+0161   02??               M     subwf slice,W
+0162   1D03               M     skpz
+                          M     leave
+0163   2???               M     goto isr_exit
+0164   01??               M     clrf slice
+0165   0A??               M     incf task
+0166   3010               M     movlw 2*BRICK_HEIGHT
+0167   07??               M     addwf lcount
+                          M     leave
+0168   2???               M     goto isr_exit
+                      00656     
+                      00657 ; task 11, draw top brick row
+0169                  00658 draw_row1 ; yellow
+                      00659     chroma_ref
+0169   003B               M     banksel PWM1CON
+016A   121B               M     bcf PWM1CON,POL
+016B   002?           00660     banksel row1
+016C   08??           00661     movfw row1
+016D   00??           00662     movwf temp
+                      00663     tdelay LEFT_MARGIN-4
+  0006                    M     variable q=(LEFT_MARGIN-4)/3
+  0002                    M     variable r=(LEFT_MARGIN-4)%3
+                          M     if (q)
+016E   3006               M     movlw q
+016F   0B89               M     decfsz WREG
+0170   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+0171   2???               M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 20
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M     endif
+                      00664 ;    draw_border BORDER_WIDTH
+                      00665     draw_wall yellow
+  0000                    M     local next_brick
+0172   3008               M     movlw 8
+                          M     pushw
+0173   0019               M     movwi --SP
+0174                      M next_brick    
+0174   35??               M     lslf temp
                           M     draw_brick yellow
   0000                    M     local no_brick
   0000                    M     local brick_delay
-0141   1C03               M     skpc
-0142   3???               M     bra no_brick
+0175   1C03               M     skpc
+0176   3???               M     bra no_brick
                           M     yellow
                           M ;    chroma_ref
-0143   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0144   120C               M     bcf TRISA,VIDEO_OUT
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0145   108C               M     bcf TRISA,CHROMA
-0146   3???               M     bra brick_delay
-0147                      M no_brick
-0147   0000               M     nop
+0177   0021               M     banksel TRISA
+0178   120C               M     bcf TRISA,VIDEO_OUT
+0179   108C               M     bcf TRISA,CHROMA
+017A   3???               M     bra brick_delay
+017B                      M no_brick
+017B   0000               M     nop
                           M     black
-0148   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0149   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-014A   160C               M     bsf TRISA,VIDEO_OUT
+017C   0021               M     banksel TRISA
+017D   148C               M     bsf TRISA,CHROMA
+017E   160C               M     bsf TRISA,VIDEO_OUT
                           M ;    goto $+1
-014B   3???               M     bra brick_delay 
-014C                      M brick_delay    
+017F   3???               M     bra brick_delay 
+0180                      M brick_delay    
                           M     tdelay BRICK_WIDTH
   0009                    M     variable q=(BRICK_WIDTH)/3
   0001                    M     variable r=(BRICK_WIDTH)%3
                           M     if (q)
-014C   3009               M     movlw q
-Message[305]: Using default destination of 1 (file).
-014D   0B89               M     decfsz WREG
-014E   2???               M     goto $-1
+0180   3009               M     movlw q
+0181   0B89               M     decfsz WREG
+0182   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-014F   0000               M     nop
+0183   0000               M     nop
                           M     endif
-Message[305]: Using default destination of 1 (file).
-0150   0B80               M     decfsz T
-0151   3???               M     bra next_brick
+0184   0B80               M     decfsz T
+0185   3???               M     bra next_brick
                           M     dropn 1
-0152   3101               M     addfsr T,1
-                      00618     black
-0153   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0154   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 21
+0186   3101               M     addfsr T,1
+                      00666     black
+0187   0021               M     banksel TRISA
+0188   148C               M     bsf TRISA,CHROMA
+0189   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+                      00667     tdelay 3
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 21
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0155   160C               M     bsf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-                      00619     tdelay 3
   0001                    M     variable q=(3)/3
   0000                    M     variable r=(3)%3
                           M     if (q)
-0156   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0157   0B89               M     decfsz WREG
-0158   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
-                      00620     draw_border BORDER_WIDTH
-0159   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-015A   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-015B   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
-                          M     if (q)
-015C   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-015D   0B89               M     decfsz WREG
-015E   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-015F   0000               M     nop
-                          M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0160   160C               M     bsf TRISA,VIDEO_OUT
-                      00621     next_task BRICK_HEIGHT
-Message[305]: Using default destination of 1 (file).
-0161   0A??               M     incf slice
-0162   3008               M     movlw BRICK_HEIGHT
-0163   02??               M     subwf slice,W
-0164   1D03               M     skpz
-                          M     leave
-0165   2???               M     goto isr_exit
-0166   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-0167   0A??               M     incf task
-0168   3008               M     movlw BRICK_HEIGHT
-Message[305]: Using default destination of 1 (file).
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 22
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-0169   07??               M     addwf lcount
-                          M     leave
-016A   2???               M     goto isr_exit
-                      00622     
-                      00623 ; task 12, draw 2nd brick row    
-016B                  00624 draw_row2 ;cyan
-                      00625     chroma_invert
-016B   003B               M     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-016C   161B               M     bsf PWM1CON,POL
-016D   002?           00626     banksel row2
-016E   08??           00627     movfw row2
-016F   00??           00628     movwf temp
-                      00629     tdelay LEFT_MARGIN-5
-  0003                    M     variable q=(LEFT_MARGIN-5)/3
-  0002                    M     variable r=(LEFT_MARGIN-5)%3
-                          M     if (q)
-0170   3003               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0171   0B89               M     decfsz WREG
-0172   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-0173   2???               M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
-                      00630     draw_border BORDER_WIDTH
-0174   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0175   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0176   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
-                          M     if (q)
-0177   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0178   0B89               M     decfsz WREG
-0179   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-017A   0000               M     nop
-                          M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-017B   160C               M     bsf TRISA,VIDEO_OUT
-                      00631     draw_wall cyan
-  0000                    M     local next_brick
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 23
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-017C   3008               M     movlw 8
-                          M     pushw
-017D   0019               M     movwi --SP
-017E                      M next_brick    
-Message[305]: Using default destination of 1 (file).
-017E   35??               M     lslf temp
-                          M     draw_brick cyan
-  0000                    M     local no_brick
-  0000                    M     local brick_delay
-017F   1C03               M     skpc
-0180   3???               M     bra no_brick
-                          M     cyan
-                          M ;    chroma_invert
-0181   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0182   120C               M     bcf TRISA,VIDEO_OUT
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0183   108C               M     bcf TRISA,CHROMA
-0184   3???               M     bra brick_delay
-0185                      M no_brick
-0185   0000               M     nop
-                          M     black
-0186   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0187   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0188   160C               M     bsf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-0189   3???               M     bra brick_delay 
-018A                      M brick_delay    
-                          M     tdelay BRICK_WIDTH
-  0009                    M     variable q=(BRICK_WIDTH)/3
-  0001                    M     variable r=(BRICK_WIDTH)%3
-                          M     if (q)
-018A   3009               M     movlw q
-Message[305]: Using default destination of 1 (file).
+018A   3001               M     movlw q
 018B   0B89               M     decfsz WREG
 018C   2???               M     goto $-1
                           M     endif
@@ -1345,213 +1195,231 @@ Message[305]: Using default destination of 1 (file).
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-018D   0000               M     nop
+                          M     nop
                           M     endif
-Message[305]: Using default destination of 1 (file).
-018E   0B80               M     decfsz T
-018F   3???               M     bra next_brick
-                          M     dropn 1
-0190   3101               M     addfsr T,1
-                      00632     black
-0191   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 24
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-0192   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0193   160C               M     bsf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-                      00633     tdelay 3
-  0001                    M     variable q=(3)/3
-  0000                    M     variable r=(3)%3
+                      00668 ;    draw_border BORDER_WIDTH
+                      00669     next_task BRICK_HEIGHT
+018D   0A??               M     incf slice
+018E   3008               M     movlw BRICK_HEIGHT
+018F   02??               M     subwf slice,W
+0190   1D03               M     skpz
+                          M     leave
+0191   2???               M     goto isr_exit
+0192   01??               M     clrf slice
+0193   0A??               M     incf task
+0194   3008               M     movlw BRICK_HEIGHT
+0195   07??               M     addwf lcount
+                          M     leave
+0196   2???               M     goto isr_exit
+                      00670     
+                      00671 ; task 12, draw 2nd brick row    
+0197                  00672 draw_row2 ;cyan
+                      00673     chroma_invert
+0197   003B               M     banksel PWM1CON
+0198   161B               M     bsf PWM1CON,POL
+0199   002?           00674     banksel row2
+019A   08??           00675     movfw row2
+019B   00??           00676     movwf temp
+                      00677     tdelay LEFT_MARGIN-4
+  0006                    M     variable q=(LEFT_MARGIN-4)/3
+  0002                    M     variable r=(LEFT_MARGIN-4)%3
                           M     if (q)
-0194   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0195   0B89               M     decfsz WREG
-0196   2???               M     goto $-1
+019C   3006               M     movlw q
+019D   0B89               M     decfsz WREG
+019E   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-                          M     goto $+1
+019F   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00634     draw_border BORDER_WIDTH
-0197   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0198   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0199   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
-                          M     if (q)
-019A   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-019B   0B89               M     decfsz WREG
-019C   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-019D   0000               M     nop
-                          M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-019E   160C               M     bsf TRISA,VIDEO_OUT
-                      00635     next_task BRICK_HEIGHT
-Message[305]: Using default destination of 1 (file).
-019F   0A??               M     incf slice
-01A0   3008               M     movlw BRICK_HEIGHT
-01A1   02??               M     subwf slice,W
-01A2   1D03               M     skpz
-                          M     leave
-01A3   2???               M     goto isr_exit
-01A4   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-01A5   0A??               M     incf task
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 25
+                      00678 ;    draw_border BORDER_WIDTH
+                      00679     draw_wall cyan
+  0000                    M     local next_brick
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 22
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-01A6   3008               M     movlw BRICK_HEIGHT
-Message[305]: Using default destination of 1 (file).
-01A7   07??               M     addwf lcount
-                          M     leave
-01A8   2???               M     goto isr_exit
-                      00636 
-                      00637 ; task 13, draw 3rd brick row    
-01A9                  00638 draw_row3 ; green
-                      00639     chroma_ref
-01A9   003B               M     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01AA   121B               M     bcf PWM1CON,POL
-01AB   002?           00640     banksel row3
-01AC   08??           00641     movfw row3
-01AD   00??           00642     movwf temp
-                      00643     tdelay LEFT_MARGIN-5
-  0003                    M     variable q=(LEFT_MARGIN-5)/3
-  0002                    M     variable r=(LEFT_MARGIN-5)%3
+01A0   3008               M     movlw 8
+                          M     pushw
+01A1   0019               M     movwi --SP
+01A2                      M next_brick    
+01A2   35??               M     lslf temp
+                          M     draw_brick cyan
+  0000                    M     local no_brick
+  0000                    M     local brick_delay
+01A3   1C03               M     skpc
+01A4   3???               M     bra no_brick
+                          M     cyan
+                          M ;    chroma_invert
+01A5   0021               M     banksel TRISA
+01A6   120C               M     bcf TRISA,VIDEO_OUT
+01A7   108C               M     bcf TRISA,CHROMA
+01A8   3???               M     bra brick_delay
+01A9                      M no_brick
+01A9   0000               M     nop
+                          M     black
+01AA   0021               M     banksel TRISA
+01AB   148C               M     bsf TRISA,CHROMA
+01AC   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+01AD   3???               M     bra brick_delay 
+01AE                      M brick_delay    
+                          M     tdelay BRICK_WIDTH
+  0009                    M     variable q=(BRICK_WIDTH)/3
+  0001                    M     variable r=(BRICK_WIDTH)%3
                           M     if (q)
-01AE   3003               M     movlw q
-Message[305]: Using default destination of 1 (file).
+01AE   3009               M     movlw q
 01AF   0B89               M     decfsz WREG
 01B0   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-01B1   2???               M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
-                      00644     draw_border BORDER_WIDTH
-01B2   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01B3   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01B4   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
-                          M     if (q)
-01B5   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-01B6   0B89               M     decfsz WREG
-01B7   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-01B8   0000               M     nop
+01B1   0000               M     nop
                           M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01B9   160C               M     bsf TRISA,VIDEO_OUT
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 26
+01B2   0B80               M     decfsz T
+01B3   3???               M     bra next_brick
+                          M     dropn 1
+01B4   3101               M     addfsr T,1
+                      00680     black
+01B5   0021               M     banksel TRISA
+01B6   148C               M     bsf TRISA,CHROMA
+01B7   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+                      00681     tdelay 3
+  0001                    M     variable q=(3)/3
+  0000                    M     variable r=(3)%3
+                          M     if (q)
+01B8   3001               M     movlw q
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 23
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00645     draw_wall green
+01B9   0B89               M     decfsz WREG
+01BA   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+                      00682 ;    draw_border BORDER_WIDTH
+                      00683     next_task BRICK_HEIGHT
+01BB   0A??               M     incf slice
+01BC   3008               M     movlw BRICK_HEIGHT
+01BD   02??               M     subwf slice,W
+01BE   1D03               M     skpz
+                          M     leave
+01BF   2???               M     goto isr_exit
+01C0   01??               M     clrf slice
+01C1   0A??               M     incf task
+01C2   3008               M     movlw BRICK_HEIGHT
+01C3   07??               M     addwf lcount
+                          M     leave
+01C4   2???               M     goto isr_exit
+                      00684 
+                      00685 ; task 13, draw 3rd brick row    
+01C5                  00686 draw_row3 ; green
+                      00687 ;    btfss flags, F_EVEN
+                      00688 ;    bra row3_exit
+                      00689     chroma_ref
+01C5   003B               M     banksel PWM1CON
+01C6   121B               M     bcf PWM1CON,POL
+01C7   002?           00690     banksel row3
+01C8   08??           00691     movfw row3
+01C9   00??           00692     movwf temp
+                      00693     tdelay LEFT_MARGIN-4
+  0006                    M     variable q=(LEFT_MARGIN-4)/3
+  0002                    M     variable r=(LEFT_MARGIN-4)%3
+                          M     if (q)
+01CA   3006               M     movlw q
+01CB   0B89               M     decfsz WREG
+01CC   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+01CD   2???               M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+                      00694 ;    draw_border BORDER_WIDTH
+                      00695     draw_wall green
   0000                    M     local next_brick
-01BA   3008               M     movlw 8
+01CE   3008               M     movlw 8
                           M     pushw
-01BB   0019               M     movwi --SP
-01BC                      M next_brick    
-Message[305]: Using default destination of 1 (file).
-01BC   35??               M     lslf temp
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 24
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+01CF   0019               M     movwi --SP
+01D0                      M next_brick    
+01D0   35??               M     lslf temp
                           M     draw_brick green
   0000                    M     local no_brick
   0000                    M     local brick_delay
-01BD   1C03               M     skpc
-01BE   3???               M     bra no_brick
+01D1   1C03               M     skpc
+01D2   3???               M     bra no_brick
                           M     green
                           M ;    chroma_ref
-01BF   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01C0   160C               M     bsf TRISA, VIDEO_OUT
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01C1   108C               M     bcf TRISA,CHROMA
-01C2   3???               M     bra brick_delay
-01C3                      M no_brick
-01C3   0000               M     nop
+01D3   0021               M     banksel TRISA
+01D4   160C               M     bsf TRISA, VIDEO_OUT
+01D5   108C               M     bcf TRISA,CHROMA
+01D6   3???               M     bra brick_delay
+01D7                      M no_brick
+01D7   0000               M     nop
                           M     black
-01C4   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01C5   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01C6   160C               M     bsf TRISA,VIDEO_OUT
+01D8   0021               M     banksel TRISA
+01D9   148C               M     bsf TRISA,CHROMA
+01DA   160C               M     bsf TRISA,VIDEO_OUT
                           M ;    goto $+1
-01C7   3???               M     bra brick_delay 
-01C8                      M brick_delay    
+01DB   3???               M     bra brick_delay 
+01DC                      M brick_delay    
                           M     tdelay BRICK_WIDTH
   0009                    M     variable q=(BRICK_WIDTH)/3
   0001                    M     variable r=(BRICK_WIDTH)%3
                           M     if (q)
-01C8   3009               M     movlw q
-Message[305]: Using default destination of 1 (file).
-01C9   0B89               M     decfsz WREG
-01CA   2???               M     goto $-1
+01DC   3009               M     movlw q
+01DD   0B89               M     decfsz WREG
+01DE   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-01CB   0000               M     nop
+01DF   0000               M     nop
                           M     endif
-Message[305]: Using default destination of 1 (file).
-01CC   0B80               M     decfsz T
-01CD   3???               M     bra next_brick
+01E0   0B80               M     decfsz T
+01E1   3???               M     bra next_brick
                           M     dropn 1
-01CE   3101               M     addfsr T,1
-                      00646     black
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 27
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-01CF   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01D0   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01D1   160C               M     bsf TRISA,VIDEO_OUT
+01E2   3101               M     addfsr T,1
+                      00696     black
+01E3   0021               M     banksel TRISA
+01E4   148C               M     bsf TRISA,CHROMA
+01E5   160C               M     bsf TRISA,VIDEO_OUT
                           M ;    goto $+1
-                      00647     tdelay 3
+                      00697     tdelay 3
   0001                    M     variable q=(3)/3
   0000                    M     variable r=(3)%3
                           M     if (q)
-01D2   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-01D3   0B89               M     decfsz WREG
-01D4   2???               M     goto $-1
+01E6   3001               M     movlw q
+01E7   0B89               M     decfsz WREG
+01E8   2???               M     goto $-1
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 25
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     endif
                           M     if (r==2)
                           M     goto $+1
@@ -1559,178 +1427,148 @@ Message[305]: Using default destination of 1 (file).
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00648     draw_border BORDER_WIDTH
-01D5   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01D6   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01D7   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
+                      00698 ;    draw_border BORDER_WIDTH
+01E9                  00699 row3_exit    
+                      00700     next_task BRICK_HEIGHT
+01E9   0A??               M     incf slice
+01EA   3008               M     movlw BRICK_HEIGHT
+01EB   02??               M     subwf slice,W
+01EC   1D03               M     skpz
+                          M     leave
+01ED   2???               M     goto isr_exit
+01EE   01??               M     clrf slice
+01EF   0A??               M     incf task
+01F0   3008               M     movlw BRICK_HEIGHT
+01F1   07??               M     addwf lcount
+                          M     leave
+01F2   2???               M     goto isr_exit
+                      00701     
+                      00702 ; task 14, draw 4th brick row    
+01F3                  00703 draw_row4 ; dark blue
+                      00704     chroma_invert
+01F3   003B               M     banksel PWM1CON
+01F4   161B               M     bsf PWM1CON,POL
+01F5   002?           00705     banksel row4
+01F6   08??           00706     movfw row4
+01F7   00??           00707     movwf temp
+                      00708     tdelay LEFT_MARGIN-4
+  0006                    M     variable q=(LEFT_MARGIN-4)/3
+  0002                    M     variable r=(LEFT_MARGIN-4)%3
                           M     if (q)
-01D8   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-01D9   0B89               M     decfsz WREG
-01DA   2???               M     goto $-1
+01F8   3006               M     movlw q
+01F9   0B89               M     decfsz WREG
+01FA   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-01DB   0000               M     nop
-                          M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01DC   160C               M     bsf TRISA,VIDEO_OUT
-                      00649     next_task BRICK_HEIGHT
-Message[305]: Using default destination of 1 (file).
-01DD   0A??               M     incf slice
-01DE   3008               M     movlw BRICK_HEIGHT
-01DF   02??               M     subwf slice,W
-01E0   1D03               M     skpz
-                          M     leave
-01E1   2???               M     goto isr_exit
-01E2   01??               M     clrf slice
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 28
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-Message[305]: Using default destination of 1 (file).
-01E3   0A??               M     incf task
-01E4   3008               M     movlw BRICK_HEIGHT
-Message[305]: Using default destination of 1 (file).
-01E5   07??               M     addwf lcount
-                          M     leave
-01E6   2???               M     goto isr_exit
-                      00650     
-                      00651 ; task 14, draw 4th brick row    
-01E7                  00652 draw_row4 ; dark blue
-                      00653     chroma_invert
-01E7   003B               M     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01E8   161B               M     bsf PWM1CON,POL
-01E9   002?           00654     banksel row4
-01EA   08??           00655     movfw row4
-01EB   00??           00656     movwf temp
-                      00657     tdelay LEFT_MARGIN-5
-  0003                    M     variable q=(LEFT_MARGIN-5)/3
-  0002                    M     variable r=(LEFT_MARGIN-5)%3
-                          M     if (q)
-01EC   3003               M     movlw q
-Message[305]: Using default destination of 1 (file).
-01ED   0B89               M     decfsz WREG
-01EE   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-01EF   2???               M     goto $+1
+01FB   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00658     draw_border BORDER_WIDTH
-01F0   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01F1   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01F2   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
-                          M     if (q)
-01F3   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-01F4   0B89               M     decfsz WREG
-01F5   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-01F6   0000               M     nop
-                          M     endif
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 29
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01F7   160C               M     bsf TRISA,VIDEO_OUT
-                      00659     draw_wall dark_blue
+                      00709 ;    draw_border BORDER_WIDTH
+                      00710     draw_wall dark_blue
   0000                    M     local next_brick
-01F8   3008               M     movlw 8
+01FC   3008               M     movlw 8
                           M     pushw
-01F9   0019               M     movwi --SP
-01FA                      M next_brick    
-Message[305]: Using default destination of 1 (file).
-01FA   35??               M     lslf temp
+01FD   0019               M     movwi --SP
+01FE                      M next_brick    
+01FE   35??               M     lslf temp
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 26
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M     draw_brick dark_blue
   0000                    M     local no_brick
   0000                    M     local brick_delay
-01FB   1C03               M     skpc
-01FC   3???               M     bra no_brick
+01FF   1C03               M     skpc
+0200   3???               M     bra no_brick
                           M     dark_blue
                           M ;    chroma_invert
-01FD   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01FE   160C               M     bsf TRISA, VIDEO_OUT
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-01FF   108C               M     bcf TRISA,CHROMA
-0200   3???               M     bra brick_delay
-0201                      M no_brick
-0201   0000               M     nop
+0201   0021               M     banksel TRISA
+0202   160C               M     bsf TRISA, VIDEO_OUT
+0203   108C               M     bcf TRISA,CHROMA
+0204   3???               M     bra brick_delay
+0205                      M no_brick
+0205   0000               M     nop
                           M     black
-0202   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0203   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0204   160C               M     bsf TRISA,VIDEO_OUT
+0206   0021               M     banksel TRISA
+0207   148C               M     bsf TRISA,CHROMA
+0208   160C               M     bsf TRISA,VIDEO_OUT
                           M ;    goto $+1
-0205   3???               M     bra brick_delay 
-0206                      M brick_delay    
+0209   3???               M     bra brick_delay 
+020A                      M brick_delay    
                           M     tdelay BRICK_WIDTH
   0009                    M     variable q=(BRICK_WIDTH)/3
   0001                    M     variable r=(BRICK_WIDTH)%3
                           M     if (q)
-0206   3009               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0207   0B89               M     decfsz WREG
-0208   2???               M     goto $-1
+020A   3009               M     movlw q
+020B   0B89               M     decfsz WREG
+020C   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-0209   0000               M     nop
+020D   0000               M     nop
                           M     endif
-Message[305]: Using default destination of 1 (file).
-020A   0B80               M     decfsz T
-020B   3???               M     bra next_brick
+020E   0B80               M     decfsz T
+020F   3???               M     bra next_brick
                           M     dropn 1
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 30
+0210   3101               M     addfsr T,1
+                      00711     black
+0211   0021               M     banksel TRISA
+0212   148C               M     bsf TRISA,CHROMA
+0213   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+                      00712     tdelay 3
+  0001                    M     variable q=(3)/3
+  0000                    M     variable r=(3)%3
+                          M     if (q)
+0214   3001               M     movlw q
+0215   0B89               M     decfsz WREG
+0216   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 27
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-020C   3101               M     addfsr T,1
-                      00660     black
-020D   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-020E   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-020F   160C               M     bsf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-                      00661     tdelay 3
-  0001                    M     variable q=(3)/3
-  0000                    M     variable r=(3)%3
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+                      00713 ;    draw_border BORDER_WIDTH
+                      00714     next_task BRICK_HEIGHT
+0217   0A??               M     incf slice
+0218   3008               M     movlw BRICK_HEIGHT
+0219   02??               M     subwf slice,W
+021A   1D03               M     skpz
+                          M     leave
+021B   2???               M     goto isr_exit
+021C   01??               M     clrf slice
+021D   0A??               M     incf task
+021E   3008               M     movlw BRICK_HEIGHT
+021F   07??               M     addwf lcount
+                          M     leave
+0220   2???               M     goto isr_exit
+                      00715 
+                      00716 ; task 15, draw 5th brick row    
+0221                  00717 draw_row5 ; white
+0221   002?           00718     banksel row5
+0222   08??           00719     movfw row5
+0223   00??           00720     movwf temp
+                      00721     tdelay LEFT_MARGIN-3
+  0007                    M     variable q=(LEFT_MARGIN-3)/3
+  0000                    M     variable r=(LEFT_MARGIN-3)%3
                           M     if (q)
-0210   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0211   0B89               M     decfsz WREG
-0212   2???               M     goto $-1
+0224   3007               M     movlw q
+0225   0B89               M     decfsz WREG
+0226   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
@@ -1738,174 +1576,70 @@ Message[305]: Using default destination of 1 (file).
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00662     draw_border BORDER_WIDTH
-0213   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0214   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0215   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
-                          M     if (q)
-0216   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0217   0B89               M     decfsz WREG
-0218   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-0219   0000               M     nop
-                          M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-021A   160C               M     bsf TRISA,VIDEO_OUT
-                      00663     next_task BRICK_HEIGHT
-Message[305]: Using default destination of 1 (file).
-021B   0A??               M     incf slice
-021C   3008               M     movlw BRICK_HEIGHT
-021D   02??               M     subwf slice,W
-021E   1D03               M     skpz
-                          M     leave
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 31
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-021F   2???               M     goto isr_exit
-0220   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-0221   0A??               M     incf task
-0222   3008               M     movlw BRICK_HEIGHT
-Message[305]: Using default destination of 1 (file).
-0223   07??               M     addwf lcount
-                          M     leave
-0224   2???               M     goto isr_exit
-                      00664 
-                      00665 ; task 15, draw 5th brick row    
-0225                  00666 draw_row5 ; white
-0225   002?           00667     banksel row5
-0226   08??           00668     movfw row5
-0227   00??           00669     movwf temp
-                      00670     tdelay LEFT_MARGIN-3
-  0004                    M     variable q=(LEFT_MARGIN-3)/3
-  0001                    M     variable r=(LEFT_MARGIN-3)%3
-                          M     if (q)
-0228   3004               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0229   0B89               M     decfsz WREG
-022A   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-022B   0000               M     nop
-                          M     endif
-                      00671     draw_border BORDER_WIDTH
-022C   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-022D   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-022E   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
-                          M     if (q)
-022F   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0230   0B89               M     decfsz WREG
-0231   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-0232   0000               M     nop
-                          M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0233   160C               M     bsf TRISA,VIDEO_OUT
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 32
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-                      00672     draw_wall white
+                      00722 ;    draw_border BORDER_WIDTH
+                      00723     draw_wall white
   0000                    M     local next_brick
-0234   3008               M     movlw 8
+0227   3008               M     movlw 8
                           M     pushw
-0235   0019               M     movwi --SP
-0236                      M next_brick    
-Message[305]: Using default destination of 1 (file).
-0236   35??               M     lslf temp
+0228   0019               M     movwi --SP
+0229                      M next_brick    
+0229   35??               M     lslf temp
                           M     draw_brick white
   0000                    M     local no_brick
   0000                    M     local brick_delay
-0237   1C03               M     skpc
-0238   3???               M     bra no_brick
+022A   1C03               M     skpc
+022B   3???               M     bra no_brick
                           M     white
-0239   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-023A   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-023B   120C               M     bcf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-023C   3???               M     bra brick_delay
-023D                      M no_brick
-023D   0000               M     nop
-                          M     black
-023E   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-023F   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0240   160C               M     bsf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-0241   3???               M     bra brick_delay 
-0242                      M brick_delay    
-                          M     tdelay BRICK_WIDTH
-  0009                    M     variable q=(BRICK_WIDTH)/3
-  0001                    M     variable r=(BRICK_WIDTH)%3
-                          M     if (q)
-0242   3009               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0243   0B89               M     decfsz WREG
-0244   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-0245   0000               M     nop
-                          M     endif
-Message[305]: Using default destination of 1 (file).
-0246   0B80               M     decfsz T
-0247   3???               M     bra next_brick
-                          M     dropn 1
-0248   3101               M     addfsr T,1
-                      00673     black
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 33
+022C   0021               M     banksel TRISA
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 28
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0249   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-024A   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-024B   160C               M     bsf TRISA,VIDEO_OUT
+022D   148C               M     bsf TRISA,CHROMA
+022E   120C               M     bcf TRISA,VIDEO_OUT
                           M ;    goto $+1
-                      00674     tdelay 3
+022F   3???               M     bra brick_delay
+0230                      M no_brick
+0230   0000               M     nop
+                          M     black
+0231   0021               M     banksel TRISA
+0232   148C               M     bsf TRISA,CHROMA
+0233   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+0234   3???               M     bra brick_delay 
+0235                      M brick_delay    
+                          M     tdelay BRICK_WIDTH
+  0009                    M     variable q=(BRICK_WIDTH)/3
+  0001                    M     variable r=(BRICK_WIDTH)%3
+                          M     if (q)
+0235   3009               M     movlw q
+0236   0B89               M     decfsz WREG
+0237   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+0238   0000               M     nop
+                          M     endif
+0239   0B80               M     decfsz T
+023A   3???               M     bra next_brick
+                          M     dropn 1
+023B   3101               M     addfsr T,1
+                      00724     black
+023C   0021               M     banksel TRISA
+023D   148C               M     bsf TRISA,CHROMA
+023E   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+                      00725     tdelay 3
   0001                    M     variable q=(3)/3
   0000                    M     variable r=(3)%3
                           M     if (q)
-024C   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-024D   0B89               M     decfsz WREG
-024E   2???               M     goto $-1
+023F   3001               M     movlw q
+0240   0B89               M     decfsz WREG
+0241   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
@@ -1913,664 +1647,478 @@ Message[305]: Using default destination of 1 (file).
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00675     draw_border BORDER_WIDTH
-024F   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0250   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0251   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
+                      00726 ;    draw_border BORDER_WIDTH
+                      00727     black
+0242   0021               M     banksel TRISA
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 29
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0243   148C               M     bsf TRISA,CHROMA
+0244   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+                      00728     next_task BRICK_HEIGHT
+0245   0A??               M     incf slice
+0246   3008               M     movlw BRICK_HEIGHT
+0247   02??               M     subwf slice,W
+0248   1D03               M     skpz
+                          M     leave
+0249   2???               M     goto isr_exit
+024A   01??               M     clrf slice
+024B   0A??               M     incf task
+024C   3008               M     movlw BRICK_HEIGHT
+024D   07??               M     addwf lcount
+                          M     leave
+024E   2???               M     goto isr_exit
+                      00729 
+                      00730 ; task 16,draw all rows between paddle and lower brick row    
+024F                  00731 draw_empty
+                      00732     tdelay LEFT_MARGIN
+  0008                    M     variable q=(LEFT_MARGIN)/3
+  0000                    M     variable r=(LEFT_MARGIN)%3
                           M     if (q)
-0252   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
+024F   3008               M     movlw q
+0250   0B89               M     decfsz WREG
+0251   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+                      00733 ;    draw_border BORDER_WIDTH
+                      00734     tdelay 320
+  006A                    M     variable q=(320)/3
+  0002                    M     variable r=(320)%3
+                          M     if (q)
+0252   306A               M     movlw q
 0253   0B89               M     decfsz WREG
 0254   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-0255   0000               M     nop
-                          M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0256   160C               M     bsf TRISA,VIDEO_OUT
-                      00676     black
-0257   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0258   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0259   160C               M     bsf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-                      00677     next_task BRICK_HEIGHT
-Message[305]: Using default destination of 1 (file).
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 34
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-025A   0A??               M     incf slice
-025B   3008               M     movlw BRICK_HEIGHT
-025C   02??               M     subwf slice,W
-025D   1D03               M     skpz
-                          M     leave
-025E   2???               M     goto isr_exit
-025F   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-0260   0A??               M     incf task
-0261   3008               M     movlw BRICK_HEIGHT
-Message[305]: Using default destination of 1 (file).
-0262   07??               M     addwf lcount
-                          M     leave
-0263   2???               M     goto isr_exit
-                      00678 
-                      00679 ; task 16,draw all rows between paddle and lower brick row    
-0264                  00680 draw_empty
-                      00681     tdelay LEFT_MARGIN
-  0005                    M     variable q=(LEFT_MARGIN)/3
-  0001                    M     variable r=(LEFT_MARGIN)%3
-                          M     if (q)
-0264   3005               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0265   0B89               M     decfsz WREG
-0266   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-0267   0000               M     nop
-                          M     endif
-                      00682     draw_border BORDER_WIDTH
-0268   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0269   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-026A   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
-                          M     if (q)
-026B   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-026C   0B89               M     decfsz WREG
-026D   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-026E   0000               M     nop
-                          M     endif
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 35
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-026F   160C               M     bsf TRISA,VIDEO_OUT
-                      00683     tdelay 320
-  006A                    M     variable q=(320)/3
-  0002                    M     variable r=(320)%3
-                          M     if (q)
-0270   306A               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0271   0B89               M     decfsz WREG
-0272   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-0273   2???               M     goto $+1
+0255   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00684     draw_border BORDER_WIDTH
-0274   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0275   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0276   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
-                          M     if (q)
-0277   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0278   0B89               M     decfsz WREG
-0279   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-027A   0000               M     nop
-                          M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-027B   160C               M     bsf TRISA,VIDEO_OUT
-                      00685     black
-027C   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-027D   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-027E   160C               M     bsf TRISA,VIDEO_OUT
+                      00735 ;    draw_border BORDER_WIDTH
+                      00736     black
+0256   0021               M     banksel TRISA
+0257   148C               M     bsf TRISA,CHROMA
+0258   160C               M     bsf TRISA,VIDEO_OUT
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 30
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
                           M ;    goto $+1
-                      00686     next_task 118
-Message[305]: Using default destination of 1 (file).
-027F   0A??               M     incf slice
-0280   3076               M     movlw 118
-0281   02??               M     subwf slice,W
-0282   1D03               M     skpz
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 36
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
+                      00737     next_task 118
+0259   0A??               M     incf slice
+025A   3076               M     movlw 118
+025B   02??               M     subwf slice,W
+025C   1D03               M     skpz
                           M     leave
-0283   2???               M     goto isr_exit
-0284   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-0285   0A??               M     incf task
-0286   3076               M     movlw 118
-Message[305]: Using default destination of 1 (file).
-0287   07??               M     addwf lcount
+025D   2???               M     goto isr_exit
+025E   01??               M     clrf slice
+025F   0A??               M     incf task
+0260   3076               M     movlw 118
+0261   07??               M     addwf lcount
                           M     leave
-0288   2???               M     goto isr_exit
-                      00687 
-                      00688     
-                      00689 ; task 17, draw paddle at bottom screen    
-0289                  00690 draw_paddle
-                      00691     tdelay LEFT_MARGIN
-  0005                    M     variable q=(LEFT_MARGIN)/3
-  0001                    M     variable r=(LEFT_MARGIN)%3
+0262   2???               M     goto isr_exit
+                      00738 
+                      00739     
+                      00740 ; task 17, draw paddle at bottom screen    
+0263                  00741 draw_paddle
+                      00742     tdelay LEFT_MARGIN+2
+  0008                    M     variable q=(LEFT_MARGIN+2)/3
+  0002                    M     variable r=(LEFT_MARGIN+2)%3
                           M     if (q)
-0289   3005               M     movlw q
-Message[305]: Using default destination of 1 (file).
-028A   0B89               M     decfsz WREG
-028B   2???               M     goto $-1
+0263   3008               M     movlw q
+0264   0B89               M     decfsz WREG
+0265   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-                          M     goto $+1
+0266   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
-028C   0000               M     nop
+                          M     nop
                           M     endif
-                      00692     draw_border BORDER_WIDTH
-028D   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-028E   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-028F   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
-                          M     if (q)
-0290   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-0291   0B89               M     decfsz WREG
-0292   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-0293   0000               M     nop
-                          M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0294   160C               M     bsf TRISA,VIDEO_OUT
-0295   08??           00693     movfw paddle_pos
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 37
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-0296   1903           00694     skpnz
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0297   120C           00695     bcf TRISA,VIDEO_OUT
-0298   1903           00696     skpnz
-0299   3???           00697     bra at_left+2
-Message[305]: Using default destination of 1 (file).
-029A   0B89           00698     decfsz WREG
-029B   3???           00699     bra $-1
-029C                  00700 at_left
-029C   0000           00701     nop
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-029D   120C           00702     bcf TRISA,VIDEO_OUT
-                      00703     tdelay PADDLE_WIDTH
+0267   08??           00743     movfw paddle_pos
+0268   1903           00744     skpnz
+0269   3???           00745     bra $+3
+026A   0B89           00746     decfsz WREG
+026B   3???           00747     bra $-1
+026C   0021           00748     banksel TRISA
+026D   120C           00749     bcf TRISA,VIDEO_OUT
+                      00750     tdelay PADDLE_WIDTH
   000A                    M     variable q=(PADDLE_WIDTH)/3
   0002                    M     variable r=(PADDLE_WIDTH)%3
                           M     if (q)
-029E   300A               M     movlw q
-Message[305]: Using default destination of 1 (file).
-029F   0B89               M     decfsz WREG
-02A0   2???               M     goto $-1
+026E   300A               M     movlw q
+026F   0B89               M     decfsz WREG
+0270   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-02A1   2???               M     goto $+1
+0271   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-02A2   08??           00704     movfw paddle_pos
-02A3   3C5C           00705     sublw PADDLE_LIMIT
-02A4   0000           00706     nop
-02A5   1903           00707     skpnz
-02A6   3???           00708     bra $+5
-02A7   0000           00709     nop
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-02A8   160C           00710     bsf TRISA,VIDEO_OUT
-Message[305]: Using default destination of 1 (file).
-02A9   0B89           00711     decfsz WREG
-02AA   3???           00712     bra $-1
-                      00713     draw_border BORDER_WIDTH
-02AB   0021               M     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-02AC   148C               M     bsf TRISA,CHROMA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-02AD   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
-                          M     if (q)
-02AE   3001               M     movlw q
-Message[305]: Using default destination of 1 (file).
-02AF   0B89               M     decfsz WREG
-02B0   2???               M     goto $-1
-                          M     endif
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 38
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 31
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-02B1   0000               M     nop
-                          M     endif
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-02B2   160C               M     bsf TRISA,VIDEO_OUT
-                      00714     next_task 8
-Message[305]: Using default destination of 1 (file).
-02B3   0A??               M     incf slice
-02B4   3008               M     movlw 8
-02B5   02??               M     subwf slice,W
-02B6   1D03               M     skpz
+0272   160C           00751     bsf TRISA,VIDEO_OUT
+                      00752 ;    draw_border BORDER_WIDTH
+                      00753 ;    movfw paddle_pos
+                      00754 ;    skpnz
+                      00755 ;    bcf TRISA,VIDEO_OUT
+                      00756 ;    skpnz
+                      00757 ;    bra at_left+2
+                      00758 ;    decfsz WREG
+                      00759 ;    bra $-1
+                      00760 ;at_left
+                      00761 ;    nop
+                      00762 ;    bcf TRISA,VIDEO_OUT
+                      00763 ;    tdelay PADDLE_WIDTH
+                      00764 ;    movfw paddle_pos
+                      00765 ;    sublw PADDLE_LIMIT
+                      00766 ;    nop
+                      00767 ;    skpnz
+                      00768 ;    bra $+5
+                      00769 ;    nop
+                      00770 ;    bsf TRISA,VIDEO_OUT
+                      00771 ;    decfsz WREG
+                      00772 ;    bra $-1
+                      00773 ;    draw_border BORDER_WIDTH
+                      00774     next_task 8
+0273   0A??               M     incf slice
+0274   3008               M     movlw 8
+0275   02??               M     subwf slice,W
+0276   1D03               M     skpz
                           M     leave
-02B7   2???               M     goto isr_exit
-02B8   01??               M     clrf slice
-Message[305]: Using default destination of 1 (file).
-02B9   0A??               M     incf task
-02BA   3008               M     movlw 8
-Message[305]: Using default destination of 1 (file).
-02BB   07??               M     addwf lcount
+0277   2???               M     goto isr_exit
+0278   01??               M     clrf slice
+0279   0A??               M     incf task
+027A   3008               M     movlw 8
+027B   07??               M     addwf lcount
                           M     leave
-02BC   2???               M     goto isr_exit
-                      00715 
-                      00716 ; task 18,  wait end of this field, reset task to zero    
-02BD                  00717 wait_field_end
-Message[305]: Using default destination of 1 (file).
-02BD   0A??           00718     incf lcount
-02BE   1903           00719     skpnz
-02BF   1400           00720     bsf flags, F_HI_LINE
-02C0   1800           00721     btfsc flags, F_HI_LINE
-02C1   2???           00722     goto hi_line
-                      00723     leave
-02C2   2???               M     goto isr_exit
-02C3                  00724 hi_line
-02C3   1880           00725     btfsc flags,F_EVEN
-02C4   2???           00726     goto even_field
-02C5   3005           00727     movlw 5
-02C6   02??           00728     subwf lcount,W
-02C7   1D03           00729     skpz
-                      00730     leave
-02C8   2???               M     goto isr_exit
-02C9   2???           00731     goto field_end
-02CA                  00732 even_field
-02CA   3006           00733     movlw 6
-02CB   02??           00734     subwf lcount,W
-02CC   1D03           00735     skpz
-                      00736     leave
-02CD   2???               M     goto isr_exit
-                      00737 ; even field last line is half_line    
-                      00738 ; set PWM3 for line 263 half-line
-02CE   003B           00739     banksel PWM3DC
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 39
+027C   2???               M     goto isr_exit
+                      00775 
+                      00776 ; task 18,  wait end of this field, reset task to zero    
+027D                  00777 wait_field_end
+027D   0A??           00778     incf lcount
+027E   1903           00779     skpnz
+027F   1400           00780     bsf flags, F_HI_LINE
+0280   1800           00781     btfsc flags, F_HI_LINE
+0281   2???           00782     goto hi_line
+                      00783     leave
+0282   2???               M     goto isr_exit
+0283                  00784 hi_line
+0283   1880           00785     btfsc flags,F_EVEN
+0284   2???           00786     goto even_field
+0285   3005           00787     movlw 5
+0286   02??           00788     subwf lcount,W
+0287   1D03           00789     skpz
+                      00790     leave
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 32
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-02CF   3003           00740     movlw high HALF_LINE
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-02D0   00B6           00741     movwf PWM3PRH
-02D1   308D           00742     movlw low HALF_LINE
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-02D2   00B5           00743     movwf PWM3PRL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-02D3   17BF           00744     bsf PWM3LDCON,7
-02D4                  00745 field_end
-02D4   01??           00746     clrf task
-02D5   01??           00747     clrf slice
-02D6   01??           00748     clrf lcount
-02D7   1000           00749     bcf flags, F_HI_LINE
-02D8   1680           00750     bsf flags, F_SYNC
-                      00751 ; toggle odd/even field flag    
-02D9   3002           00752     movlw 1<<F_EVEN
-Message[305]: Using default destination of 1 (file).
-02DA   06??           00753     xorwf flags
-                      00754     leave
-02DB   2???               M     goto isr_exit
-                      00755 
-                      00756 ; helper functions
-                      00757 
-                      00758 ; add 2 BCD digits
-                      00759 ; parameters:
-                      00760 ;   WREG -> first digit
-                      00761 ;   T -> second digit
-                      00762 ;   C -> carry from previous digits add    
-                      00763 ; output:
-                      00764 ;   T -> sum
-                      00765 ;   C -> overflow
-02DC                  00766 bcd_add
-Message[305]: Using default destination of 1 (file).
-02DC   3D80           00767     addwfc T
-02DD   300A           00768     movlw 10
-02DE   0200           00769     subwf T,W
-02DF   1C03           00770     skpc
-02E0   0008           00771     return
-02E1   3006           00772     movlw 6
-Message[305]: Using default destination of 1 (file).
-02E2   0780           00773     addwf T
-02E3   300F           00774     movlw 15
-Message[305]: Using default destination of 1 (file).
-02E4   0580           00775     andwf T
-02E5   1403           00776     bsf STATUS,C
-02E6   0008           00777     return
-                      00778     
-                      00779 ; increment user score
-                      00780 ; This is a BCD addition where a single digit is added to score.   
-                      00781 ; score is stored as big indian
-                      00782 ; argument: ( n -- )
-                      00783 ;   WREG ->  bdc digit to add to score variable
-02E7                  00784 inc_score
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 40
+0288   2???               M     goto isr_exit
+0289   2???           00791     goto field_end
+028A                  00792 even_field
+028A   3006           00793     movlw 6
+028B   02??           00794     subwf lcount,W
+028C   1D03           00795     skpz
+                      00796     leave
+028D   2???               M     goto isr_exit
+                      00797 ; even field last line is half_line    
+                      00798 ; set PWM3 for line 263 half-line
+028E   003B           00799     banksel PWM3DC
+028F   3003           00800     movlw high HALF_LINE
+0290   00B6           00801     movwf PWM3PRH
+0291   308D           00802     movlw low HALF_LINE
+0292   00B5           00803     movwf PWM3PRL
+0293   17BF           00804     bsf PWM3LDCON,7
+0294                  00805 field_end
+0294   01??           00806     clrf task
+0295   01??           00807     clrf slice
+0296   01??           00808     clrf lcount
+0297   1000           00809     bcf flags, F_HI_LINE
+0298   1680           00810     bsf flags, F_SYNC
+                      00811 ; toggle odd/even field flag    
+0299   3002           00812     movlw 1<<F_EVEN
+029A   06??           00813     xorwf flags
+                      00814     leave
+029B   2???               M     goto isr_exit
+                      00815 
+                      00816 ; helper functions
+                      00817 
+                      00818 ; add 2 BCD digits
+                      00819 ; parameters:
+                      00820 ;   WREG -> first digit
+                      00821 ;   T -> second digit
+                      00822 ;   C -> carry from previous digits add    
+                      00823 ; output:
+                      00824 ;   T -> sum
+                      00825 ;   C -> overflow
+029C                  00826 bcd_add
+029C   3D80           00827     addwfc T
+029D   300A           00828     movlw 10
+029E   0200           00829     subwf T,W
+029F   1C03           00830     skpc
+02A0   0008           00831     return
+02A1   3006           00832     movlw 6
+02A2   0780           00833     addwf T
+02A3   300F           00834     movlw 15
+02A4   0580           00835     andwf T
+02A5   1403           00836     bsf STATUS,C
+02A6   0008           00837     return
+                      00838     
+                      00839 ; increment user score
+                      00840 ; This is a BCD addition where a single digit is added to score.   
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 33
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00785     pushw
-02E7   0019               M     movwi --SP
-02E8   1003           00786     clrc
-02E9   300F           00787     movlw 15
-02EA   05??           00788     andwf score+1,W
-02EB   2???           00789     call bcd_add
-02EC   0103           00790     clrw 
-                      00791     pushw
-02ED   0019               M     movwi --SP
-02EE   0E??           00792     swapf score+1,W
-02EF   390F           00793     andlw 15
-02F0   2???           00794     call bcd_add
-02F1   1803           00795     skpnc
-Message[305]: Using default destination of 1 (file).
-02F2   0A??           00796     incf score
-                      00797     popw
-02F3   0012               M     moviw SP++
-Message[305]: Using default destination of 1 (file).
-02F4   0E89           00798     swapf WREG
-02F5   0400           00799     iorwf T,W
-02F6   00??           00800     movwf score+1
-                      00801     dropn 1
-02F7   3101               M     addfsr T,1
-02F8   0008           00802     return
-                      00803     
-                      00804 ;***********************************
-                      00805 ; digit_offset, compute digit position in 'digits' table
-                      00806 ;   position = digit * 5
-                      00807 ; 
-                      00808 ; input: WREG -> digit value {0..9}
-                      00809 ;         
-                      00810 ; output: WREG -> displacement in table
-                      00811 ;***********************************
-02F9                  00812 digit_offset    
-                      00813     pushw 
-02F9   0019               M     movwi --SP
-Message[305]: Using default destination of 1 (file).
-02FA   3589           00814     lslf WREG
-Message[305]: Using default destination of 1 (file).
-02FB   3589           00815     lslf WREG
-Message[305]: Using default destination of 1 (file).
-02FC   0780           00816     addwf T
-                      00817     popw
-02FD   0012               M     moviw SP++
-02FE   0008           00818     return
-                      00819     
-02FF                  00820 init_brick_wall
-02FF   30??           00821     movlw high brick_wall
-0300   0087           00822     movwf FSR1H
-0301   30??           00823     movlw low brick_wall
-0302   0086           00824     movwf FSR1L
-0303   3005           00825     movlw 5
-0304   00??           00826     movwf temp
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 41
+                      00841 ; score is stored as big indian
+                      00842 ; argument: ( n -- )
+                      00843 ;   WREG ->  bdc digit to add to score variable
+02A7                  00844 inc_score
+                      00845     pushw
+02A7   0019               M     movwi --SP
+02A8   1003           00846     clrc
+02A9   300F           00847     movlw 15
+02AA   05??           00848     andwf score+1,W
+02AB   2???           00849     call bcd_add
+02AC   0103           00850     clrw 
+                      00851     pushw
+02AD   0019               M     movwi --SP
+02AE   0E??           00852     swapf score+1,W
+02AF   390F           00853     andlw 15
+02B0   2???           00854     call bcd_add
+02B1   1803           00855     skpnc
+02B2   0A??           00856     incf score
+                      00857     popw
+02B3   0012               M     moviw SP++
+02B4   0E89           00858     swapf WREG
+02B5   0400           00859     iorwf T,W
+02B6   00??           00860     movwf score+1
+                      00861     dropn 1
+02B7   3101               M     addfsr T,1
+02B8   0008           00862     return
+                      00863     
+                      00864 ;***********************************
+                      00865 ; digit_offset, compute digit position in 'digits' table
+                      00866 ;   position = digit * 5
+                      00867 ; 
+                      00868 ; input: WREG -> digit value {0..9}
+                      00869 ;         
+                      00870 ; output: WREG -> displacement in table
+                      00871 ;***********************************
+02B9                  00872 digit_offset    
+                      00873     pushw 
+02B9   0019               M     movwi --SP
+02BA   3589           00874     lslf WREG
+02BB   3589           00875     lslf WREG
+02BC   0780           00876     addwf T
+                      00877     popw
+02BD   0012               M     moviw SP++
+02BE   0008           00878     return
+                      00879     
+02BF                  00880 init_brick_wall
+02BF   30??           00881     movlw high brick_wall
+02C0   0087           00882     movwf FSR1H
+02C1   30??           00883     movlw low brick_wall
+02C2   0086           00884     movwf FSR1L
+02C3   3005           00885     movlw 5
+02C4   00??           00886     movwf temp
+02C5   30FF           00887     movlw 0xff
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 34
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0305   30FF           00827     movlw 0xff
-0306                  00828 ibw    
-0306   001E           00829     movwi FSR1++
-Message[305]: Using default destination of 1 (file).
-0307   0B??           00830     decfsz temp
-0308   3???           00831     bra ibw
-0309   0008           00832     return
-                      00833 
-                      00834 ; delay by TIMER0
-                      00835 ; parameter
-                      00836 ;   WREG -> 2*Tcy+7cy    
-030A                  00837 t0delay 
-Message[305]: Using default destination of 1 (file).
-030A   0989           00838     comf WREG
-030B   0095           00839     movwf TMR0
-030C   110B           00840     bcf INTCON,T0IF
-030D   1D0B           00841     btfss INTCON,T0IF
-030E   3???           00842     bra $-1
-030F   0008           00843     return
-                      00844     
-                      00845 MAIN_PROG CODE                      ; let linker place main program
-                      00846 
-0000                  00847 START
-                      00848 ; clear common RAM
-0000   0185           00849     clrf FSR0H
-0001   3070           00850     movlw 0x70
-0002   0084           00851     movwf FSR0L
-0003   0103           00852     clrw
-0004   001A           00853     movwi FSR0++
-0005   1F84           00854     btfss FSR0L,7
-0006   3???           00855     bra $-2
-                      00856 ; clear banked RAM
-0007   0184           00857     clrf FSR0L
-0008   3020           00858     movlw 0x20
-0009   0085           00859     movwf FSR0H
-000A   0103           00860     clrw 
-000B   001A           00861     movwi FSR0++
-000C   1C05           00862     btfss FSR0H,0
-000D   3???           00863     bra $-2
-000E   2???           00864     call init_brick_wall
-                      00865 ;   setup arguments stack pointer
-000F   30??           00866     movlw high (stack+STACK_SIZE)
-0010   0085           00867     movwf FSR0H
-0011   30??           00868     movlw low (stack+STACK_SIZE)
-0012   0084           00869     movwf FSR0L
-                      00870 ; setup OPTION register to enable weak pullup and prescale used by TIMER
-                      00871 ; TIMER0 prescale 1:2
-0013   3050           00872     movlw ~((1<<NOT_WPUEN)|(1<<TMR0CS)|(1<<PSA)|(7<<PS0_OPTION_REG))
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0014   0095           00873     movwf OPTION_REG
-                      00874 ; disable analog inputs, except AN0
-0015   0023           00875     banksel ANSELA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 42
+02C6                  00888 ibw    
+02C6   001E           00889     movwi FSR1++
+02C7   0B??           00890     decfsz temp
+02C8   3???           00891     bra ibw
+02C9   0008           00892     return
+                      00893 
+                      00894 ; delay by TIMER0
+                      00895 ; parameter
+                      00896 ;   WREG -> 2*Tcy+7cy    
+02CA                  00897 t0delay 
+02CA   0989           00898     comf WREG
+02CB   0095           00899     movwf TMR0
+02CC   110B           00900     bcf INTCON,T0IF
+02CD   1D0B           00901     btfss INTCON,T0IF
+02CE   3???           00902     bra $-1
+02CF   0008           00903     return
+                      00904     
+                      00905 MAIN_PROG CODE                      ; let linker place main program
+                      00906 
+0000                  00907 START
+                      00908 ; clear common RAM
+0000   0185           00909     clrf FSR0H
+0001   3070           00910     movlw 0x70
+0002   0084           00911     movwf FSR0L
+0003   0103           00912     clrw
+0004   001A           00913     movwi FSR0++
+0005   1F84           00914     btfss FSR0L,7
+0006   3???           00915     bra $-2
+                      00916 ; clear banked RAM
+0007   0184           00917     clrf FSR0L
+0008   3020           00918     movlw 0x20
+0009   0085           00919     movwf FSR0H
+000A   0103           00920     clrw 
+000B   001A           00921     movwi FSR0++
+000C   1C05           00922     btfss FSR0H,0
+000D   3???           00923     bra $-2
+000E   2???           00924     call init_brick_wall
+                      00925 ;   setup arguments stack pointer
+000F   30??           00926     movlw high (stack+STACK_SIZE)
+0010   0085           00927     movwf FSR0H
+0011   30??           00928     movlw low (stack+STACK_SIZE)
+0012   0084           00929     movwf FSR0L
+                      00930 ; setup OPTION register to enable weak pullup and prescale used by TIMER
+                      00931 ; TIMER0 prescale 1:2
+0013   3050           00932     movlw ~((1<<NOT_WPUEN)|(1<<TMR0CS)|(1<<PSA)|(7<<PS0_OPTION_REG))
+0014   0095           00933     movwf OPTION_REG
+                      00934 ; disable analog inputs, except AN0
+0015   0023           00935     banksel ANSELA
+0016   018C           00936     clrf ANSELA
+                      00937 ; paddle potentiometer input     
+0017   140C           00938     bsf ANSELA,PADDLE
+0018   0021           00939     banksel ADCON1
+0019   3020           00940     movlw (2<<ADCS0)
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 35
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0016   018C           00876     clrf ANSELA
-                      00877 ; paddle potentiometer input     
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0017   140C           00878     bsf ANSELA,PADDLE
-0018   0021           00879     banksel ADCON1
-0019   3020           00880     movlw (2<<ADCS0)
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-001A   009E           00881     movwf ADCON1
-                      00882 ; pin setup
-001B   0024           00883     banksel WPUA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-001C   018C           00884     clrf WPUA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-001D   158C           00885     bsf WPUA,START_BTN
-001E   0021           00886     banksel TRISA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-001F   110C           00887     bcf TRISA,SYNC_OUT
-0020   0022           00888     banksel LATA
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0021   160C           00889     bsf LATA, VIDEO_OUT
-                      00890 ; PWM1 chroma signal on RA1
-0022   003B           00891     banksel PWM1CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0023   019F           00892     clrf PWM1LDCON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0024   0191           00893     clrf PWM1PHL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0025   0192           00894     clrf PWM1PHH
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0026   0197           00895     clrf PWM1OFL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0027   0198           00896     clrf PWM1OFH
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0028   0196           00897     clrf PWM1PRH
-0029   3007           00898     movlw 7
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-002A   0095           00899     movwf PWM1PRL
-002B   3004           00900     movlw 4
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-002C   0093           00901     movwf PWM1DCL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-002D   0194           00902     clrf PWM1DCH
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-002E   179F           00903     bsf PWM1LDCON,7
-002F   30C0           00904     movlw (1<<EN)|(1<<OE)
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0030   009B           00905     movwf PWM1CON
-                      00906 ; PWM3 set to horizontal period 15734 hertz, output on RA2
-0031   003B           00907     banksel PWM3CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0032   01BF           00908     clrf PWM3LDCON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0033   01B1           00909     clrf PWM3PHL
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 43
+001A   009E           00941     movwf ADCON1
+                      00942 ; pin setup
+001B   0024           00943     banksel WPUA
+001C   018C           00944     clrf WPUA
+001D   158C           00945     bsf WPUA,START_BTN
+001E   0021           00946     banksel TRISA
+001F   110C           00947     bcf TRISA,SYNC_OUT
+0020   0022           00948     banksel LATA
+0021   160C           00949     bsf LATA, VIDEO_OUT
+                      00950 ; PWM1 chroma signal on RA1
+0022   003B           00951     banksel PWM1CON
+0023   019F           00952     clrf PWM1LDCON
+0024   0191           00953     clrf PWM1PHL
+0025   0192           00954     clrf PWM1PHH
+0026   0197           00955     clrf PWM1OFL
+0027   0198           00956     clrf PWM1OFH
+0028   0196           00957     clrf PWM1PRH
+0029   3007           00958     movlw 7
+002A   0095           00959     movwf PWM1PRL
+002B   3004           00960     movlw 4
+002C   0093           00961     movwf PWM1DCL
+002D   0194           00962     clrf PWM1DCH
+002E   179F           00963     bsf PWM1LDCON,7
+002F   30C0           00964     movlw (1<<EN)|(1<<OE)
+0030   009B           00965     movwf PWM1CON
+                      00966 ; PWM3 set to horizontal period 15734 hertz, output on RA2
+0031   003B           00967     banksel PWM3CON
+0032   01BF           00968     clrf PWM3LDCON
+0033   01B1           00969     clrf PWM3PHL
+0034   01B2           00970     clrf PWM3PHH
+0035   01B7           00971     clrf PWM3OFL
+0036   01B8           00972     clrf PWM3OFH
+0037   301B           00973     movlw low HPERIOD
+0038   00B5           00974     movwf PWM3PRL
+0039   3007           00975     movlw high HPERIOD
+003A   00B6           00976     movwf PWM3PRH
+003B   3086           00977     movlw HSYNC
+003C   00B3           00978     movwf PWM3DCL
+003D   01B4           00979     clrf PWM3DCH
+003E   30D0           00980     movlw (1<<EN)|(1<<OE)|(1<<POL)
+003F   00BB           00981     movwf PWM3CON
+0040   17BF           00982     bsf PWM3LDCON,7
+0041   143C           00983     bsf PWM3INTE,PRIE
+0042   0020           00984     banksel PIR3
+0043   1313           00985     bcf PIR3,PWM3IF
+0044   0021           00986     banksel PIE3
+0045   1713           00987     bsf PIE3,PWM3IE
+0046   170B           00988     bsf INTCON,PEIE
+0047   178B           00989     bsf INTCON,GIE
+0048   1480           00990     bsf flags, F_EVEN
+0049   1680           00991     bsf flags, F_SYNC
+                      00992 ; test code
+004A   002?           00993     banksel balls
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 36
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0034   01B2           00910     clrf PWM3PHH
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0035   01B7           00911     clrf PWM3OFL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0036   01B8           00912     clrf PWM3OFH
-0037   301B           00913     movlw low HPERIOD
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0038   00B5           00914     movwf PWM3PRL
-0039   3007           00915     movlw high HPERIOD
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-003A   00B6           00916     movwf PWM3PRH
-003B   3086           00917     movlw HSYNC
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-003C   00B3           00918     movwf PWM3DCL
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-003D   01B4           00919     clrf PWM3DCH
-003E   30D0           00920     movlw (1<<EN)|(1<<OE)|(1<<POL)
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-003F   00BB           00921     movwf PWM3CON
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0040   17BF           00922     bsf PWM3LDCON,7
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0041   143C           00923     bsf PWM3INTE,PRIE
-0042   0020           00924     banksel PIR3
-0043   1313           00925     bcf PIR3,PWM3IF
-0044   0021           00926     banksel PIE3
-Message[302]: Register in operand not in bank 0.  Ensure that bank bits are correct.
-0045   1713           00927     bsf PIE3,PWM3IE
-0046   170B           00928     bsf INTCON,PEIE
-0047   178B           00929     bsf INTCON,GIE
-0048   1480           00930     bsf flags, F_EVEN
-0049   1680           00931     bsf flags, F_SYNC
-                      00932 ; test code
-                      00933 ;    movlw 0x98
-                      00934 ;    movwf score+1
-                      00935 ;    movlw 9
-                      00936 ;    call inc_score
-004A   002?           00937     banksel balls
-004B   3003           00938     movlw 3
-004C   00??           00939     movwf balls
-004D                  00940 test_loop
-004D   3011           00941     movlw 17
-004E   002?           00942     banksel sound_timer
-004F   00??           00943     movwf sound_timer
-0050   1600           00944     bsf flags, F_SOUND
-0051   1A00           00945     btfsc flags, F_SOUND
-0052   3???           00946     bra $-1
-0053   3???           00947     bra test_loop
-                      00948 ; end test code    
-                      00949  ; all processing done in ISR    
-0054   2???           00950     goto $
-                      00951 
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 44
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-                      00952 ; digits character table
-0055                  00953 digits
-0055   000B           00954     brw
-0056   3440 34A0 34A0 00955     dt  0x40,0xA0,0xA0,0xA0,0x40 ; 0
+004B   3003           00994     movlw 3
+004C   00??           00995     movwf balls
+004D   304E           00996     movlw BALL_LEFT_BOUND+PADDLE_LIMIT/2
+004E   00??           00997     movwf ball_x
+004F   30C8           00998     movlw BALL_BOTTOM_BOUND-40
+0050   00??           00999     movwf ball_y
+0051                  01000 test_loop
+0051   303C           01001     movlw 60
+0052   002?           01002     banksel sound_timer
+0053   00??           01003     movwf sound_timer
+0054   1600           01004     bsf flags, F_SOUND
+0055   1A00           01005     btfsc flags, F_SOUND
+0056   3???           01006     bra $-1
+0057   3001           01007     movlw 1
+0058   2???           01008     call inc_score
+0059   3???           01009     bra test_loop
+                      01010 ; end test code    
+                      01011  ; all processing done in ISR    
+005A   2???           01012     goto $
+                      01013 
+                      01014 ; digits character table
+005B                  01015 digits
+005B   000B           01016     brw
+005C   3440 34A0 34A0 01017     dt  0x40,0xA0,0xA0,0xA0,0x40 ; 0
        34A0 3440 
-005B   3440 34C0 3440 00956     dt  0x40,0xC0,0x40,0x40,0xE0 ; 1
+0061   3440 34C0 3440 01018     dt  0x40,0xC0,0x40,0x40,0xE0 ; 1
        3440 34E0 
-0060   34E0 3420 34C0 00957     dt  0xE0,0x20,0xC0,0x80,0xE0 ; 2
+0066   34E0 3420 34C0 01019     dt  0xE0,0x20,0xC0,0x80,0xE0 ; 2
        3480 34E0 
-0065   34E0 3420 34C0 00958     dt  0xE0,0x20,0xC0,0x20,0xE0 ; 3
+006B   34E0 3420 34C0 01020     dt  0xE0,0x20,0xC0,0x20,0xE0 ; 3
        3420 34E0 
-006A   34A0 34A0 34E0 00959     dt  0xA0,0xA0,0xE0,0x20,0x20 ; 4
+0070   34A0 34A0 34E0 01021     dt  0xA0,0xA0,0xE0,0x20,0x20 ; 4
        3420 3420 
-006F   34E0 3480 34E0 00960     dt  0xE0,0x80,0xE0,0x20,0xE0 ; 5
+0075   34E0 3480 34E0 01022     dt  0xE0,0x80,0xE0,0x20,0xE0 ; 5
        3420 34E0 
-0074   34C0 3480 34E0 00961     dt  0xC0,0x80,0xE0,0xA0,0xE0 ; 6
+007A   34C0 3480 34E0 01023     dt  0xC0,0x80,0xE0,0xA0,0xE0 ; 6
        34A0 34E0 
-0079   34E0 3420 3420 00962     dt  0xE0,0x20,0x20,0x20,0x20 ; 7
+007F   34E0 3420 3420 01024     dt  0xE0,0x20,0x20,0x20,0x20 ; 7
        3420 3420 
-007E   34E0 34A0 34E0 00963     dt  0xE0,0xA0,0xE0,0xA0,0xE0 ; 8
+0084   34E0 34A0 34E0 01025     dt  0xE0,0xA0,0xE0,0xA0,0xE0 ; 8
        34A0 34E0 
-0083   34E0 34A0 34E0 00964     dt  0xE0,0xA0,0xE0,0x20,0x60 ; 9
+0089   34E0 34A0 34E0 01026     dt  0xE0,0xA0,0xE0,0x20,0x60 ; 9
        3420 3460 
-                      00965     
-                      00966     
-                      00967 eeprom org (PROG_SIZE-EEPROM_SIZE)
-0780                  00968 max_score 
-                      00969  
-3FA7 3EFF             00970     END
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 45
+                      01027     
+                      01028     
+                      01029 eeprom org (PROG_SIZE-EEPROM_SIZE)
+0780                  01030 max_score 
+                      01031  
+3FA7 3EFF             01032     END
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 37
 
 
 SYMBOL TABLE
@@ -2605,6 +2153,10 @@ ANSELA                            0000018C
 APFCON                            0000011D
 APFCON0                           0000011D
 AUDIO                             00000000
+BALL_BOTTOM_BOUND                 000000F0
+BALL_LEFT_BOUND                   00000020
+BALL_RIGHT_BOUND                  00000136
+BALL_TOP_BOUND                    00000036
 BAUDCON                           0000019F
 BORCON                            00000116
 BORDER_WIDTH                      00000004
@@ -2625,16 +2177,16 @@ C                                 00000000
 C1HYS                             00000001
 C1IE                              00000005
 C1IF                              00000005
-C1INTN                            00000006
-C1INTP                            00000007
-C1NCH0                            00000000
-C1NCH1                            00000001
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 46
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 38
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+C1INTN                            00000006
+C1INTP                            00000007
+C1NCH0                            00000000
+C1NCH1                            00000001
 C1NCH2                            00000002
 C1OE                              00000005
 C1ON                              00000007
@@ -2657,6 +2209,7 @@ CLKIN                             00000005
 CM1CON0                           00000111
 CM1CON1                           00000112
 CMOUT                             00000115
+COURT_WIDTH                       00000130
 CREN                              00000004
 CS0                               00000000
 CS1                               00000001
@@ -2683,17 +2236,17 @@ CWGBSEL                           00000005
 C_SHAD                            00000000
 DACCON0                           00000118
 DACCON1                           00000119
-DACEN                             00000007
-DACLPS                            00000006
-DACOE                             00000005
-DACPSS0                           00000002
-DACPSS1                           00000003
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 47
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 39
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+DACEN                             00000007
+DACLPS                            00000006
+DACOE                             00000005
+DACPSS0                           00000002
+DACPSS1                           00000003
 DACR0                             00000000
 DACR1                             00000001
 DACR2                             00000002
@@ -2742,17 +2295,17 @@ G1ASDSC1                          00000002
 G1ASDSFLT                         00000001
 G1ASE                             00000007
 G1CS0                             00000000
-G1EN                              00000007
-G1IS0                             00000000
-G1IS1                             00000001
-G1IS2                             00000002
-G1OEA                             00000005
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 48
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 40
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+G1EN                              00000007
+G1IS0                             00000000
+G1IS1                             00000001
+G1IS2                             00000002
+G1OEA                             00000005
 G1OEB                             00000006
 G1POLA                            00000003
 G1POLB                            00000004
@@ -2801,17 +2354,17 @@ IOCAP3                            00000003
 IOCAP4                            00000004
 IOCAP5                            00000005
 IOCIE                             00000003
-IOCIF                             00000000
-IRCF0                             00000003
-IRCF1                             00000004
-IRCF2                             00000005
-IRCF3                             00000006
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 49
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 41
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+IOCIF                             00000000
+IRCF0                             00000003
+IRCF1                             00000004
+IRCF2                             00000005
+IRCF3                             00000006
 LATA                              0000010C
 LATA0                             00000000
 LATA1                             00000001
@@ -2822,7 +2375,7 @@ LDA                               00000007
 LDS0                              00000000
 LDS1                              00000001
 LDT                               00000006
-LEFT_MARGIN                       00000010
+LEFT_MARGIN                       00000018
 LFIOFR                            00000001
 LWLO                              00000005
 MC1OUT                            00000000
@@ -2860,17 +2413,17 @@ OFIE                              00000003
 OFIF                              00000003
 OFM0                              00000005
 OFM1                              00000006
-OFO                               00000004
-OFS0                              00000000
-OFS1                              00000001
-OPTION_REG                        00000095
-OSCCON                            00000099
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 50
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 42
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+OFO                               00000004
+OFS0                              00000000
+OFS1                              00000001
+OPTION_REG                        00000095
+OSCCON                            00000099
 OSCSTAT                           0000009A
 OSCTUNE                           00000098
 OSTS                              00000005
@@ -2878,7 +2431,7 @@ OUT                               00000005
 P1SEL                             00000000
 P2SEL                             00000001
 PADDLE                            00000000
-PADDLE_LIMIT                      0000005C
+PADDLE_LIMIT                      0000005D
 PADDLE_WIDTH                      00000020
 PCL                               00000002
 PCLATH                            0000000A
@@ -2919,17 +2472,17 @@ PS1_PWM3CLKCON                    00000005
 PS2_OPTION_REG                    00000002
 PS2_PWM1CLKCON                    00000006
 PS2_PWM2CLKCON                    00000006
-PS2_PWM3CLKCON                    00000006
-PSA                               00000003
-PWM1CLKCON                        00000D9E
-PWM1CON                           00000D9B
-PWM1CS0                           00000000
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 51
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 43
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+PS2_PWM3CLKCON                    00000006
+PSA                               00000003
+PWM1CLKCON                        00000D9E
+PWM1CON                           00000D9B
+PWM1CS0                           00000000
 PWM1CS1                           00000001
 PWM1DC                            00000D93
 PWM1DCH                           00000D94
@@ -2978,17 +2531,17 @@ PWM1OFH2                          00000002
 PWM1OFH3                          00000003
 PWM1OFH4                          00000004
 PWM1OFH5                          00000005
-PWM1OFH6                          00000006
-PWM1OFH7                          00000007
-PWM1OFIE                          00000003
-PWM1OFIF                          00000003
-PWM1OFL                           00000D97
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 52
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 44
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+PWM1OFH6                          00000006
+PWM1OFH7                          00000007
+PWM1OFIE                          00000003
+PWM1OFIF                          00000003
+PWM1OFL                           00000D97
 PWM1OFL0                          00000000
 PWM1OFL1                          00000001
 PWM1OFL2                          00000002
@@ -3037,17 +2590,17 @@ PWM1PRH5                          00000005
 PWM1PRH6                          00000006
 PWM1PRH7                          00000007
 PWM1PRIE                          00000000
-PWM1PRIF                          00000000
-PWM1PRL                           00000D95
-PWM1PRL0                          00000000
-PWM1PRL1                          00000001
-PWM1PRL2                          00000002
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 53
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 45
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+PWM1PRIF                          00000000
+PWM1PRL                           00000D95
+PWM1PRL0                          00000000
+PWM1PRL1                          00000001
+PWM1PRL2                          00000002
 PWM1PRL3                          00000003
 PWM1PRL4                          00000004
 PWM1PRL5                          00000005
@@ -3096,17 +2649,17 @@ PWM2DCL0                          00000000
 PWM2DCL1                          00000001
 PWM2DCL2                          00000002
 PWM2DCL3                          00000003
-PWM2DCL4                          00000004
-PWM2DCL5                          00000005
-PWM2DCL6                          00000006
-PWM2DCL7                          00000007
-PWM2EN                            00000007
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 54
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 46
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+PWM2DCL4                          00000004
+PWM2DCL5                          00000005
+PWM2DCL6                          00000006
+PWM2DCL7                          00000007
+PWM2EN                            00000007
 PWM2EN_A                          00000001
 PWM2IE                            00000005
 PWM2IF                            00000005
@@ -3155,17 +2708,17 @@ PWM2OUT_A                         00000001
 PWM2PH                            00000DA1
 PWM2PHH                           00000DA2
 PWM2PHH0                          00000000
-PWM2PHH1                          00000001
-PWM2PHH2                          00000002
-PWM2PHH3                          00000003
-PWM2PHH4                          00000004
-PWM2PHH5                          00000005
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 55
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 47
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+PWM2PHH1                          00000001
+PWM2PHH2                          00000002
+PWM2PHH3                          00000003
+PWM2PHH4                          00000004
+PWM2PHH5                          00000005
 PWM2PHH6                          00000006
 PWM2PHH7                          00000007
 PWM2PHIE                          00000002
@@ -3214,17 +2767,17 @@ PWM2TMRH4                         00000004
 PWM2TMRH5                         00000005
 PWM2TMRH6                         00000006
 PWM2TMRH7                         00000007
-PWM2TMRL                          00000DA9
-PWM2TMRL0                         00000000
-PWM2TMRL1                         00000001
-PWM2TMRL2                         00000002
-PWM2TMRL3                         00000003
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 56
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 48
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+PWM2TMRL                          00000DA9
+PWM2TMRL0                         00000000
+PWM2TMRL1                         00000001
+PWM2TMRL2                         00000002
+PWM2TMRL3                         00000003
 PWM2TMRL4                         00000004
 PWM2TMRL5                         00000005
 PWM2TMRL6                         00000006
@@ -3273,17 +2826,17 @@ PWM3MODE1                         00000003
 PWM3OE                            00000006
 PWM3OF                            00000DB7
 PWM3OFCON                         00000DC0
-PWM3OFH                           00000DB8
-PWM3OFH0                          00000000
-PWM3OFH1                          00000001
-PWM3OFH2                          00000002
-PWM3OFH3                          00000003
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 57
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 49
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+PWM3OFH                           00000DB8
+PWM3OFH0                          00000000
+PWM3OFH1                          00000001
+PWM3OFH2                          00000002
+PWM3OFH3                          00000003
 PWM3OFH4                          00000004
 PWM3OFH5                          00000005
 PWM3OFH6                          00000006
@@ -3332,17 +2885,17 @@ PWM3PR                            00000DB5
 PWM3PRH                           00000DB6
 PWM3PRH0                          00000000
 PWM3PRH1                          00000001
-PWM3PRH2                          00000002
-PWM3PRH3                          00000003
-PWM3PRH4                          00000004
-PWM3PRH5                          00000005
-PWM3PRH6                          00000006
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 58
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 50
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+PWM3PRH2                          00000002
+PWM3PRH3                          00000003
+PWM3PRH4                          00000004
+PWM3PRH5                          00000005
+PWM3PRH6                          00000006
 PWM3PRH7                          00000007
 PWM3PRIE                          00000000
 PWM3PRIF                          00000000
@@ -3391,17 +2944,17 @@ RCIE                              00000005
 RCIF                              00000005
 RCREG                             00000199
 RCSTA                             0000019D
-RD                                00000000
-RX9                               00000006
-RX9D                              00000000
-RXDTSEL                           00000007
-SBOREN                            00000007
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 59
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 51
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+RD                                00000000
+RX9                               00000006
+RX9D                              00000000
+RXDTSEL                           00000007
+SBOREN                            00000007
 SCKP                              00000004
 SCS0                              00000000
 SCS1                              00000001
@@ -3450,17 +3003,17 @@ T1GTM                             00000005
 T1GVAL                            00000002
 T2CKPS0                           00000000
 T2CKPS1                           00000001
-T2CON                             0000001C
-T2OUTPS0                          00000003
-T2OUTPS1                          00000004
-T2OUTPS2                          00000005
-T2OUTPS3                          00000006
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 60
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 52
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+T2CON                             0000001C
+T2OUTPS0                          00000003
+T2OUTPS1                          00000004
+T2OUTPS2                          00000005
+T2OUTPS3                          00000006
 TMR0                              00000015
 TMR0CS                            00000005
 TMR0IE                            00000005
@@ -3481,7 +3034,6 @@ TMR2                              0000001A
 TMR2IE                            00000001
 TMR2IF                            00000001
 TMR2ON                            00000002
-TOP_LINE_WIDTH                    0000014A
 TOS                               00000FEE
 TOSH                              00000FEF
 TOSL                              00000FEE
@@ -3510,16 +3062,16 @@ TX9D                              00000000
 TXCKSEL                           00000002
 TXEN                              00000005
 TXIE                              00000004
-TXIF                              00000004
-TXREG                             0000019A
-TXSTA                             0000019E
-VIDEO_OUT                         00000004
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 61
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 53
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+TXIF                              00000004
+TXREG                             0000019A
+TXSTA                             0000019E
+VIDEO_OUT                         00000004
 VREGCON                           00000197
 VREGPM                            00000001
 VSYNC_PULSE                       00000308
@@ -3569,84 +3121,78 @@ _IDLOC2                           00008002
 _IDLOC3                           00008003
 _ISR_0008                         00000008
 _ISR_000D                         0000000D
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 54
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
 _ISR_0084                         00000084
 _ISR_008B                         0000008B
 _ISR_00C5                         000000C5
 _ISR_00C9                         000000C9
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 62
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
 _ISR_00CA                         000000CA
 _ISR_00CE                         000000CE
 _ISR_00ED                         000000ED
 _ISR_00EE                         000000EE
-_ISR_00F3                         000000F3
-_ISR_00FA                         000000FA
-_ISR_010A                         0000010A
-_ISR_0111                         00000111
+_ISR_00F5                         000000F5
+_ISR_00FC                         000000FC
+_ISR_00FD                         000000FD
+_ISR_0118                         00000118
 _ISR_0119                         00000119
-_ISR_011A                         0000011A
-_ISR_0120                         00000120
+_ISR_011F                         0000011F
+_ISR_0127                         00000127
+_ISR_012E                         0000012E
 _ISR_0134                         00000134
 _ISR_0135                         00000135
 _ISR_013B                         0000013B
-_ISR_014E                         0000014E
-_ISR_0158                         00000158
-_ISR_015E                         0000015E
-_ISR_0172                         00000172
-_ISR_0173                         00000173
-_ISR_0179                         00000179
+_ISR_0142                         00000142
+_ISR_0146                         00000146
+_ISR_014B                         0000014B
+_ISR_0152                         00000152
+_ISR_0170                         00000170
+_ISR_0171                         00000171
+_ISR_0182                         00000182
 _ISR_018C                         0000018C
-_ISR_0196                         00000196
-_ISR_019C                         0000019C
+_ISR_019E                         0000019E
+_ISR_019F                         0000019F
 _ISR_01B0                         000001B0
-_ISR_01B1                         000001B1
-_ISR_01B7                         000001B7
-_ISR_01CA                         000001CA
-_ISR_01D4                         000001D4
-_ISR_01DA                         000001DA
-_ISR_01EE                         000001EE
-_ISR_01EF                         000001EF
-_ISR_01F5                         000001F5
-_ISR_0208                         00000208
-_ISR_0212                         00000212
-_ISR_0218                         00000218
-_ISR_022A                         0000022A
-_ISR_0231                         00000231
-_ISR_0244                         00000244
-_ISR_024E                         0000024E
+_ISR_01BA                         000001BA
+_ISR_01CC                         000001CC
+_ISR_01CD                         000001CD
+_ISR_01DE                         000001DE
+_ISR_01E8                         000001E8
+_ISR_01FA                         000001FA
+_ISR_01FB                         000001FB
+_ISR_020C                         0000020C
+_ISR_0216                         00000216
+_ISR_0226                         00000226
+_ISR_0237                         00000237
+_ISR_0241                         00000241
+_ISR_0251                         00000251
 _ISR_0254                         00000254
+_ISR_0255                         00000255
+_ISR_0265                         00000265
 _ISR_0266                         00000266
-_ISR_026D                         0000026D
-_ISR_0272                         00000272
-_ISR_0273                         00000273
-_ISR_0279                         00000279
-_ISR_028B                         0000028B
-_ISR_0292                         00000292
-_ISR_029B                         0000029B
-_ISR_02A0                         000002A0
-_ISR_02A1                         000002A1
-_ISR_02A6                         000002A6
-_ISR_02AA                         000002AA
-_ISR_02B0                         000002B0
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 63
+_ISR_0269                         00000269
+_ISR_026B                         0000026B
+_ISR_0270                         00000270
+_ISR_0271                         00000271
+_ISR_02CE                         000002CE
+_LPBOREN_OFF                      00003FFF
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 55
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
-_ISR_030E                         0000030E
-_LPBOREN_OFF                      00003FFF
 _LPBOREN_ON                       000037FF
 _LVP_OFF                          00001FFF
 _LVP_ON                           00003FFF
 _MAIN_PROG_0006                   00000006
 _MAIN_PROG_000D                   0000000D
-_MAIN_PROG_0052                   00000052
-_MAIN_PROG_0054                   00000054
+_MAIN_PROG_0056                   00000056
+_MAIN_PROG_005A                   0000005A
 _MCLRE_OFF                        00003FBF
 _MCLRE_ON                         00003FFF
 _PLLEN_OFF                        00003EFF
@@ -3665,16 +3211,16 @@ _WRT_HALF                         00003FFD
 _WRT_OFF                          00003FFF
 __12F1572                         00000001
 __DEBUG                           
-__MPLAB_DEBUGGER_PK3              1
-at_left                           0000029C
+__MPLAB_DEBUGGER_SIMULATOR        1
 ball_dx                           00000009
 ball_dy                           0000000A
+ball_left                         00000143
 ball_speed                        0000000B
 ball_timer                        0000000E
 ball_x                            00000007
 ball_y                            00000008
 balls                             000000A3
-bcd_add                           000002DC
+bcd_add                           0000029C
 black                             
 brick_wall                        00000030
 case                              
@@ -3687,38 +3233,39 @@ d1                                000000A0
 d2                                000000A1
 d3                                000000A2
 dark_blue                         
-digit_offset                      000002F9
+digit_offset                      000002B9
 digit_row                         000000DE
-digits                            00000055
+digits                            0000005B
 draw_border                       
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 64
+draw_brick                        
+draw_empty                        0000024F
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 56
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
-draw_brick                        
-draw_empty                        00000264
-draw_paddle                       00000289
-draw_row1                         0000012D
-draw_row2                         0000016B
-draw_row3                         000001A9
-draw_row4                         000001E7
-draw_row5                         00000225
+draw_paddle                       00000263
+draw_row1                         00000169
+draw_row2                         00000197
+draw_row3                         000001C5
+draw_row4                         000001F3
+draw_row5                         00000221
 draw_score                        000000A8
 draw_top_wall                     000000F1
-draw_void                         00000108
+draw_void                         0000010B
+draw_void_exit                    00000155
 draw_wall                         
 dropn                             
 eeprom                            00000780
-even_field                        000002CA
-field_end                         000002D4
+even_field                        0000028A
+field_end                         00000294
 flags                             00000000
 green                             
-hi_line                           000002C3
-ibw                               00000306
-inc_score                         000002E7
-init_brick_wall                   000002FF
+hi_line                           00000283
+ibw                               000002C6
+inc_score                         000002A7
+init_brick_wall                   000002BF
 isr                               00000004
 isr_exit                          00000029
 lcount                            00000001
@@ -3726,6 +3273,8 @@ leave
 max_score                         00000780
 move_ball                         0000009D
 next_task                         
+no_ball                           00000116
+no_wall_draw                      0000015F
 paddle_pos                        00000006
 pickn                             
 pokew                             
@@ -3736,47 +3285,49 @@ post_last                         00000064
 post_vsync                        0000005B
 pre_vsync                         0000002E
 pushw                             
-q                                 00000001
-r                                 00000001
+q                                 0000000A
+r                                 00000002
 read_paddle                       0000007E
 row1                              00000030
 row2                              00000031
 row3                              00000032
+row3_exit                         000001E9
 row4                              00000033
 row5                              00000034
 score                             0000000C
 score_exit                        000000D4
 set_presync                       0000003B
 set_vsync                         00000053
-slice                             00000002
-sound                             00000091
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-5-2019  10:03:22         PAGE 65
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  10:56:55         PAGE 57
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+slice                             00000002
+sound                             00000091
 sound_timer                       000000A4
 stack                             00000020
 swap_var                          
 swapw                             
-t0delay                           0000030A
+t0delay                           000002CA
 task                              00000003
 task_switch                       00000012
 tdelay                            
 temp                              00000004
-test_loop                         0000004D
-top_wall_exit                     000000FE
+test_loop                         00000051
+top_wall_exit                     00000101
 user_input                        00000076
 video_first                       000000A0
 vsync                             00000046
 vsync_end                         00000068
-wait_field_end                    000002BD
+wait_field_end                    0000027D
 white                             
 yellow                            
+yes_ball                          00000132
 
 Errors   :     0
-Warnings :     1 reported,     0 suppressed
-Messages :   290 reported,     0 suppressed
+Warnings :     0 reported,     1 suppressed
+Messages :     0 reported,   248 suppressed
 
 
