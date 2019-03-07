@@ -1,4 +1,4 @@
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE  1
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -57,7 +57,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00041  
                       00042 
                       00043 ;;;;;;;;;;;;;;;;;;;;;;
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE  2
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -116,7 +116,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00094     variable r=(T)%3
                       00095     if (q)
                       00096     movlw q
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE  3
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE  3
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -175,7 +175,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00147 ;   colors macros
                       00148 ; each one take 5 T 
                       00149 ;;;;;;;;;;;;;;;;;;;;;;
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE  4
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE  4
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -234,7 +234,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00200 ; draw a brick
                       00201 ; use 6T+BRICK_WIDTH
                       00202 ; if carry is 1 draw in color else draw black    
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE  5
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE  5
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -293,7 +293,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00253 pushw  macro
                       00254     movwi --SP
                       00255     endm
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE  6
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE  6
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -352,7 +352,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00306   
                       00307     udata_shr
 0000                  00308 flags  res 1 ; boolean variables
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE  7
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE  7
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -411,7 +411,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     endif
                           M     if (r==2)
                           M     goto $+1
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE  8
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE  8
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -470,7 +470,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00382     next_task 6
 0031   0A??               M     incf slice
 0032   3006               M     movlw 6
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE  9
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE  9
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -529,7 +529,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00410     leave
 005A   2???               M     goto isr_exit
                       00411     
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 10
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 10
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -578,7 +578,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
   00000000            00449 BALL_LEFT_BOUND equ 0
   00000064            00450 BALL_RIGHT_BOUND equ 100
   00000036            00451 BALL_TOP_BOUND equ 54
-  000000F0            00452 BALL_BOTTOM_BOUND equ 240 ;(BALL_TOP_BOUND+7*BRICK_HEIGHT+118)
+  000000E6            00452 BALL_BOTTOM_BOUND equ 230 ;(BALL_TOP_BOUND+7*BRICK_HEIGHT+118)
                       00453  
                       00454  
 0076                  00455 user_input
@@ -588,7 +588,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0079   2???           00459     goto read_paddle
                       00460 ; read start button
 007A   0022           00461     banksel LATA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 11
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 11
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -641,87 +641,121 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00501    
                       00502 ; task 6, move recking ball and check collision    
 009D                  00503 move_ball
-                      00504     
-009D   0A??           00505     incf task
-009E   0A??           00506     incf lcount
-                      00507     leave
-009F   2???               M     goto isr_exit
-                      00508 
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 12
+009D   0B??           00504     decfsz ball_timer
+009E   3???           00505     bra move_ball_exit
+009F   08??           00506     movfw ball_speed
+00A0   00??           00507     movwf ball_timer
+00A1   08??           00508     movfw ball_dx
+00A2   07??           00509     addwf ball_x
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 12
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00509     
-                      00510 ; task 7, wait for lcount==26, First visible video line is 27
-00A0                  00511 video_first
-00A0   0A??           00512     incf lcount
-00A1   301A           00513     movlw 26
-00A2   02??           00514     subwf lcount,W
-00A3   1D03           00515     skpz
-                      00516     leave
-00A4   2???               M     goto isr_exit
-00A5   01??           00517     clrf slice
-00A6   0A??           00518     incf task
-                      00519     leave
-00A7   2???               M     goto isr_exit
-                      00520    
-                      00521 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                      00522 ; The following tasks are responsible to render video display.
-                      00523 ; Each video line must be completed by setting color to black.
-                      00524 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                      00525     
-                      00526 ; constants used in video display
-  00000018            00527 LEFT_MARGIN equ 24
-  00000130            00528 COURT_WIDTH equ 304
-  00000008            00529 BRICK_HEIGHT equ 8
-  00000004            00530 BORDER_WIDTH equ 4
-  0000001A            00531 FIRST_VIDEO_LINE equ 26
-                      00532  
-                      00533 ; task 8, draw score en ball count
-00A8                  00534 draw_score
-00A8   0021           00535     banksel TRISA
-00A9   08??           00536     movfw slice
-00AA   3689           00537     lsrf WREG
-00AB   3689           00538     lsrf WREG
-                      00539     pushw
-00AC   0019               M     movwi --SP
-00AD   300F           00540     movlw 0xf
-00AE   05??           00541     andwf score+1,W
-00AF   2???           00542     call digit_offset
-00B0   0700           00543     addwf T,W
-00B1   2???           00544     call digits
-00B2   00??           00545     movwf d3
-00B3   0E??           00546     swapf score+1,W
-00B4   390F           00547     andlw 0xf
-00B5   2???           00548     call digit_offset
-00B6   0700           00549     addwf T,W
-00B7   2???           00550     call digits
-00B8   00??           00551     movwf d2
-00B9   300F           00552     movlw 0xf
-00BA   05??           00553     andwf score,W
-00BB   2???           00554     call digit_offset
-00BC   0700           00555     addwf T,W
-00BD   2???           00556     call digits
-00BE   2???           00557     call digit_row
-00BF   08??           00558     movfw d2
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 13
+00A3   1D03           00510     skpz
+00A4   3???           00511     bra right_bound
+00A5   09??           00512     comf ball_dx
+00A6   3???           00513     bra move_y
+00A7                  00514 right_bound    
+00A7   08??           00515     movfw ball_x
+00A8   3C64           00516     sublw BALL_RIGHT_BOUND
+00A9   1803           00517     skpnc
+00AA   3???           00518     bra move_y
+00AB   03??           00519     decf ball_x
+00AC   09??           00520     comf ball_dx
+00AD                  00521 move_y
+00AD   08??           00522     movfw ball_dy
+00AE   07??           00523     addwf ball_y
+00AF   3036           00524     movlw BALL_TOP_BOUND
+00B0   02??           00525     subwf ball_y,W
+00B1   1803           00526     skpnc
+00B2   3???           00527     bra bottom_bound
+00B3   09??           00528     comf ball_dy
+00B4   0A??           00529     incf ball_dy
+00B5   3???           00530     bra move_ball_exit
+00B6                  00531 bottom_bound
+00B6   08??           00532     movfw ball_y
+00B7   3CE6           00533     sublw BALL_BOTTOM_BOUND
+00B8   1803           00534     skpnc
+00B9   3???           00535     bra move_ball_exit
+00BA   09??           00536     comf ball_dy
+00BB   0A??           00537     incf ball_dy
+00BC                  00538 move_ball_exit    
+00BC   0A??           00539     incf task
+00BD   0A??           00540     incf lcount
+                      00541     leave
+00BE   2???               M     goto isr_exit
+                      00542 
+                      00543     
+                      00544 ; task 7, wait for lcount==26, First visible video line is 27
+00BF                  00545 video_first
+00BF   0A??           00546     incf lcount
+00C0   301B           00547     movlw 27
+00C1   02??           00548     subwf lcount,W
+00C2   1D03           00549     skpz
+                      00550     leave
+00C3   2???               M     goto isr_exit
+00C4   01??           00551     clrf slice
+00C5   0A??           00552     incf task
+                      00553     leave
+00C6   2???               M     goto isr_exit
+                      00554    
+                      00555 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                      00556 ; The following tasks are responsible to render video display.
+                      00557 ; Each video line must be completed by setting color to black.
+                      00558 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                      00559     
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 13
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-00C0   2???           00559     call digit_row
-00C1   08??           00560     movfw d3
-00C2   2???           00561     call digit_row
-                      00562     tdelay 60
+                      00560 ; constants used in video display
+  00000018            00561 LEFT_MARGIN equ 24
+  00000130            00562 COURT_WIDTH equ 304
+  00000008            00563 BRICK_HEIGHT equ 8
+  00000004            00564 BORDER_WIDTH equ 4
+  0000001A            00565 FIRST_VIDEO_LINE equ 26
+                      00566  
+                      00567 ; task 8, draw score en ball count
+00C7                  00568 draw_score
+00C7   0021           00569     banksel TRISA
+00C8   08??           00570     movfw slice
+00C9   3689           00571     lsrf WREG
+00CA   3689           00572     lsrf WREG
+                      00573     pushw
+00CB   0019               M     movwi --SP
+00CC   300F           00574     movlw 0xf
+00CD   05??           00575     andwf score+1,W
+00CE   2???           00576     call digit_offset
+00CF   0700           00577     addwf T,W
+00D0   2???           00578     call digits
+00D1   00??           00579     movwf d3
+00D2   0E??           00580     swapf score+1,W
+00D3   390F           00581     andlw 0xf
+00D4   2???           00582     call digit_offset
+00D5   0700           00583     addwf T,W
+00D6   2???           00584     call digits
+00D7   00??           00585     movwf d2
+00D8   300F           00586     movlw 0xf
+00D9   05??           00587     andwf score,W
+00DA   2???           00588     call digit_offset
+00DB   0700           00589     addwf T,W
+00DC   2???           00590     call digits
+00DD   2???           00591     call digit_row
+00DE   08??           00592     movfw d2
+00DF   2???           00593     call digit_row
+00E0   08??           00594     movfw d3
+00E1   2???           00595     call digit_row
+                      00596     tdelay 60
   0014                    M     variable q=(60)/3
   0000                    M     variable r=(60)%3
                           M     if (q)
-00C3   3014               M     movlw q
-00C4   0B89               M     decfsz WREG
-00C5   2???               M     goto $-1
+00E2   3014               M     movlw q
+00E3   0B89               M     decfsz WREG
+00E4   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
@@ -729,29 +763,35 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     if (r==1)
                           M     nop
                           M     endif
-00C6   120C           00563     bcf TRISA,VIDEO_OUT
-                      00564     tdelay 5
+00E5   120C           00597     bcf TRISA,VIDEO_OUT
+                      00598     tdelay 5
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 14
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
   0001                    M     variable q=(5)/3
   0002                    M     variable r=(5)%3
                           M     if (q)
-00C7   3001               M     movlw q
-00C8   0B89               M     decfsz WREG
-00C9   2???               M     goto $-1
+00E6   3001               M     movlw q
+00E7   0B89               M     decfsz WREG
+00E8   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-00CA   2???               M     goto $+1
+00E9   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-00CB   160C           00565     bsf TRISA,VIDEO_OUT
-                      00566     tdelay 30
+00EA   160C           00599     bsf TRISA,VIDEO_OUT
+                      00600     tdelay 30
   000A                    M     variable q=(30)/3
   0000                    M     variable r=(30)%3
                           M     if (q)
-00CC   300A               M     movlw q
-00CD   0B89               M     decfsz WREG
-00CE   2???               M     goto $-1
+00EB   300A               M     movlw q
+00EC   0B89               M     decfsz WREG
+00ED   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
@@ -759,237 +799,163 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     if (r==1)
                           M     nop
                           M     endif
-00CF   08??           00567     movfw balls
-00D0   2???           00568     call digit_offset
-00D1   0700           00569     addwf T,W
-00D2   2???           00570     call digits
-00D3   2???           00571     call digit_row
-00D4                  00572 score_exit
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 14
+00EE   08??           00601     movfw balls
+00EF   2???           00602     call digit_offset
+00F0   0700           00603     addwf T,W
+00F1   2???           00604     call digits
+00F2   2???           00605     call digit_row
+00F3                  00606 score_exit
+                      00607     next_task 5*4
+00F3   0A??               M     incf slice
+00F4   3014               M     movlw 5*4
+00F5   02??               M     subwf slice,W
+00F6   1D03               M     skpz
+                          M     leave
+00F7   2???               M     goto isr_exit
+00F8   01??               M     clrf slice
+00F9   0A??               M     incf task
+00FA   3014               M     movlw 5*4
+00FB   07??               M     addwf lcount
+                          M     leave
+00FC   2???               M     goto isr_exit
+                      00608 
+  00000002            00609 digit_version equ 2
+                      00610 ; display digit row    
+00FD                  00611 digit_row
+                      00612  if digit_version==1
+                      00613     rlf WREG
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 15
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00573     next_task 5*4
-00D4   0A??               M     incf slice
-00D5   3014               M     movlw 5*4
-00D6   02??               M     subwf slice,W
-00D7   1D03               M     skpz
-                          M     leave
-00D8   2???               M     goto isr_exit
-00D9   01??               M     clrf slice
-00DA   0A??               M     incf task
-00DB   3014               M     movlw 5*4
-00DC   07??               M     addwf lcount
-                          M     leave
-00DD   2???               M     goto isr_exit
-                      00574 
-                      00575 ; display digit row    
-00DE                  00576 digit_row
-00DE   0D89           00577     rlf WREG
-00DF   1803           00578     skpnc
-00E0   120C           00579     bcf TRISA,VIDEO_OUT
-00E1   1C03           00580     skpc
-00E2   160C           00581     bsf TRISA,VIDEO_OUT
-00E3   0D89           00582     rlf WREG
-00E4   1803           00583     skpnc
-00E5   120C           00584     bcf TRISA,VIDEO_OUT
-00E6   1C03           00585     skpc
-00E7   160C           00586     bsf TRISA,VIDEO_OUT
-00E8   0D89           00587     rlf WREG
-00E9   1803           00588     skpnc
-00EA   120C           00589     bcf TRISA,VIDEO_OUT
-00EB   1C03           00590     skpc
-00EC   160C           00591     bsf TRISA,VIDEO_OUT
-00ED   3???           00592     bra $+1
-00EE   3???           00593     bra $+1
-00EF   160C           00594     bsf TRISA,VIDEO_OUT
-00F0   0008           00595     return
-                      00596     
-                      00597 ; task 9,  draw top wall, 8 screen lines    
-00F1                  00598 draw_top_wall
-00F1   1C80           00599     btfss flags, F_EVEN
-00F2   3???           00600     bra top_wall_exit
-                      00601     tdelay LEFT_MARGIN-2
+                      00614     skpnc
+                      00615     bcf TRISA,VIDEO_OUT
+                      00616     rlf WREG
+                      00617     bra $+1
+                      00618     bsf TRISA,VIDEO_OUT
+                      00619     skpnc
+                      00620     bcf TRISA,VIDEO_OUT
+                      00621     rlf WREG
+                      00622     bra $+1
+                      00623     bsf TRISA,VIDEO_OUT
+                      00624     skpnc
+                      00625     bcf TRISA,VIDEO_OUT
+                      00626     nop
+                      00627     bra $+1
+                      00628     bsf TRISA,VIDEO_OUT
+                      00629  else
+00FD   0D89           00630     rlf WREG
+00FE   1803           00631     skpnc
+00FF   120C           00632     bcf TRISA,VIDEO_OUT
+0100   1C03           00633     skpc
+0101   160C           00634     bsf TRISA,VIDEO_OUT
+0102   0D89           00635     rlf WREG
+0103   1803           00636     skpnc
+0104   120C           00637     bcf TRISA,VIDEO_OUT
+0105   1C03           00638     skpc
+0106   160C           00639     bsf TRISA,VIDEO_OUT
+0107   0D89           00640     rlf WREG
+0108   1803           00641     skpnc
+0109   120C           00642     bcf TRISA,VIDEO_OUT
+010A   1C03           00643     skpc
+010B   160C           00644     bsf TRISA,VIDEO_OUT
+010C   3???           00645     bra $+1
+010D   3???           00646     bra $+1
+010E   160C           00647     bsf TRISA,VIDEO_OUT
+                      00648  endif
+010F   0008           00649     return
+                      00650     
+                      00651 ; task 9,  draw top wall, 8 screen lines    
+0110                  00652 draw_top_wall
+0110   1C80           00653     btfss flags, F_EVEN
+0111   3???           00654     bra top_wall_exit
+                      00655     tdelay LEFT_MARGIN-2
   0007                    M     variable q=(LEFT_MARGIN-2)/3
   0001                    M     variable r=(LEFT_MARGIN-2)%3
                           M     if (q)
-00F3   3007               M     movlw q
-00F4   0B89               M     decfsz WREG
-00F5   2???               M     goto $-1
+0112   3007               M     movlw q
+0113   0B89               M     decfsz WREG
+0114   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-00F6   0000               M     nop
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 15
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 16
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
+0115   0000               M     nop
                           M     endif
-                      00602     white
-00F7   0021               M     banksel TRISA
-00F8   148C               M     bsf TRISA,CHROMA
-00F9   120C               M     bcf TRISA,VIDEO_OUT
+                      00656     white
+0116   0021               M     banksel TRISA
+0117   148C               M     bsf TRISA,CHROMA
+0118   120C               M     bcf TRISA,VIDEO_OUT
                           M ;    goto $+1
-                      00603     tdelay COURT_WIDTH+3*BORDER_WIDTH+1
+                      00657     tdelay COURT_WIDTH+3*BORDER_WIDTH+1
   0069                    M     variable q=(COURT_WIDTH+3*BORDER_WIDTH+1)/3
   0002                    M     variable r=(COURT_WIDTH+3*BORDER_WIDTH+1)%3
                           M     if (q)
-00FA   3069               M     movlw q
-00FB   0B89               M     decfsz WREG
-00FC   2???               M     goto $-1
+0119   3069               M     movlw q
+011A   0B89               M     decfsz WREG
+011B   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-00FD   2???               M     goto $+1
+011C   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00604     black
-00FE   0021               M     banksel TRISA
-00FF   148C               M     bsf TRISA,CHROMA
-0100   160C               M     bsf TRISA,VIDEO_OUT
+                      00658     black
+011D   0021               M     banksel TRISA
+011E   148C               M     bsf TRISA,CHROMA
+011F   160C               M     bsf TRISA,VIDEO_OUT
                           M ;    goto $+1
-0101                  00605 top_wall_exit
-                      00606     next_task BRICK_HEIGHT
-0101   0A??               M     incf slice
-0102   3008               M     movlw BRICK_HEIGHT
-0103   02??               M     subwf slice,W
-0104   1D03               M     skpz
+0120                  00659 top_wall_exit
+                      00660     next_task BRICK_HEIGHT
+0120   0A??               M     incf slice
+0121   3008               M     movlw BRICK_HEIGHT
+0122   02??               M     subwf slice,W
+0123   1D03               M     skpz
                           M     leave
-0105   2???               M     goto isr_exit
-0106   01??               M     clrf slice
-0107   0A??               M     incf task
-0108   3008               M     movlw BRICK_HEIGHT
-0109   07??               M     addwf lcount
+0124   2???               M     goto isr_exit
+0125   01??               M     clrf slice
+0126   0A??               M     incf task
+0127   3008               M     movlw BRICK_HEIGHT
+0128   07??               M     addwf lcount
                           M     leave
-010A   2???               M     goto isr_exit
-                      00607 
-                      00608 ; task 10,  only on even field draw vertical side bands.    
-010B                  00609 draw_void
-010B   1C80           00610     btfss flags, F_EVEN
-010C   3???           00611     bra no_wall_draw
-010D   08??           00612     movfw ball_y
-010E   02??           00613     subwf lcount,W
-010F   1C03           00614     skpc
-0110   3???           00615     bra no_ball_dly
-0111   3008           00616     movlw 8
-0112   07??           00617     addwf ball_y,W
-0113   02??           00618     subwf lcount,W
-0114   1C03           00619     skpc
-0115   3???           00620     bra yes_ball
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 16
+0129   2???               M     goto isr_exit
+                      00661 
+                      00662 ; task 10,  only on even field draw vertical side bands.    
+012A                  00663 draw_void
+012A   1C80           00664     btfss flags, F_EVEN
+012B   3???           00665     bra no_wall_draw
+012C   08??           00666     movfw ball_y
+012D   02??           00667     subwf lcount,W
+012E   1C03           00668     skpc
+012F   3???           00669     bra no_ball_dly
+0130   3008           00670     movlw 8
+0131   07??           00671     addwf ball_y,W
+0132   02??           00672     subwf lcount,W
+0133   1C03           00673     skpc
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 17
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0116   3???           00621     bra no_ball
-0117                  00622 no_ball_dly
-                      00623     tdelay 6
+0134   3???           00674     bra yes_ball
+0135   3???           00675     bra no_ball
+0136                  00676 no_ball_dly
+                      00677     tdelay 6
   0002                    M     variable q=(6)/3
   0000                    M     variable r=(6)%3
                           M     if (q)
-0117   3002               M     movlw q
-0118   0B89               M     decfsz WREG
-0119   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
-011A                  00624 no_ball    
-                      00625     tdelay LEFT_MARGIN-13
-  0003                    M     variable q=(LEFT_MARGIN-13)/3
-  0002                    M     variable r=(LEFT_MARGIN-13)%3
-                          M     if (q)
-011A   3003               M     movlw q
-011B   0B89               M     decfsz WREG
-011C   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-011D   2???               M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
-                      00626     draw_border BORDER_WIDTH
-011E   0021               M     banksel TRISA
-011F   148C               M     bsf TRISA,CHROMA
-0120   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
-                          M     if (q)
-0121   3001               M     movlw q
-0122   0B89               M     decfsz WREG
-0123   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-0124   0000               M     nop
-                          M     endif
-0125   160C               M     bsf TRISA,VIDEO_OUT
-                      00627     black
-0126   0021               M     banksel TRISA
-0127   148C               M     bsf TRISA,CHROMA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 17
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-0128   160C               M     bsf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-                      00628     tdelay COURT_WIDTH
-  0065                    M     variable q=(COURT_WIDTH)/3
-  0001                    M     variable r=(COURT_WIDTH)%3
-                          M     if (q)
-0129   3065               M     movlw q
-012A   0B89               M     decfsz WREG
-012B   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-012C   0000               M     nop
-                          M     endif
-                      00629     draw_border BORDER_WIDTH
-012D   0021               M     banksel TRISA
-012E   148C               M     bsf TRISA,CHROMA
-012F   120C               M     bcf TRISA,VIDEO_OUT
-                          M     tdelay BORDER_WIDTH
-  0001                    M     variable q=(BORDER_WIDTH)/3
-  0001                    M     variable r=(BORDER_WIDTH)%3
-                          M     if (q)
-0130   3001               M     movlw q
-0131   0B89               M     decfsz WREG
-0132   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-0133   0000               M     nop
-                          M     endif
-0134   160C               M     bsf TRISA,VIDEO_OUT
-0135   3???           00630     bra draw_void_exit
-0136                  00631 yes_ball
-                      00632     tdelay LEFT_MARGIN-11
-  0004                    M     variable q=(LEFT_MARGIN-11)/3
-  0001                    M     variable r=(LEFT_MARGIN-11)%3
-                          M     if (q)
-0136   3004               M     movlw q
+0136   3002               M     movlw q
 0137   0B89               M     decfsz WREG
 0138   2???               M     goto $-1
                           M     endif
@@ -997,212 +963,124 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-0139   0000               M     nop
+                          M     nop
                           M     endif
-013A   0021           00633     banksel TRISA
-013B   120C           00634     bcf TRISA, VIDEO_OUT
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 18
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-013C   08??           00635     movfw ball_x
-013D   1D03           00636     skpz
-013E   3???           00637     bra ball_delayed
-                      00638     tdelay 8
-  0002                    M     variable q=(8)/3
-  0002                    M     variable r=(8)%3
+0139                  00678 no_ball    
+                      00679     tdelay LEFT_MARGIN-13
+  0003                    M     variable q=(LEFT_MARGIN-13)/3
+  0002                    M     variable r=(LEFT_MARGIN-13)%3
                           M     if (q)
-013F   3002               M     movlw q
-0140   0B89               M     decfsz WREG
-0141   2???               M     goto $-1
+0139   3003               M     movlw q
+013A   0B89               M     decfsz WREG
+013B   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-0142   2???               M     goto $+1
+013C   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-0143   160C           00639     bsf TRISA,VIDEO_OUT
-0144   0000           00640     nop
-0145   3???           00641     bra after_ball
-0146                  00642 ball_delayed
-0146   160C           00643     bsf TRISA,VIDEO_OUT
-0147   08??           00644     movfw ball_x
-0148   0B89           00645     decfsz WREG
-0149   3???           00646     bra $-1
-014A   120C           00647     bcf TRISA,VIDEO_OUT
-                      00648     tdelay 8
-  0002                    M     variable q=(8)/3
-  0002                    M     variable r=(8)%3
+                      00680     draw_border BORDER_WIDTH
+013D   0021               M     banksel TRISA
+013E   148C               M     bsf TRISA,CHROMA
+013F   120C               M     bcf TRISA,VIDEO_OUT
+                          M     tdelay BORDER_WIDTH
+  0001                    M     variable q=(BORDER_WIDTH)/3
+  0001                    M     variable r=(BORDER_WIDTH)%3
                           M     if (q)
-014B   3002               M     movlw q
-014C   0B89               M     decfsz WREG
-014D   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-014E   2???               M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
-014F   160C           00649     bsf TRISA, VIDEO_OUT
-0150                  00650 after_ball
-                      00651 ;    movlw PADDLE_LIMIT
-                      00652 ;    subwf ball_x,W
-0150   08??           00653     movfw ball_x
-0151   3C61           00654     sublw BALL_RIGHT_BOUND-3
-0152   1903           00655     skpnz
-0153   120C           00656     bcf TRISA,VIDEO_OUT
-0154   3E01           00657     addlw 1
-0155   0B89           00658     decfsz WREG
-0156   3???           00659     bra $-1
-0157   0000           00660     nop
-0158                  00661 draw_border_no_dly    
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 19
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-0158   120C           00662     bcf TRISA, VIDEO_OUT
-                      00663     tdelay 4
-  0001                    M     variable q=(4)/3
-  0001                    M     variable r=(4)%3
-                          M     if (q)
-0159   3001               M     movlw q
-015A   0B89               M     decfsz WREG
-015B   2???               M     goto $-1
+0140   3001               M     movlw q
+0141   0B89               M     decfsz WREG
+0142   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-015C   0000               M     nop
+0143   0000               M     nop
                           M     endif
-015D   160C           00664     bsf TRISA, VIDEO_OUT
-015E                  00665 draw_void_exit    
-015E   0A??           00666     incf slice
-015F   0A??           00667     incf lcount
-0160   30B6           00668     movlw 8*BRICK_HEIGHT+118
-0161   02??           00669     subwf slice,W
-0162   1D03           00670     skpz
-                      00671     leave
-0163   2???               M     goto isr_exit
-0164   3012           00672     movlw 18
-0165   01??           00673     clrf slice
-0166   00??           00674     movwf task
-                      00675     leave
-0167   2???               M     goto isr_exit
-                      00676     ;    next_task 125*BRICK_HEIGHT
-0168                  00677 no_wall_draw
-                      00678     next_task 2*BRICK_HEIGHT
-0168   0A??               M     incf slice
-0169   3010               M     movlw 2*BRICK_HEIGHT
-016A   02??               M     subwf slice,W
-016B   1D03               M     skpz
-                          M     leave
-016C   2???               M     goto isr_exit
-016D   01??               M     clrf slice
-016E   0A??               M     incf task
-016F   3010               M     movlw 2*BRICK_HEIGHT
-0170   07??               M     addwf lcount
-                          M     leave
-0171   2???               M     goto isr_exit
-                      00679     
-                      00680 ; task 11, draw top brick row
-0172                  00681 draw_row1 ; yellow
-                      00682     chroma_ref
-0172   003B               M     banksel PWM1CON
-0173   121B               M     bcf PWM1CON,POL
-0174   002?           00683     banksel row1
-0175   08??           00684     movfw row1
-0176   00??           00685     movwf temp
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 20
+0144   160C               M     bsf TRISA,VIDEO_OUT
+                      00681     black
+0145   0021               M     banksel TRISA
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 18
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      00686     tdelay LEFT_MARGIN-4
-  0006                    M     variable q=(LEFT_MARGIN-4)/3
-  0002                    M     variable r=(LEFT_MARGIN-4)%3
-                          M     if (q)
-0177   3006               M     movlw q
-0178   0B89               M     decfsz WREG
-0179   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-017A   2???               M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
-                      00687 ;    draw_border BORDER_WIDTH
-                      00688     draw_wall yellow
-  0000                    M     local next_brick
-017B   3008               M     movlw 8
-                          M     pushw
-017C   0019               M     movwi --SP
-017D                      M next_brick    
-017D   35??               M     lslf temp
-                          M     draw_brick yellow
-  0000                    M     local no_brick
-  0000                    M     local brick_delay
-017E   1C03               M     skpc
-017F   3???               M     bra no_brick
-                          M     yellow
-                          M ;    chroma_ref
-0180   0021               M     banksel TRISA
-0181   120C               M     bcf TRISA,VIDEO_OUT
-0182   108C               M     bcf TRISA,CHROMA
-0183   3???               M     bra brick_delay
-0184                      M no_brick
-0184   0000               M     nop
-                          M     black
-0185   0021               M     banksel TRISA
-0186   148C               M     bsf TRISA,CHROMA
-0187   160C               M     bsf TRISA,VIDEO_OUT
+0146   148C               M     bsf TRISA,CHROMA
+0147   160C               M     bsf TRISA,VIDEO_OUT
                           M ;    goto $+1
-0188   3???               M     bra brick_delay 
-0189                      M brick_delay    
-                          M     tdelay BRICK_WIDTH
-  0009                    M     variable q=(BRICK_WIDTH)/3
-  0001                    M     variable r=(BRICK_WIDTH)%3
+                      00682     tdelay COURT_WIDTH
+  0065                    M     variable q=(COURT_WIDTH)/3
+  0001                    M     variable r=(COURT_WIDTH)%3
                           M     if (q)
-0189   3009               M     movlw q
-018A   0B89               M     decfsz WREG
-018B   2???               M     goto $-1
+0148   3065               M     movlw q
+0149   0B89               M     decfsz WREG
+014A   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 21
+                          M     if (r==1)
+014B   0000               M     nop
+                          M     endif
+                      00683     draw_border BORDER_WIDTH
+014C   0021               M     banksel TRISA
+014D   148C               M     bsf TRISA,CHROMA
+014E   120C               M     bcf TRISA,VIDEO_OUT
+                          M     tdelay BORDER_WIDTH
+  0001                    M     variable q=(BORDER_WIDTH)/3
+  0001                    M     variable r=(BORDER_WIDTH)%3
+                          M     if (q)
+014F   3001               M     movlw q
+0150   0B89               M     decfsz WREG
+0151   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+0152   0000               M     nop
+                          M     endif
+0153   160C               M     bsf TRISA,VIDEO_OUT
+0154   3???           00684     bra draw_void_exit
+0155                  00685 yes_ball
+0155   0021           00686     banksel TRISA
+0156   08??           00687     movfw ball_x
+0157   1903           00688     skpnz
+0158   3???           00689     bra ball_at_left
+0159   3C64           00690     sublw BALL_RIGHT_BOUND
+015A   1903           00691     skpnz
+015B   3???           00692     bra ball_at_right
+015C                  00693 ball_in_middle    
+                      00694     tdelay LEFT_MARGIN-17
+  0002                    M     variable q=(LEFT_MARGIN-17)/3
+  0001                    M     variable r=(LEFT_MARGIN-17)%3
+                          M     if (q)
+015C   3002               M     movlw q
+015D   0B89               M     decfsz WREG
+015E   2???               M     goto $-1
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 19
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                          M     if (r==1)
-018C   0000               M     nop
                           M     endif
-018D   0B80               M     decfsz T
-018E   3???               M     bra next_brick
-                          M     dropn 1
-018F   3101               M     addfsr T,1
-                      00689     black
-0190   0021               M     banksel TRISA
-0191   148C               M     bsf TRISA,CHROMA
-0192   160C               M     bsf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-                      00690     tdelay 3
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+015F   0000               M     nop
+                          M     endif
+0160   120C           00695     bcf TRISA,VIDEO_OUT
+                      00696     tdelay 3
   0001                    M     variable q=(3)/3
   0000                    M     variable r=(3)%3
                           M     if (q)
-0193   3001               M     movlw q
-0194   0B89               M     decfsz WREG
-0195   2???               M     goto $-1
+0161   3001               M     movlw q
+0162   0B89               M     decfsz WREG
+0163   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
@@ -1210,344 +1088,543 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00691 ;    draw_border BORDER_WIDTH
-                      00692     next_task BRICK_HEIGHT
-0196   0A??               M     incf slice
-0197   3008               M     movlw BRICK_HEIGHT
-0198   02??               M     subwf slice,W
-0199   1D03               M     skpz
-                          M     leave
-019A   2???               M     goto isr_exit
-019B   01??               M     clrf slice
-019C   0A??               M     incf task
-019D   3008               M     movlw BRICK_HEIGHT
-019E   07??               M     addwf lcount
-                          M     leave
-019F   2???               M     goto isr_exit
-                      00693     
-                      00694 ; task 12, draw 2nd brick row    
-01A0                  00695 draw_row2 ;cyan
-                      00696     chroma_invert
-01A0   003B               M     banksel PWM1CON
-01A1   161B               M     bsf PWM1CON,POL
-01A2   002?           00697     banksel row2
-01A3   08??           00698     movfw row2
-01A4   00??           00699     movwf temp
-                      00700     tdelay LEFT_MARGIN-4
-  0006                    M     variable q=(LEFT_MARGIN-4)/3
-  0002                    M     variable r=(LEFT_MARGIN-4)%3
+0164   08??           00697     movfw ball_x
+0165   160C           00698     bsf TRISA,VIDEO_OUT
+0166   0B89           00699     decfsz WREG
+0167   3???           00700     bra $-1
+0168   120C           00701     bcf TRISA, VIDEO_OUT
+                      00702     tdelay 8
+  0002                    M     variable q=(8)/3
+  0002                    M     variable r=(8)%3
                           M     if (q)
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 22
+0169   3002               M     movlw q
+016A   0B89               M     decfsz WREG
+016B   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+016C   2???               M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+016D   160C           00703     bsf TRISA,VIDEO_OUT
+016E   08??           00704     movfw ball_x
+016F   3C64           00705     sublw BALL_RIGHT_BOUND
+0170   0B89           00706     decfsz WREG
+0171   3???           00707     bra $-1
+                      00708 ;    nop
+                      00709 ;    nop
+0172   120C           00710     bcf TRISA,VIDEO_OUT
+                      00711     tdelay 4
+  0001                    M     variable q=(4)/3
+  0001                    M     variable r=(4)%3
+                          M     if (q)
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 20
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-01A5   3006               M     movlw q
-01A6   0B89               M     decfsz WREG
-01A7   2???               M     goto $-1
+0173   3001               M     movlw q
+0174   0B89               M     decfsz WREG
+0175   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-01A8   2???               M     goto $+1
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+0176   0000               M     nop
+                          M     endif
+0177   160C           00712     bsf TRISA,VIDEO_OUT
+0178   3???           00713     bra draw_void_exit
+0179                  00714 ball_at_left
+                      00715     tdelay LEFT_MARGIN-15
+  0003                    M     variable q=(LEFT_MARGIN-15)/3
+  0000                    M     variable r=(LEFT_MARGIN-15)%3
+                          M     if (q)
+0179   3003               M     movlw q
+017A   0B89               M     decfsz WREG
+017B   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00701 ;    draw_border BORDER_WIDTH
-                      00702     draw_wall cyan
-  0000                    M     local next_brick
-01A9   3008               M     movlw 8
-                          M     pushw
-01AA   0019               M     movwi --SP
-01AB                      M next_brick    
-01AB   35??               M     lslf temp
-                          M     draw_brick cyan
-  0000                    M     local no_brick
-  0000                    M     local brick_delay
-01AC   1C03               M     skpc
-01AD   3???               M     bra no_brick
-                          M     cyan
-                          M ;    chroma_invert
-01AE   0021               M     banksel TRISA
-01AF   120C               M     bcf TRISA,VIDEO_OUT
-01B0   108C               M     bcf TRISA,CHROMA
-01B1   3???               M     bra brick_delay
-01B2                      M no_brick
-01B2   0000               M     nop
-                          M     black
-01B3   0021               M     banksel TRISA
-01B4   148C               M     bsf TRISA,CHROMA
-01B5   160C               M     bsf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-01B6   3???               M     bra brick_delay 
-01B7                      M brick_delay    
-                          M     tdelay BRICK_WIDTH
-  0009                    M     variable q=(BRICK_WIDTH)/3
-  0001                    M     variable r=(BRICK_WIDTH)%3
+017C   120C           00716     bcf TRISA,VIDEO_OUT
+                      00717     tdelay 12
+  0004                    M     variable q=(12)/3
+  0000                    M     variable r=(12)%3
                           M     if (q)
-01B7   3009               M     movlw q
+017D   3004               M     movlw q
+017E   0B89               M     decfsz WREG
+017F   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+0180   160C           00718     bsf TRISA,VIDEO_OUT
+                      00719     tdelay 300
+  0064                    M     variable q=(300)/3
+  0000                    M     variable r=(300)%3
+                          M     if (q)
+0181   3064               M     movlw q
+0182   0B89               M     decfsz WREG
+0183   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 21
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+0184   0000           00720     nop
+0185   120C           00721     bcf TRISA,VIDEO_OUT
+                      00722     tdelay 4
+  0001                    M     variable q=(4)/3
+  0001                    M     variable r=(4)%3
+                          M     if (q)
+0186   3001               M     movlw q
+0187   0B89               M     decfsz WREG
+0188   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+0189   0000               M     nop
+                          M     endif
+018A   160C           00723     bsf TRISA,VIDEO_OUT
+018B   3???           00724     bra draw_void_exit
+018C                  00725 ball_at_right
+                      00726     tdelay LEFT_MARGIN-18
+  0002                    M     variable q=(LEFT_MARGIN-18)/3
+  0000                    M     variable r=(LEFT_MARGIN-18)%3
+                          M     if (q)
+018C   3002               M     movlw q
+018D   0B89               M     decfsz WREG
+018E   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+018F   120C           00727     bcf TRISA,VIDEO_OUT
+                      00728     tdelay 4
+  0001                    M     variable q=(4)/3
+  0001                    M     variable r=(4)%3
+                          M     if (q)
+0190   3001               M     movlw q
+0191   0B89               M     decfsz WREG
+0192   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+0193   0000               M     nop
+                          M     endif
+0194   160C           00729     bsf TRISA,VIDEO_OUT
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 22
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00730     tdelay 300
+  0064                    M     variable q=(300)/3
+  0000                    M     variable r=(300)%3
+                          M     if (q)
+0195   3064               M     movlw q
+0196   0B89               M     decfsz WREG
+0197   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+0198   0000           00731     nop
+0199   120C           00732     bcf TRISA,VIDEO_OUT
+                      00733     tdelay 12
+  0004                    M     variable q=(12)/3
+  0000                    M     variable r=(12)%3
+                          M     if (q)
+019A   3004               M     movlw q
+019B   0B89               M     decfsz WREG
+019C   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+019D   160C           00734     bsf TRISA,VIDEO_OUT
+019E                  00735 draw_void_exit    
+019E   0A??           00736     incf slice
+019F   0A??           00737     incf lcount
+01A0   30B6           00738     movlw 8*BRICK_HEIGHT+118
+01A1   02??           00739     subwf slice,W
+01A2   1D03           00740     skpz
+                      00741     leave
+01A3   2???               M     goto isr_exit
+01A4   3012           00742     movlw 18
+01A5   01??           00743     clrf slice
+01A6   00??           00744     movwf task
+                      00745     leave
+01A7   2???               M     goto isr_exit
+                      00746     ;    next_task 125*BRICK_HEIGHT
+01A8                  00747 no_wall_draw
+                      00748     next_task 2*BRICK_HEIGHT
+01A8   0A??               M     incf slice
+01A9   3010               M     movlw 2*BRICK_HEIGHT
+01AA   02??               M     subwf slice,W
+01AB   1D03               M     skpz
+                          M     leave
+01AC   2???               M     goto isr_exit
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 23
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+01AD   01??               M     clrf slice
+01AE   0A??               M     incf task
+01AF   3010               M     movlw 2*BRICK_HEIGHT
+01B0   07??               M     addwf lcount
+                          M     leave
+01B1   2???               M     goto isr_exit
+                      00749     
+                      00750 ; task 11, draw top brick row
+01B2                  00751 draw_row1 ; yellow
+                      00752     chroma_ref
+01B2   003B               M     banksel PWM1CON
+01B3   121B               M     bcf PWM1CON,POL
+01B4   002?           00753     banksel row1
+01B5   08??           00754     movfw row1
+01B6   00??           00755     movwf temp
+                      00756     tdelay LEFT_MARGIN-4
+  0006                    M     variable q=(LEFT_MARGIN-4)/3
+  0002                    M     variable r=(LEFT_MARGIN-4)%3
+                          M     if (q)
+01B7   3006               M     movlw q
 01B8   0B89               M     decfsz WREG
 01B9   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-01BA   0000               M     nop
-                          M     endif
-01BB   0B80               M     decfsz T
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 23
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-01BC   3???               M     bra next_brick
-                          M     dropn 1
-01BD   3101               M     addfsr T,1
-                      00703     black
-01BE   0021               M     banksel TRISA
-01BF   148C               M     bsf TRISA,CHROMA
-01C0   160C               M     bsf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-                      00704     tdelay 3
-  0001                    M     variable q=(3)/3
-  0000                    M     variable r=(3)%3
-                          M     if (q)
-01C1   3001               M     movlw q
-01C2   0B89               M     decfsz WREG
-01C3   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
+01BA   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00705 ;    draw_border BORDER_WIDTH
-                      00706     next_task BRICK_HEIGHT
-01C4   0A??               M     incf slice
-01C5   3008               M     movlw BRICK_HEIGHT
-01C6   02??               M     subwf slice,W
-01C7   1D03               M     skpz
-                          M     leave
-01C8   2???               M     goto isr_exit
-01C9   01??               M     clrf slice
-01CA   0A??               M     incf task
-01CB   3008               M     movlw BRICK_HEIGHT
-01CC   07??               M     addwf lcount
-                          M     leave
-01CD   2???               M     goto isr_exit
-                      00707 
-                      00708 ; task 13, draw 3rd brick row    
-01CE                  00709 draw_row3 ; green
-                      00710 ;    btfss flags, F_EVEN
-                      00711 ;    bra row3_exit
-                      00712     chroma_ref
-01CE   003B               M     banksel PWM1CON
-01CF   121B               M     bcf PWM1CON,POL
-01D0   002?           00713     banksel row3
-01D1   08??           00714     movfw row3
-01D2   00??           00715     movwf temp
-                      00716     tdelay LEFT_MARGIN-4
-  0006                    M     variable q=(LEFT_MARGIN-4)/3
-  0002                    M     variable r=(LEFT_MARGIN-4)%3
-                          M     if (q)
-01D3   3006               M     movlw q
-01D4   0B89               M     decfsz WREG
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 24
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-01D5   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-01D6   2???               M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
-                      00717 ;    draw_border BORDER_WIDTH
-                      00718     draw_wall green
+                      00757 ;    draw_border BORDER_WIDTH
+                      00758     draw_wall yellow
   0000                    M     local next_brick
-01D7   3008               M     movlw 8
+01BB   3008               M     movlw 8
                           M     pushw
-01D8   0019               M     movwi --SP
-01D9                      M next_brick    
-01D9   35??               M     lslf temp
-                          M     draw_brick green
+01BC   0019               M     movwi --SP
+01BD                      M next_brick    
+01BD   35??               M     lslf temp
+                          M     draw_brick yellow
   0000                    M     local no_brick
   0000                    M     local brick_delay
-01DA   1C03               M     skpc
-01DB   3???               M     bra no_brick
-                          M     green
+01BE   1C03               M     skpc
+01BF   3???               M     bra no_brick
+                          M     yellow
                           M ;    chroma_ref
-01DC   0021               M     banksel TRISA
-01DD   160C               M     bsf TRISA, VIDEO_OUT
-01DE   108C               M     bcf TRISA,CHROMA
-01DF   3???               M     bra brick_delay
-01E0                      M no_brick
-01E0   0000               M     nop
+01C0   0021               M     banksel TRISA
+01C1   120C               M     bcf TRISA,VIDEO_OUT
+01C2   108C               M     bcf TRISA,CHROMA
+01C3   3???               M     bra brick_delay
+01C4                      M no_brick
+01C4   0000               M     nop
                           M     black
-01E1   0021               M     banksel TRISA
-01E2   148C               M     bsf TRISA,CHROMA
-01E3   160C               M     bsf TRISA,VIDEO_OUT
+01C5   0021               M     banksel TRISA
+01C6   148C               M     bsf TRISA,CHROMA
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 24
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+01C7   160C               M     bsf TRISA,VIDEO_OUT
                           M ;    goto $+1
-01E4   3???               M     bra brick_delay 
-01E5                      M brick_delay    
+01C8   3???               M     bra brick_delay 
+01C9                      M brick_delay    
                           M     tdelay BRICK_WIDTH
   0009                    M     variable q=(BRICK_WIDTH)/3
   0001                    M     variable r=(BRICK_WIDTH)%3
                           M     if (q)
-01E5   3009               M     movlw q
+01C9   3009               M     movlw q
+01CA   0B89               M     decfsz WREG
+01CB   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+01CC   0000               M     nop
+                          M     endif
+01CD   0B80               M     decfsz T
+01CE   3???               M     bra next_brick
+                          M     dropn 1
+01CF   3101               M     addfsr T,1
+                      00759     black
+01D0   0021               M     banksel TRISA
+01D1   148C               M     bsf TRISA,CHROMA
+01D2   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+                      00760     tdelay 3
+  0001                    M     variable q=(3)/3
+  0000                    M     variable r=(3)%3
+                          M     if (q)
+01D3   3001               M     movlw q
+01D4   0B89               M     decfsz WREG
+01D5   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+                      00761 ;    draw_border BORDER_WIDTH
+                      00762     next_task BRICK_HEIGHT
+01D6   0A??               M     incf slice
+01D7   3008               M     movlw BRICK_HEIGHT
+01D8   02??               M     subwf slice,W
+01D9   1D03               M     skpz
+                          M     leave
+01DA   2???               M     goto isr_exit
+01DB   01??               M     clrf slice
+01DC   0A??               M     incf task
+01DD   3008               M     movlw BRICK_HEIGHT
+01DE   07??               M     addwf lcount
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 25
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                          M     leave
+01DF   2???               M     goto isr_exit
+                      00763     
+                      00764 ; task 12, draw 2nd brick row    
+01E0                  00765 draw_row2 ;cyan
+                      00766     chroma_invert
+01E0   003B               M     banksel PWM1CON
+01E1   161B               M     bsf PWM1CON,POL
+01E2   002?           00767     banksel row2
+01E3   08??           00768     movfw row2
+01E4   00??           00769     movwf temp
+                      00770     tdelay LEFT_MARGIN-4
+  0006                    M     variable q=(LEFT_MARGIN-4)/3
+  0002                    M     variable r=(LEFT_MARGIN-4)%3
+                          M     if (q)
+01E5   3006               M     movlw q
 01E6   0B89               M     decfsz WREG
 01E7   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-                          M     goto $+1
+01E8   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
-01E8   0000               M     nop
+                          M     nop
                           M     endif
-01E9   0B80               M     decfsz T
-01EA   3???               M     bra next_brick
-                          M     dropn 1
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 25
+                      00771 ;    draw_border BORDER_WIDTH
+                      00772     draw_wall cyan
+  0000                    M     local next_brick
+01E9   3008               M     movlw 8
+                          M     pushw
+01EA   0019               M     movwi --SP
+01EB                      M next_brick    
+01EB   35??               M     lslf temp
+                          M     draw_brick cyan
+  0000                    M     local no_brick
+  0000                    M     local brick_delay
+01EC   1C03               M     skpc
+01ED   3???               M     bra no_brick
+                          M     cyan
+                          M ;    chroma_invert
+01EE   0021               M     banksel TRISA
+01EF   120C               M     bcf TRISA,VIDEO_OUT
+01F0   108C               M     bcf TRISA,CHROMA
+01F1   3???               M     bra brick_delay
+01F2                      M no_brick
+01F2   0000               M     nop
+                          M     black
+01F3   0021               M     banksel TRISA
+01F4   148C               M     bsf TRISA,CHROMA
+01F5   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+01F6   3???               M     bra brick_delay 
+01F7                      M brick_delay    
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 26
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-01EB   3101               M     addfsr T,1
-                      00719     black
-01EC   0021               M     banksel TRISA
-01ED   148C               M     bsf TRISA,CHROMA
-01EE   160C               M     bsf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-                      00720     tdelay 3
-  0001                    M     variable q=(3)/3
-  0000                    M     variable r=(3)%3
+                          M     tdelay BRICK_WIDTH
+  0009                    M     variable q=(BRICK_WIDTH)/3
+  0001                    M     variable r=(BRICK_WIDTH)%3
                           M     if (q)
-01EF   3001               M     movlw q
-01F0   0B89               M     decfsz WREG
-01F1   2???               M     goto $-1
+01F7   3009               M     movlw q
+01F8   0B89               M     decfsz WREG
+01F9   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-                          M     nop
+01FA   0000               M     nop
                           M     endif
-                      00721 ;    draw_border BORDER_WIDTH
-01F2                  00722 row3_exit    
-                      00723     next_task BRICK_HEIGHT
-01F2   0A??               M     incf slice
-01F3   3008               M     movlw BRICK_HEIGHT
-01F4   02??               M     subwf slice,W
-01F5   1D03               M     skpz
-                          M     leave
-01F6   2???               M     goto isr_exit
-01F7   01??               M     clrf slice
-01F8   0A??               M     incf task
-01F9   3008               M     movlw BRICK_HEIGHT
-01FA   07??               M     addwf lcount
-                          M     leave
-01FB   2???               M     goto isr_exit
-                      00724     
-                      00725 ; task 14, draw 4th brick row    
-01FC                  00726 draw_row4 ; dark blue
-                      00727     chroma_invert
-01FC   003B               M     banksel PWM1CON
-01FD   161B               M     bsf PWM1CON,POL
-01FE   002?           00728     banksel row4
-01FF   08??           00729     movfw row4
-0200   00??           00730     movwf temp
-                      00731     tdelay LEFT_MARGIN-4
-  0006                    M     variable q=(LEFT_MARGIN-4)/3
-  0002                    M     variable r=(LEFT_MARGIN-4)%3
+01FB   0B80               M     decfsz T
+01FC   3???               M     bra next_brick
+                          M     dropn 1
+01FD   3101               M     addfsr T,1
+                      00773     black
+01FE   0021               M     banksel TRISA
+01FF   148C               M     bsf TRISA,CHROMA
+0200   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+                      00774     tdelay 3
+  0001                    M     variable q=(3)/3
+  0000                    M     variable r=(3)%3
                           M     if (q)
-0201   3006               M     movlw q
+0201   3001               M     movlw q
 0202   0B89               M     decfsz WREG
 0203   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 26
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+                      00775 ;    draw_border BORDER_WIDTH
+                      00776     next_task BRICK_HEIGHT
+0204   0A??               M     incf slice
+0205   3008               M     movlw BRICK_HEIGHT
+0206   02??               M     subwf slice,W
+0207   1D03               M     skpz
+                          M     leave
+0208   2???               M     goto isr_exit
+0209   01??               M     clrf slice
+020A   0A??               M     incf task
+020B   3008               M     movlw BRICK_HEIGHT
+020C   07??               M     addwf lcount
+                          M     leave
+020D   2???               M     goto isr_exit
+                      00777 
+                      00778 ; task 13, draw 3rd brick row    
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 27
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0204   2???               M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
-                      00732 ;    draw_border BORDER_WIDTH
-                      00733     draw_wall dark_blue
-  0000                    M     local next_brick
-0205   3008               M     movlw 8
-                          M     pushw
-0206   0019               M     movwi --SP
-0207                      M next_brick    
-0207   35??               M     lslf temp
-                          M     draw_brick dark_blue
-  0000                    M     local no_brick
-  0000                    M     local brick_delay
-0208   1C03               M     skpc
-0209   3???               M     bra no_brick
-                          M     dark_blue
-                          M ;    chroma_invert
-020A   0021               M     banksel TRISA
-020B   160C               M     bsf TRISA, VIDEO_OUT
-020C   108C               M     bcf TRISA,CHROMA
-020D   3???               M     bra brick_delay
-020E                      M no_brick
-020E   0000               M     nop
-                          M     black
-020F   0021               M     banksel TRISA
-0210   148C               M     bsf TRISA,CHROMA
-0211   160C               M     bsf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-0212   3???               M     bra brick_delay 
-0213                      M brick_delay    
-                          M     tdelay BRICK_WIDTH
-  0009                    M     variable q=(BRICK_WIDTH)/3
-  0001                    M     variable r=(BRICK_WIDTH)%3
+020E                  00779 draw_row3 ; green
+                      00780 ;    btfss flags, F_EVEN
+                      00781 ;    bra row3_exit
+                      00782     chroma_ref
+020E   003B               M     banksel PWM1CON
+020F   121B               M     bcf PWM1CON,POL
+0210   002?           00783     banksel row3
+0211   08??           00784     movfw row3
+0212   00??           00785     movwf temp
+                      00786     tdelay LEFT_MARGIN-4
+  0006                    M     variable q=(LEFT_MARGIN-4)/3
+  0002                    M     variable r=(LEFT_MARGIN-4)%3
                           M     if (q)
-0213   3009               M     movlw q
+0213   3006               M     movlw q
 0214   0B89               M     decfsz WREG
 0215   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-                          M     goto $+1
+0216   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
-0216   0000               M     nop
+                          M     nop
                           M     endif
-0217   0B80               M     decfsz T
-0218   3???               M     bra next_brick
-                          M     dropn 1
-0219   3101               M     addfsr T,1
-                      00734     black
-021A   0021               M     banksel TRISA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 27
+                      00787 ;    draw_border BORDER_WIDTH
+                      00788     draw_wall green
+  0000                    M     local next_brick
+0217   3008               M     movlw 8
+                          M     pushw
+0218   0019               M     movwi --SP
+0219                      M next_brick    
+0219   35??               M     lslf temp
+                          M     draw_brick green
+  0000                    M     local no_brick
+  0000                    M     local brick_delay
+021A   1C03               M     skpc
+021B   3???               M     bra no_brick
+                          M     green
+                          M ;    chroma_ref
+021C   0021               M     banksel TRISA
+021D   160C               M     bsf TRISA, VIDEO_OUT
+021E   108C               M     bcf TRISA,CHROMA
+021F   3???               M     bra brick_delay
+0220                      M no_brick
+0220   0000               M     nop
+                          M     black
+0221   0021               M     banksel TRISA
+0222   148C               M     bsf TRISA,CHROMA
+0223   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+0224   3???               M     bra brick_delay 
+0225                      M brick_delay    
+                          M     tdelay BRICK_WIDTH
+  0009                    M     variable q=(BRICK_WIDTH)/3
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 28
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-021B   148C               M     bsf TRISA,CHROMA
-021C   160C               M     bsf TRISA,VIDEO_OUT
+  0001                    M     variable r=(BRICK_WIDTH)%3
+                          M     if (q)
+0225   3009               M     movlw q
+0226   0B89               M     decfsz WREG
+0227   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+0228   0000               M     nop
+                          M     endif
+0229   0B80               M     decfsz T
+022A   3???               M     bra next_brick
+                          M     dropn 1
+022B   3101               M     addfsr T,1
+                      00789     black
+022C   0021               M     banksel TRISA
+022D   148C               M     bsf TRISA,CHROMA
+022E   160C               M     bsf TRISA,VIDEO_OUT
                           M ;    goto $+1
-                      00735     tdelay 3
+                      00790     tdelay 3
   0001                    M     variable q=(3)/3
   0000                    M     variable r=(3)%3
                           M     if (q)
-021D   3001               M     movlw q
-021E   0B89               M     decfsz WREG
-021F   2???               M     goto $-1
+022F   3001               M     movlw q
+0230   0B89               M     decfsz WREG
+0231   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
@@ -1555,110 +1632,114 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00736 ;    draw_border BORDER_WIDTH
-                      00737     next_task BRICK_HEIGHT
-0220   0A??               M     incf slice
-0221   3008               M     movlw BRICK_HEIGHT
-0222   02??               M     subwf slice,W
-0223   1D03               M     skpz
+                      00791 ;    draw_border BORDER_WIDTH
+0232                  00792 row3_exit    
+                      00793     next_task BRICK_HEIGHT
+0232   0A??               M     incf slice
+0233   3008               M     movlw BRICK_HEIGHT
+0234   02??               M     subwf slice,W
+0235   1D03               M     skpz
                           M     leave
-0224   2???               M     goto isr_exit
-0225   01??               M     clrf slice
-0226   0A??               M     incf task
-0227   3008               M     movlw BRICK_HEIGHT
-0228   07??               M     addwf lcount
+0236   2???               M     goto isr_exit
+0237   01??               M     clrf slice
+0238   0A??               M     incf task
+0239   3008               M     movlw BRICK_HEIGHT
+023A   07??               M     addwf lcount
                           M     leave
-0229   2???               M     goto isr_exit
-                      00738 
-                      00739 ; task 15, draw 5th brick row    
-022A                  00740 draw_row5 ; white
-022A   002?           00741     banksel row5
-022B   08??           00742     movfw row5
-022C   00??           00743     movwf temp
-                      00744     tdelay LEFT_MARGIN-3
-  0007                    M     variable q=(LEFT_MARGIN-3)/3
-  0000                    M     variable r=(LEFT_MARGIN-3)%3
-                          M     if (q)
-022D   3007               M     movlw q
-022E   0B89               M     decfsz WREG
-022F   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-                          M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
-                      00745 ;    draw_border BORDER_WIDTH
-                      00746     draw_wall white
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 28
+023B   2???               M     goto isr_exit
+                      00794     
+                      00795 ; task 14, draw 4th brick row    
+023C                  00796 draw_row4 ; dark blue
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 29
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
+                      00797     chroma_invert
+023C   003B               M     banksel PWM1CON
+023D   161B               M     bsf PWM1CON,POL
+023E   002?           00798     banksel row4
+023F   08??           00799     movfw row4
+0240   00??           00800     movwf temp
+                      00801     tdelay LEFT_MARGIN-4
+  0006                    M     variable q=(LEFT_MARGIN-4)/3
+  0002                    M     variable r=(LEFT_MARGIN-4)%3
+                          M     if (q)
+0241   3006               M     movlw q
+0242   0B89               M     decfsz WREG
+0243   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+0244   2???               M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+                      00802 ;    draw_border BORDER_WIDTH
+                      00803     draw_wall dark_blue
   0000                    M     local next_brick
-0230   3008               M     movlw 8
+0245   3008               M     movlw 8
                           M     pushw
-0231   0019               M     movwi --SP
-0232                      M next_brick    
-0232   35??               M     lslf temp
-                          M     draw_brick white
+0246   0019               M     movwi --SP
+0247                      M next_brick    
+0247   35??               M     lslf temp
+                          M     draw_brick dark_blue
   0000                    M     local no_brick
   0000                    M     local brick_delay
-0233   1C03               M     skpc
-0234   3???               M     bra no_brick
-                          M     white
-0235   0021               M     banksel TRISA
-0236   148C               M     bsf TRISA,CHROMA
-0237   120C               M     bcf TRISA,VIDEO_OUT
-                          M ;    goto $+1
-0238   3???               M     bra brick_delay
-0239                      M no_brick
-0239   0000               M     nop
+0248   1C03               M     skpc
+0249   3???               M     bra no_brick
+                          M     dark_blue
+                          M ;    chroma_invert
+024A   0021               M     banksel TRISA
+024B   160C               M     bsf TRISA, VIDEO_OUT
+024C   108C               M     bcf TRISA,CHROMA
+024D   3???               M     bra brick_delay
+024E                      M no_brick
+024E   0000               M     nop
                           M     black
-023A   0021               M     banksel TRISA
-023B   148C               M     bsf TRISA,CHROMA
-023C   160C               M     bsf TRISA,VIDEO_OUT
+024F   0021               M     banksel TRISA
+0250   148C               M     bsf TRISA,CHROMA
+0251   160C               M     bsf TRISA,VIDEO_OUT
                           M ;    goto $+1
-023D   3???               M     bra brick_delay 
-023E                      M brick_delay    
+0252   3???               M     bra brick_delay 
+0253                      M brick_delay    
                           M     tdelay BRICK_WIDTH
   0009                    M     variable q=(BRICK_WIDTH)/3
   0001                    M     variable r=(BRICK_WIDTH)%3
                           M     if (q)
-023E   3009               M     movlw q
-023F   0B89               M     decfsz WREG
-0240   2???               M     goto $-1
+0253   3009               M     movlw q
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 30
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0254   0B89               M     decfsz WREG
+0255   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
                           M     endif 
                           M     if (r==1)
-0241   0000               M     nop
+0256   0000               M     nop
                           M     endif
-0242   0B80               M     decfsz T
-0243   3???               M     bra next_brick
+0257   0B80               M     decfsz T
+0258   3???               M     bra next_brick
                           M     dropn 1
-0244   3101               M     addfsr T,1
-                      00747     black
-0245   0021               M     banksel TRISA
-0246   148C               M     bsf TRISA,CHROMA
-0247   160C               M     bsf TRISA,VIDEO_OUT
+0259   3101               M     addfsr T,1
+                      00804     black
+025A   0021               M     banksel TRISA
+025B   148C               M     bsf TRISA,CHROMA
+025C   160C               M     bsf TRISA,VIDEO_OUT
                           M ;    goto $+1
-                      00748     tdelay 3
+                      00805     tdelay 3
   0001                    M     variable q=(3)/3
   0000                    M     variable r=(3)%3
                           M     if (q)
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 29
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-0248   3001               M     movlw q
-0249   0B89               M     decfsz WREG
-024A   2???               M     goto $-1
+025D   3001               M     movlw q
+025E   0B89               M     decfsz WREG
+025F   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
@@ -1666,35 +1747,152 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00749 ;    draw_border BORDER_WIDTH
-                      00750     black
-024B   0021               M     banksel TRISA
-024C   148C               M     bsf TRISA,CHROMA
-024D   160C               M     bsf TRISA,VIDEO_OUT
+                      00806 ;    draw_border BORDER_WIDTH
+                      00807     next_task BRICK_HEIGHT
+0260   0A??               M     incf slice
+0261   3008               M     movlw BRICK_HEIGHT
+0262   02??               M     subwf slice,W
+0263   1D03               M     skpz
+                          M     leave
+0264   2???               M     goto isr_exit
+0265   01??               M     clrf slice
+0266   0A??               M     incf task
+0267   3008               M     movlw BRICK_HEIGHT
+0268   07??               M     addwf lcount
+                          M     leave
+0269   2???               M     goto isr_exit
+                      00808 
+                      00809 ; task 15, draw 5th brick row    
+026A                  00810 draw_row5 ; white
+026A   002?           00811     banksel row5
+026B   08??           00812     movfw row5
+026C   00??           00813     movwf temp
+                      00814     tdelay LEFT_MARGIN-3
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 31
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+  0007                    M     variable q=(LEFT_MARGIN-3)/3
+  0000                    M     variable r=(LEFT_MARGIN-3)%3
+                          M     if (q)
+026D   3007               M     movlw q
+026E   0B89               M     decfsz WREG
+026F   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+                      00815 ;    draw_border BORDER_WIDTH
+                      00816     draw_wall white
+  0000                    M     local next_brick
+0270   3008               M     movlw 8
+                          M     pushw
+0271   0019               M     movwi --SP
+0272                      M next_brick    
+0272   35??               M     lslf temp
+                          M     draw_brick white
+  0000                    M     local no_brick
+  0000                    M     local brick_delay
+0273   1C03               M     skpc
+0274   3???               M     bra no_brick
+                          M     white
+0275   0021               M     banksel TRISA
+0276   148C               M     bsf TRISA,CHROMA
+0277   120C               M     bcf TRISA,VIDEO_OUT
                           M ;    goto $+1
-                      00751     next_task BRICK_HEIGHT
-024E   0A??               M     incf slice
-024F   3008               M     movlw BRICK_HEIGHT
-0250   02??               M     subwf slice,W
-0251   1D03               M     skpz
+0278   3???               M     bra brick_delay
+0279                      M no_brick
+0279   0000               M     nop
+                          M     black
+027A   0021               M     banksel TRISA
+027B   148C               M     bsf TRISA,CHROMA
+027C   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+027D   3???               M     bra brick_delay 
+027E                      M brick_delay    
+                          M     tdelay BRICK_WIDTH
+  0009                    M     variable q=(BRICK_WIDTH)/3
+  0001                    M     variable r=(BRICK_WIDTH)%3
+                          M     if (q)
+027E   3009               M     movlw q
+027F   0B89               M     decfsz WREG
+0280   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 32
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+0281   0000               M     nop
+                          M     endif
+0282   0B80               M     decfsz T
+0283   3???               M     bra next_brick
+                          M     dropn 1
+0284   3101               M     addfsr T,1
+                      00817     black
+0285   0021               M     banksel TRISA
+0286   148C               M     bsf TRISA,CHROMA
+0287   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+                      00818     tdelay 3
+  0001                    M     variable q=(3)/3
+  0000                    M     variable r=(3)%3
+                          M     if (q)
+0288   3001               M     movlw q
+0289   0B89               M     decfsz WREG
+028A   2???               M     goto $-1
+                          M     endif
+                          M     if (r==2)
+                          M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+                      00819 ;    draw_border BORDER_WIDTH
+                      00820     black
+028B   0021               M     banksel TRISA
+028C   148C               M     bsf TRISA,CHROMA
+028D   160C               M     bsf TRISA,VIDEO_OUT
+                          M ;    goto $+1
+                      00821     next_task BRICK_HEIGHT
+028E   0A??               M     incf slice
+028F   3008               M     movlw BRICK_HEIGHT
+0290   02??               M     subwf slice,W
+0291   1D03               M     skpz
                           M     leave
-0252   2???               M     goto isr_exit
-0253   01??               M     clrf slice
-0254   0A??               M     incf task
-0255   3008               M     movlw BRICK_HEIGHT
-0256   07??               M     addwf lcount
+0292   2???               M     goto isr_exit
+0293   01??               M     clrf slice
+0294   0A??               M     incf task
+0295   3008               M     movlw BRICK_HEIGHT
+0296   07??               M     addwf lcount
                           M     leave
-0257   2???               M     goto isr_exit
-                      00752 
-                      00753 ; task 16,draw all rows between paddle and lower brick row    
-0258                  00754 draw_empty
-                      00755     tdelay LEFT_MARGIN
+0297   2???               M     goto isr_exit
+                      00822 
+                      00823 ; task 16,draw all rows between paddle and lower brick row    
+0298                  00824 draw_empty
+                      00825     tdelay LEFT_MARGIN
   0008                    M     variable q=(LEFT_MARGIN)/3
   0000                    M     variable r=(LEFT_MARGIN)%3
                           M     if (q)
-0258   3008               M     movlw q
-0259   0B89               M     decfsz WREG
-025A   2???               M     goto $-1
+0298   3008               M     movlw q
+0299   0B89               M     decfsz WREG
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 33
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+029A   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
                           M     goto $+1
@@ -1702,443 +1900,447 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00756 ;    draw_border BORDER_WIDTH
-                      00757     tdelay 320
+                      00826 ;    draw_border BORDER_WIDTH
+                      00827     tdelay 320
   006A                    M     variable q=(320)/3
   0002                    M     variable r=(320)%3
                           M     if (q)
-025B   306A               M     movlw q
-025C   0B89               M     decfsz WREG
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 30
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-025D   2???               M     goto $-1
+029B   306A               M     movlw q
+029C   0B89               M     decfsz WREG
+029D   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-025E   2???               M     goto $+1
+029E   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-                      00758 ;    draw_border BORDER_WIDTH
-                      00759     black
-025F   0021               M     banksel TRISA
-0260   148C               M     bsf TRISA,CHROMA
-0261   160C               M     bsf TRISA,VIDEO_OUT
+                      00828 ;    draw_border BORDER_WIDTH
+                      00829     black
+029F   0021               M     banksel TRISA
+02A0   148C               M     bsf TRISA,CHROMA
+02A1   160C               M     bsf TRISA,VIDEO_OUT
                           M ;    goto $+1
-                      00760     next_task 118
-0262   0A??               M     incf slice
-0263   3076               M     movlw 118
-0264   02??               M     subwf slice,W
-0265   1D03               M     skpz
+                      00830     next_task 118
+02A2   0A??               M     incf slice
+02A3   3076               M     movlw 118
+02A4   02??               M     subwf slice,W
+02A5   1D03               M     skpz
                           M     leave
-0266   2???               M     goto isr_exit
-0267   01??               M     clrf slice
-0268   0A??               M     incf task
-0269   3076               M     movlw 118
-026A   07??               M     addwf lcount
+02A6   2???               M     goto isr_exit
+02A7   01??               M     clrf slice
+02A8   0A??               M     incf task
+02A9   3076               M     movlw 118
+02AA   07??               M     addwf lcount
                           M     leave
-026B   2???               M     goto isr_exit
-                      00761 
-                      00762     
-                      00763 ; task 17, draw paddle at bottom screen    
-026C                  00764 draw_paddle
-                      00765     tdelay LEFT_MARGIN+2
+02AB   2???               M     goto isr_exit
+                      00831 
+                      00832     
+                      00833 ; task 17, draw paddle at bottom screen    
+02AC                  00834 draw_paddle
+                      00835     tdelay LEFT_MARGIN+2
   0008                    M     variable q=(LEFT_MARGIN+2)/3
   0002                    M     variable r=(LEFT_MARGIN+2)%3
                           M     if (q)
-026C   3008               M     movlw q
-026D   0B89               M     decfsz WREG
-026E   2???               M     goto $-1
-                          M     endif
-                          M     if (r==2)
-026F   2???               M     goto $+1
-                          M     endif 
-                          M     if (r==1)
-                          M     nop
-                          M     endif
-0270   08??           00766     movfw paddle_pos
-0271   1903           00767     skpnz
-0272   3???           00768     bra $+3
-0273   0B89           00769     decfsz WREG
-0274   3???           00770     bra $-1
-0275   0021           00771     banksel TRISA
-0276   120C           00772     bcf TRISA,VIDEO_OUT
-                      00773     tdelay PADDLE_WIDTH
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 31
+02AC   3008               M     movlw q
+02AD   0B89               M     decfsz WREG
+02AE   2???               M     goto $-1
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 34
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
+                          M     endif
+                          M     if (r==2)
+02AF   2???               M     goto $+1
+                          M     endif 
+                          M     if (r==1)
+                          M     nop
+                          M     endif
+02B0   08??           00836     movfw paddle_pos
+02B1   1903           00837     skpnz
+02B2   3???           00838     bra $+3
+02B3   0B89           00839     decfsz WREG
+02B4   3???           00840     bra $-1
+02B5   0021           00841     banksel TRISA
+02B6   120C           00842     bcf TRISA,VIDEO_OUT
+                      00843     tdelay PADDLE_WIDTH
   000A                    M     variable q=(PADDLE_WIDTH)/3
   0002                    M     variable r=(PADDLE_WIDTH)%3
                           M     if (q)
-0277   300A               M     movlw q
-0278   0B89               M     decfsz WREG
-0279   2???               M     goto $-1
+02B7   300A               M     movlw q
+02B8   0B89               M     decfsz WREG
+02B9   2???               M     goto $-1
                           M     endif
                           M     if (r==2)
-027A   2???               M     goto $+1
+02BA   2???               M     goto $+1
                           M     endif 
                           M     if (r==1)
                           M     nop
                           M     endif
-027B   160C           00774     bsf TRISA,VIDEO_OUT
-                      00775 ;    draw_border BORDER_WIDTH
-                      00776 ;    movfw paddle_pos
-                      00777 ;    skpnz
-                      00778 ;    bcf TRISA,VIDEO_OUT
-                      00779 ;    skpnz
-                      00780 ;    bra at_left+2
-                      00781 ;    decfsz WREG
-                      00782 ;    bra $-1
-                      00783 ;at_left
-                      00784 ;    nop
-                      00785 ;    bcf TRISA,VIDEO_OUT
-                      00786 ;    tdelay PADDLE_WIDTH
-                      00787 ;    movfw paddle_pos
-                      00788 ;    sublw PADDLE_LIMIT
-                      00789 ;    nop
-                      00790 ;    skpnz
-                      00791 ;    bra $+5
-                      00792 ;    nop
-                      00793 ;    bsf TRISA,VIDEO_OUT
-                      00794 ;    decfsz WREG
-                      00795 ;    bra $-1
-                      00796 ;    draw_border BORDER_WIDTH
-                      00797     next_task 8
-027C   0A??               M     incf slice
-027D   3008               M     movlw 8
-027E   02??               M     subwf slice,W
-027F   1D03               M     skpz
+02BB   160C           00844     bsf TRISA,VIDEO_OUT
+                      00845 ;    draw_border BORDER_WIDTH
+                      00846 ;    movfw paddle_pos
+                      00847 ;    skpnz
+                      00848 ;    bcf TRISA,VIDEO_OUT
+                      00849 ;    skpnz
+                      00850 ;    bra at_left+2
+                      00851 ;    decfsz WREG
+                      00852 ;    bra $-1
+                      00853 ;at_left
+                      00854 ;    nop
+                      00855 ;    bcf TRISA,VIDEO_OUT
+                      00856 ;    tdelay PADDLE_WIDTH
+                      00857 ;    movfw paddle_pos
+                      00858 ;    sublw PADDLE_LIMIT
+                      00859 ;    nop
+                      00860 ;    skpnz
+                      00861 ;    bra $+5
+                      00862 ;    nop
+                      00863 ;    bsf TRISA,VIDEO_OUT
+                      00864 ;    decfsz WREG
+                      00865 ;    bra $-1
+                      00866 ;    draw_border BORDER_WIDTH
+                      00867     next_task 8
+02BC   0A??               M     incf slice
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 35
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+02BD   3008               M     movlw 8
+02BE   02??               M     subwf slice,W
+02BF   1D03               M     skpz
                           M     leave
-0280   2???               M     goto isr_exit
-0281   01??               M     clrf slice
-0282   0A??               M     incf task
-0283   3008               M     movlw 8
-0284   07??               M     addwf lcount
+02C0   2???               M     goto isr_exit
+02C1   01??               M     clrf slice
+02C2   0A??               M     incf task
+02C3   3008               M     movlw 8
+02C4   07??               M     addwf lcount
                           M     leave
-0285   2???               M     goto isr_exit
-                      00798 
-                      00799 ; task 18,  wait end of this field, reset task to zero    
-0286                  00800 wait_field_end
-0286   0A??           00801     incf lcount
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 32
+02C5   2???               M     goto isr_exit
+                      00868 
+                      00869 ; task 18,  wait end of this field, reset task to zero    
+02C6                  00870 wait_field_end
+02C6   0A??           00871     incf lcount
+02C7   1903           00872     skpnz
+02C8   1400           00873     bsf flags, F_HI_LINE
+02C9   1800           00874     btfsc flags, F_HI_LINE
+02CA   2???           00875     goto hi_line
+                      00876     leave
+02CB   2???               M     goto isr_exit
+02CC                  00877 hi_line
+02CC   1880           00878     btfsc flags,F_EVEN
+02CD   2???           00879     goto even_field
+02CE   3005           00880     movlw 5
+02CF   02??           00881     subwf lcount,W
+02D0   1D03           00882     skpz
+                      00883     leave
+02D1   2???               M     goto isr_exit
+02D2   2???           00884     goto field_end
+02D3                  00885 even_field
+02D3   3006           00886     movlw 6
+02D4   02??           00887     subwf lcount,W
+02D5   1D03           00888     skpz
+                      00889     leave
+02D6   2???               M     goto isr_exit
+                      00890 ; even field last line is half_line    
+                      00891 ; set PWM3 for line 263 half-line
+02D7   003B           00892     banksel PWM3DC
+02D8   3003           00893     movlw high HALF_LINE
+02D9   00B6           00894     movwf PWM3PRH
+02DA   308D           00895     movlw low HALF_LINE
+02DB   00B5           00896     movwf PWM3PRL
+02DC   17BF           00897     bsf PWM3LDCON,7
+02DD                  00898 field_end
+02DD   01??           00899     clrf task
+02DE   01??           00900     clrf slice
+02DF   01??           00901     clrf lcount
+02E0   1000           00902     bcf flags, F_HI_LINE
+02E1   1680           00903     bsf flags, F_SYNC
+                      00904 ; toggle odd/even field flag    
+02E2   3002           00905     movlw 1<<F_EVEN
+02E3   06??           00906     xorwf flags
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 36
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0287   1903           00802     skpnz
-0288   1400           00803     bsf flags, F_HI_LINE
-0289   1800           00804     btfsc flags, F_HI_LINE
-028A   2???           00805     goto hi_line
-                      00806     leave
-028B   2???               M     goto isr_exit
-028C                  00807 hi_line
-028C   1880           00808     btfsc flags,F_EVEN
-028D   2???           00809     goto even_field
-028E   3005           00810     movlw 5
-028F   02??           00811     subwf lcount,W
-0290   1D03           00812     skpz
-                      00813     leave
-0291   2???               M     goto isr_exit
-0292   2???           00814     goto field_end
-0293                  00815 even_field
-0293   3006           00816     movlw 6
-0294   02??           00817     subwf lcount,W
-0295   1D03           00818     skpz
-                      00819     leave
-0296   2???               M     goto isr_exit
-                      00820 ; even field last line is half_line    
-                      00821 ; set PWM3 for line 263 half-line
-0297   003B           00822     banksel PWM3DC
-0298   3003           00823     movlw high HALF_LINE
-0299   00B6           00824     movwf PWM3PRH
-029A   308D           00825     movlw low HALF_LINE
-029B   00B5           00826     movwf PWM3PRL
-029C   17BF           00827     bsf PWM3LDCON,7
-029D                  00828 field_end
-029D   01??           00829     clrf task
-029E   01??           00830     clrf slice
-029F   01??           00831     clrf lcount
-02A0   1000           00832     bcf flags, F_HI_LINE
-02A1   1680           00833     bsf flags, F_SYNC
-                      00834 ; toggle odd/even field flag    
-02A2   3002           00835     movlw 1<<F_EVEN
-02A3   06??           00836     xorwf flags
-                      00837     leave
-02A4   2???               M     goto isr_exit
-                      00838 
-                      00839 ; helper functions
-                      00840 
-                      00841 ; add 2 BCD digits
-                      00842 ; parameters:
-                      00843 ;   WREG -> first digit
-                      00844 ;   T -> second digit
-                      00845 ;   C -> carry from previous digits add    
-                      00846 ; output:
-                      00847 ;   T -> sum
-                      00848 ;   C -> overflow
-02A5                  00849 bcd_add
-02A5   3D80           00850     addwfc T
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 33
+                      00907     leave
+02E4   2???               M     goto isr_exit
+                      00908 
+                      00909 ; helper functions
+                      00910 
+                      00911 ; add 2 BCD digits
+                      00912 ; parameters:
+                      00913 ;   WREG -> first digit
+                      00914 ;   T -> second digit
+                      00915 ;   C -> carry from previous digits add    
+                      00916 ; output:
+                      00917 ;   T -> sum
+                      00918 ;   C -> overflow
+02E5                  00919 bcd_add
+02E5   3D80           00920     addwfc T
+02E6   300A           00921     movlw 10
+02E7   0200           00922     subwf T,W
+02E8   1C03           00923     skpc
+02E9   0008           00924     return
+02EA   3006           00925     movlw 6
+02EB   0780           00926     addwf T
+02EC   300F           00927     movlw 15
+02ED   0580           00928     andwf T
+02EE   1403           00929     bsf STATUS,C
+02EF   0008           00930     return
+                      00931     
+                      00932 ; increment user score
+                      00933 ; This is a BCD addition where a single digit is added to score.   
+                      00934 ; score is stored as big indian
+                      00935 ; argument: ( n -- )
+                      00936 ;   WREG ->  bdc digit to add to score variable
+02F0                  00937 inc_score
+                      00938     pushw
+02F0   0019               M     movwi --SP
+02F1   1003           00939     clrc
+02F2   300F           00940     movlw 15
+02F3   05??           00941     andwf score+1,W
+02F4   2???           00942     call bcd_add
+02F5   0103           00943     clrw 
+                      00944     pushw
+02F6   0019               M     movwi --SP
+02F7   0E??           00945     swapf score+1,W
+02F8   390F           00946     andlw 15
+02F9   2???           00947     call bcd_add
+02FA   1803           00948     skpnc
+02FB   0A??           00949     incf score
+                      00950     popw
+02FC   0012               M     moviw SP++
+02FD   0E89           00951     swapf WREG
+02FE   0400           00952     iorwf T,W
+02FF   00??           00953     movwf score+1
+                      00954     dropn 1
+0300   3101               M     addfsr T,1
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 37
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-02A6   300A           00851     movlw 10
-02A7   0200           00852     subwf T,W
-02A8   1C03           00853     skpc
-02A9   0008           00854     return
-02AA   3006           00855     movlw 6
-02AB   0780           00856     addwf T
-02AC   300F           00857     movlw 15
-02AD   0580           00858     andwf T
-02AE   1403           00859     bsf STATUS,C
-02AF   0008           00860     return
-                      00861     
-                      00862 ; increment user score
-                      00863 ; This is a BCD addition where a single digit is added to score.   
-                      00864 ; score is stored as big indian
-                      00865 ; argument: ( n -- )
-                      00866 ;   WREG ->  bdc digit to add to score variable
-02B0                  00867 inc_score
-                      00868     pushw
-02B0   0019               M     movwi --SP
-02B1   1003           00869     clrc
-02B2   300F           00870     movlw 15
-02B3   05??           00871     andwf score+1,W
-02B4   2???           00872     call bcd_add
-02B5   0103           00873     clrw 
-                      00874     pushw
-02B6   0019               M     movwi --SP
-02B7   0E??           00875     swapf score+1,W
-02B8   390F           00876     andlw 15
-02B9   2???           00877     call bcd_add
-02BA   1803           00878     skpnc
-02BB   0A??           00879     incf score
-                      00880     popw
-02BC   0012               M     moviw SP++
-02BD   0E89           00881     swapf WREG
-02BE   0400           00882     iorwf T,W
-02BF   00??           00883     movwf score+1
-                      00884     dropn 1
-02C0   3101               M     addfsr T,1
-02C1   0008           00885     return
-                      00886     
-                      00887 ;***********************************
-                      00888 ; digit_offset, compute digit position in 'digits' table
-                      00889 ;   position = digit * 5
-                      00890 ; 
-                      00891 ; input: WREG -> digit value {0..9}
-                      00892 ;         
-                      00893 ; output: WREG -> displacement in table
-                      00894 ;***********************************
-02C2                  00895 digit_offset    
-                      00896     pushw 
-02C2   0019               M     movwi --SP
-02C3   3589           00897     lslf WREG
-02C4   3589           00898     lslf WREG
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 34
+0301   0008           00955     return
+                      00956     
+                      00957 ;***********************************
+                      00958 ; digit_offset, compute digit position in 'digits' table
+                      00959 ;   position = digit * 5
+                      00960 ; 
+                      00961 ; input: WREG -> digit value {0..9}
+                      00962 ;         
+                      00963 ; output: WREG -> displacement in table
+                      00964 ;***********************************
+0302                  00965 digit_offset    
+                      00966     pushw 
+0302   0019               M     movwi --SP
+0303   3589           00967     lslf WREG
+0304   3589           00968     lslf WREG
+0305   0780           00969     addwf T
+                      00970     popw
+0306   0012               M     moviw SP++
+0307   0008           00971     return
+                      00972     
+0308                  00973 init_brick_wall
+0308   30??           00974     movlw high brick_wall
+0309   0087           00975     movwf FSR1H
+030A   30??           00976     movlw low brick_wall
+030B   0086           00977     movwf FSR1L
+030C   3005           00978     movlw 5
+030D   00??           00979     movwf temp
+030E   30FF           00980     movlw 0xff
+030F                  00981 ibw    
+030F   001E           00982     movwi FSR1++
+0310   0B??           00983     decfsz temp
+0311   3???           00984     bra ibw
+0312   0008           00985     return
+                      00986 
+                      00987 ; delay by TIMER0
+                      00988 ; parameter
+                      00989 ;   WREG -> 2*Tcy+7cy    
+0313                  00990 t0delay 
+0313   0989           00991     comf WREG
+0314   0095           00992     movwf TMR0
+0315   110B           00993     bcf INTCON,T0IF
+0316   1D0B           00994     btfss INTCON,T0IF
+0317   3???           00995     bra $-1
+0318   0008           00996     return
+                      00997     
+                      00998 MAIN_PROG CODE                      ; let linker place main program
+                      00999 
+0000                  01000 START
+                      01001 ; clear common RAM
+0000   0185           01002     clrf FSR0H
+0001   3070           01003     movlw 0x70
+0002   0084           01004     movwf FSR0L
+0003   0103           01005     clrw
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 38
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-02C5   0780           00899     addwf T
-                      00900     popw
-02C6   0012               M     moviw SP++
-02C7   0008           00901     return
-                      00902     
-02C8                  00903 init_brick_wall
-02C8   30??           00904     movlw high brick_wall
-02C9   0087           00905     movwf FSR1H
-02CA   30??           00906     movlw low brick_wall
-02CB   0086           00907     movwf FSR1L
-02CC   3005           00908     movlw 5
-02CD   00??           00909     movwf temp
-02CE   30FF           00910     movlw 0xff
-02CF                  00911 ibw    
-02CF   001E           00912     movwi FSR1++
-02D0   0B??           00913     decfsz temp
-02D1   3???           00914     bra ibw
-02D2   0008           00915     return
-                      00916 
-                      00917 ; delay by TIMER0
-                      00918 ; parameter
-                      00919 ;   WREG -> 2*Tcy+7cy    
-02D3                  00920 t0delay 
-02D3   0989           00921     comf WREG
-02D4   0095           00922     movwf TMR0
-02D5   110B           00923     bcf INTCON,T0IF
-02D6   1D0B           00924     btfss INTCON,T0IF
-02D7   3???           00925     bra $-1
-02D8   0008           00926     return
-                      00927     
-                      00928 MAIN_PROG CODE                      ; let linker place main program
-                      00929 
-0000                  00930 START
-                      00931 ; clear common RAM
-0000   0185           00932     clrf FSR0H
-0001   3070           00933     movlw 0x70
-0002   0084           00934     movwf FSR0L
-0003   0103           00935     clrw
-0004   001A           00936     movwi FSR0++
-0005   1F84           00937     btfss FSR0L,7
-0006   3???           00938     bra $-2
-                      00939 ; clear banked RAM
-0007   0184           00940     clrf FSR0L
-0008   3020           00941     movlw 0x20
-0009   0085           00942     movwf FSR0H
-000A   0103           00943     clrw 
-000B   001A           00944     movwi FSR0++
-000C   1C05           00945     btfss FSR0H,0
-000D   3???           00946     bra $-2
-000E   2???           00947     call init_brick_wall
-                      00948 ;   setup arguments stack pointer
-000F   30??           00949     movlw high (stack+STACK_SIZE)
-0010   0085           00950     movwf FSR0H
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 35
+0004   001A           01006     movwi FSR0++
+0005   1F84           01007     btfss FSR0L,7
+0006   3???           01008     bra $-2
+                      01009 ; clear banked RAM
+0007   0184           01010     clrf FSR0L
+0008   3020           01011     movlw 0x20
+0009   0085           01012     movwf FSR0H
+000A   0103           01013     clrw 
+000B   001A           01014     movwi FSR0++
+000C   1C05           01015     btfss FSR0H,0
+000D   3???           01016     bra $-2
+000E   2???           01017     call init_brick_wall
+                      01018 ;   setup arguments stack pointer
+000F   30??           01019     movlw high (stack+STACK_SIZE)
+0010   0085           01020     movwf FSR0H
+0011   30??           01021     movlw low (stack+STACK_SIZE)
+0012   0084           01022     movwf FSR0L
+                      01023 ; setup OPTION register to enable weak pullup and prescale used by TIMER
+                      01024 ; TIMER0 prescale 1:2
+0013   3050           01025     movlw ~((1<<NOT_WPUEN)|(1<<TMR0CS)|(1<<PSA)|(7<<PS0_OPTION_REG))
+0014   0095           01026     movwf OPTION_REG
+                      01027 ; disable analog inputs, except AN0
+0015   0023           01028     banksel ANSELA
+0016   018C           01029     clrf ANSELA
+                      01030 ; paddle potentiometer input     
+0017   140C           01031     bsf ANSELA,PADDLE
+0018   0021           01032     banksel ADCON1
+0019   3020           01033     movlw (2<<ADCS0)
+001A   009E           01034     movwf ADCON1
+                      01035 ; pin setup
+001B   0024           01036     banksel WPUA
+001C   018C           01037     clrf WPUA
+001D   158C           01038     bsf WPUA,START_BTN
+001E   0021           01039     banksel TRISA
+001F   110C           01040     bcf TRISA,SYNC_OUT
+0020   0022           01041     banksel LATA
+0021   160C           01042     bsf LATA, VIDEO_OUT
+                      01043 ; PWM1 chroma signal on RA1
+0022   003B           01044     banksel PWM1CON
+0023   019F           01045     clrf PWM1LDCON
+0024   0191           01046     clrf PWM1PHL
+0025   0192           01047     clrf PWM1PHH
+0026   0197           01048     clrf PWM1OFL
+0027   0198           01049     clrf PWM1OFH
+0028   0196           01050     clrf PWM1PRH
+0029   3007           01051     movlw 7
+002A   0095           01052     movwf PWM1PRL
+002B   3004           01053     movlw 4
+002C   0093           01054     movwf PWM1DCL
+002D   0194           01055     clrf PWM1DCH
+002E   179F           01056     bsf PWM1LDCON,7
+002F   30C0           01057     movlw (1<<EN)|(1<<OE)
+0030   009B           01058     movwf PWM1CON
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 39
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-0011   30??           00951     movlw low (stack+STACK_SIZE)
-0012   0084           00952     movwf FSR0L
-                      00953 ; setup OPTION register to enable weak pullup and prescale used by TIMER
-                      00954 ; TIMER0 prescale 1:2
-0013   3050           00955     movlw ~((1<<NOT_WPUEN)|(1<<TMR0CS)|(1<<PSA)|(7<<PS0_OPTION_REG))
-0014   0095           00956     movwf OPTION_REG
-                      00957 ; disable analog inputs, except AN0
-0015   0023           00958     banksel ANSELA
-0016   018C           00959     clrf ANSELA
-                      00960 ; paddle potentiometer input     
-0017   140C           00961     bsf ANSELA,PADDLE
-0018   0021           00962     banksel ADCON1
-0019   3020           00963     movlw (2<<ADCS0)
-001A   009E           00964     movwf ADCON1
-                      00965 ; pin setup
-001B   0024           00966     banksel WPUA
-001C   018C           00967     clrf WPUA
-001D   158C           00968     bsf WPUA,START_BTN
-001E   0021           00969     banksel TRISA
-001F   110C           00970     bcf TRISA,SYNC_OUT
-0020   0022           00971     banksel LATA
-0021   160C           00972     bsf LATA, VIDEO_OUT
-                      00973 ; PWM1 chroma signal on RA1
-0022   003B           00974     banksel PWM1CON
-0023   019F           00975     clrf PWM1LDCON
-0024   0191           00976     clrf PWM1PHL
-0025   0192           00977     clrf PWM1PHH
-0026   0197           00978     clrf PWM1OFL
-0027   0198           00979     clrf PWM1OFH
-0028   0196           00980     clrf PWM1PRH
-0029   3007           00981     movlw 7
-002A   0095           00982     movwf PWM1PRL
-002B   3004           00983     movlw 4
-002C   0093           00984     movwf PWM1DCL
-002D   0194           00985     clrf PWM1DCH
-002E   179F           00986     bsf PWM1LDCON,7
-002F   30C0           00987     movlw (1<<EN)|(1<<OE)
-0030   009B           00988     movwf PWM1CON
-                      00989 ; PWM3 set to horizontal period 15734 hertz, output on RA2
-0031   003B           00990     banksel PWM3CON
-0032   01BF           00991     clrf PWM3LDCON
-0033   01B1           00992     clrf PWM3PHL
-0034   01B2           00993     clrf PWM3PHH
-0035   01B7           00994     clrf PWM3OFL
-0036   01B8           00995     clrf PWM3OFH
-0037   301B           00996     movlw low HPERIOD
-0038   00B5           00997     movwf PWM3PRL
-0039   3007           00998     movlw high HPERIOD
-003A   00B6           00999     movwf PWM3PRH
-003B   3086           01000     movlw HSYNC
-003C   00B3           01001     movwf PWM3DCL
-003D   01B4           01002     clrf PWM3DCH
-003E   30D0           01003     movlw (1<<EN)|(1<<OE)|(1<<POL)
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 36
+                      01059 ; PWM3 set to horizontal period 15734 hertz, output on RA2
+0031   003B           01060     banksel PWM3CON
+0032   01BF           01061     clrf PWM3LDCON
+0033   01B1           01062     clrf PWM3PHL
+0034   01B2           01063     clrf PWM3PHH
+0035   01B7           01064     clrf PWM3OFL
+0036   01B8           01065     clrf PWM3OFH
+0037   301B           01066     movlw low HPERIOD
+0038   00B5           01067     movwf PWM3PRL
+0039   3007           01068     movlw high HPERIOD
+003A   00B6           01069     movwf PWM3PRH
+003B   3086           01070     movlw HSYNC
+003C   00B3           01071     movwf PWM3DCL
+003D   01B4           01072     clrf PWM3DCH
+003E   30D0           01073     movlw (1<<EN)|(1<<OE)|(1<<POL)
+003F   00BB           01074     movwf PWM3CON
+0040   17BF           01075     bsf PWM3LDCON,7
+0041   143C           01076     bsf PWM3INTE,PRIE
+0042   0020           01077     banksel PIR3
+0043   1313           01078     bcf PIR3,PWM3IF
+0044   0021           01079     banksel PIE3
+0045   1713           01080     bsf PIE3,PWM3IE
+0046   170B           01081     bsf INTCON,PEIE
+0047   178B           01082     bsf INTCON,GIE
+0048   1480           01083     bsf flags, F_EVEN
+0049   1680           01084     bsf flags, F_SYNC
+                      01085 ; test code
+004A   002?           01086     banksel balls
+004B   3003           01087     movlw 3
+004C   00??           01088     movwf balls
+004D   3064           01089     movlw BALL_RIGHT_BOUND
+004E   00??           01090     movwf ball_x
+                      01091 ;    clrf ball_x
+004F   03??           01092     decf ball_x
+0050   30BE           01093     movlw BALL_BOTTOM_BOUND-40
+0051   00??           01094     movwf ball_y
+0052   0A??           01095     incf ball_dx
+0053   3004           01096     movlw 4
+0054   00??           01097     movwf ball_dy
+0055   3002           01098     movlw 2
+0056   00??           01099     movwf ball_speed
+0057                  01100 test_loop
+0057   303C           01101     movlw 60
+0058   002?           01102     banksel sound_timer
+0059   00??           01103     movwf sound_timer
+005A   1600           01104     bsf flags, F_SOUND
+005B   1A00           01105     btfsc flags, F_SOUND
+005C   3???           01106     bra $-1
+005D   3001           01107     movlw 1
+005E   2???           01108     call inc_score
+005F   1C80           01109     btfss score,1
+0060   3???           01110     bra test_loop
+0061   01??           01111     clrf score
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 40
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-003F   00BB           01004     movwf PWM3CON
-0040   17BF           01005     bsf PWM3LDCON,7
-0041   143C           01006     bsf PWM3INTE,PRIE
-0042   0020           01007     banksel PIR3
-0043   1313           01008     bcf PIR3,PWM3IF
-0044   0021           01009     banksel PIE3
-0045   1713           01010     bsf PIE3,PWM3IE
-0046   170B           01011     bsf INTCON,PEIE
-0047   178B           01012     bsf INTCON,GIE
-0048   1480           01013     bsf flags, F_EVEN
-0049   1680           01014     bsf flags, F_SYNC
-                      01015 ; test code
-004A   002?           01016     banksel balls
-004B   3003           01017     movlw 3
-004C   00??           01018     movwf balls
-004D   3061           01019     movlw BALL_RIGHT_BOUND-3
-004E   00??           01020     movwf ball_x
-                      01021 ;    clrf ball_x
-004F   30C8           01022     movlw BALL_BOTTOM_BOUND-40
-0050   00??           01023     movwf ball_y
-0051                  01024 test_loop
-0051   303C           01025     movlw 60
-0052   002?           01026     banksel sound_timer
-0053   00??           01027     movwf sound_timer
-0054   1600           01028     bsf flags, F_SOUND
-0055   1A00           01029     btfsc flags, F_SOUND
-0056   3???           01030     bra $-1
-0057   3001           01031     movlw 1
-0058   2???           01032     call inc_score
-0059   3???           01033     bra test_loop
-                      01034 ; end test code    
-                      01035  ; all processing done in ISR    
-005A   2???           01036     goto $
-                      01037 
-                      01038 ; digits character table
-005B                  01039 digits
-005B   000B           01040     brw
-005C   3440 34A0 34A0 01041     dt  0x40,0xA0,0xA0,0xA0,0x40 ; 0
+0062   01??           01112     clrf score+1
+0063   3???           01113     bra test_loop
+                      01114 ; end test code    
+                      01115  ; all processing done in ISR    
+0064   2???           01116     goto $
+                      01117 
+                      01118 ; digits character table
+0065                  01119 digits
+0065   000B           01120     brw
+0066   3440 34A0 34A0 01121     dt  0x40,0xA0,0xA0,0xA0,0x40 ; 0
        34A0 3440 
-0061   3440 34C0 3440 01042     dt  0x40,0xC0,0x40,0x40,0xE0 ; 1
+006B   3440 34C0 3440 01122     dt  0x40,0xC0,0x40,0x40,0xE0 ; 1
        3440 34E0 
-0066   34E0 3420 34C0 01043     dt  0xE0,0x20,0xC0,0x80,0xE0 ; 2
+0070   34E0 3420 34C0 01123     dt  0xE0,0x20,0xC0,0x80,0xE0 ; 2
        3480 34E0 
-006B   34E0 3420 34C0 01044     dt  0xE0,0x20,0xC0,0x20,0xE0 ; 3
+0075   34E0 3420 34C0 01124     dt  0xE0,0x20,0xC0,0x20,0xE0 ; 3
        3420 34E0 
-0070   34A0 34A0 34E0 01045     dt  0xA0,0xA0,0xE0,0x20,0x20 ; 4
+007A   34A0 34A0 34E0 01125     dt  0xA0,0xA0,0xE0,0x20,0x20 ; 4
        3420 3420 
-0075   34E0 3480 34E0 01046     dt  0xE0,0x80,0xE0,0x20,0xE0 ; 5
+007F   34E0 3480 34E0 01126     dt  0xE0,0x80,0xE0,0x20,0xE0 ; 5
        3420 34E0 
-007A   34C0 3480 34E0 01047     dt  0xC0,0x80,0xE0,0xA0,0xE0 ; 6
+0084   34C0 3480 34E0 01127     dt  0xC0,0x80,0xE0,0xA0,0xE0 ; 6
        34A0 34E0 
-007F   34E0 3420 3420 01048     dt  0xE0,0x20,0x20,0x20,0x20 ; 7
+0089   34E0 3420 3420 01128     dt  0xE0,0x20,0x20,0x20,0x20 ; 7
        3420 3420 
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 37
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-0084   34E0 34A0 34E0 01049     dt  0xE0,0xA0,0xE0,0xA0,0xE0 ; 8
+008E   34E0 34A0 34E0 01129     dt  0xE0,0xA0,0xE0,0xA0,0xE0 ; 8
        34A0 34E0 
-0089   34E0 34A0 34E0 01050     dt  0xE0,0xA0,0xE0,0x20,0x60 ; 9
+0093   34E0 34A0 34E0 01130     dt  0xE0,0xA0,0xE0,0x20,0x60 ; 9
        3420 3460 
-                      01051     
-                      01052     
-                      01053 eeprom org (PROG_SIZE-EEPROM_SIZE)
-0780                  01054 max_score 
-                      01055  
-3FA7 3EFF             01056     END
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 38
+                      01131     
+                      01132     
+                      01133 eeprom org (PROG_SIZE-EEPROM_SIZE)
+0780                  01134 max_score 
+                      01135  
+3FA7 3EFF             01136     END
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 41
 
 
 SYMBOL TABLE
@@ -2173,7 +2375,7 @@ ANSELA                            0000018C
 APFCON                            0000011D
 APFCON0                           0000011D
 AUDIO                             00000000
-BALL_BOTTOM_BOUND                 000000F0
+BALL_BOTTOM_BOUND                 000000E6
 BALL_LEFT_BOUND                   00000000
 BALL_RIGHT_BOUND                  00000064
 BALL_TOP_BOUND                    00000036
@@ -2197,7 +2399,7 @@ C                                 00000000
 C1HYS                             00000001
 C1IE                              00000005
 C1IF                              00000005
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 39
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 42
 
 
 SYMBOL TABLE
@@ -2256,7 +2458,7 @@ CWGBSEL                           00000005
 C_SHAD                            00000000
 DACCON0                           00000118
 DACCON1                           00000119
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 40
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 43
 
 
 SYMBOL TABLE
@@ -2315,7 +2517,7 @@ G1ASDSC1                          00000002
 G1ASDSFLT                         00000001
 G1ASE                             00000007
 G1CS0                             00000000
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 41
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 44
 
 
 SYMBOL TABLE
@@ -2374,7 +2576,7 @@ IOCAP3                            00000003
 IOCAP4                            00000004
 IOCAP5                            00000005
 IOCIE                             00000003
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 42
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 45
 
 
 SYMBOL TABLE
@@ -2433,7 +2635,7 @@ OFIE                              00000003
 OFIF                              00000003
 OFM0                              00000005
 OFM1                              00000006
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 43
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 46
 
 
 SYMBOL TABLE
@@ -2492,7 +2694,7 @@ PS1_PWM3CLKCON                    00000005
 PS2_OPTION_REG                    00000002
 PS2_PWM1CLKCON                    00000006
 PS2_PWM2CLKCON                    00000006
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 44
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 47
 
 
 SYMBOL TABLE
@@ -2551,7 +2753,7 @@ PWM1OFH2                          00000002
 PWM1OFH3                          00000003
 PWM1OFH4                          00000004
 PWM1OFH5                          00000005
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 45
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 48
 
 
 SYMBOL TABLE
@@ -2610,7 +2812,7 @@ PWM1PRH5                          00000005
 PWM1PRH6                          00000006
 PWM1PRH7                          00000007
 PWM1PRIE                          00000000
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 46
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 49
 
 
 SYMBOL TABLE
@@ -2669,7 +2871,7 @@ PWM2DCL0                          00000000
 PWM2DCL1                          00000001
 PWM2DCL2                          00000002
 PWM2DCL3                          00000003
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 47
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 50
 
 
 SYMBOL TABLE
@@ -2728,7 +2930,7 @@ PWM2OUT_A                         00000001
 PWM2PH                            00000DA1
 PWM2PHH                           00000DA2
 PWM2PHH0                          00000000
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 48
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 51
 
 
 SYMBOL TABLE
@@ -2787,7 +2989,7 @@ PWM2TMRH4                         00000004
 PWM2TMRH5                         00000005
 PWM2TMRH6                         00000006
 PWM2TMRH7                         00000007
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 49
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 52
 
 
 SYMBOL TABLE
@@ -2846,7 +3048,7 @@ PWM3MODE1                         00000003
 PWM3OE                            00000006
 PWM3OF                            00000DB7
 PWM3OFCON                         00000DC0
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 50
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 53
 
 
 SYMBOL TABLE
@@ -2905,7 +3107,7 @@ PWM3PR                            00000DB5
 PWM3PRH                           00000DB6
 PWM3PRH0                          00000000
 PWM3PRH1                          00000001
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 51
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 54
 
 
 SYMBOL TABLE
@@ -2964,7 +3166,7 @@ RCIE                              00000005
 RCIF                              00000005
 RCREG                             00000199
 RCSTA                             0000019D
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 52
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 55
 
 
 SYMBOL TABLE
@@ -3023,7 +3225,7 @@ T1GTM                             00000005
 T1GVAL                            00000002
 T2CKPS0                           00000000
 T2CKPS1                           00000001
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 53
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 56
 
 
 SYMBOL TABLE
@@ -3082,7 +3284,7 @@ TX9D                              00000000
 TXCKSEL                           00000002
 TXEN                              00000005
 TXIE                              00000004
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 54
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 57
 
 
 SYMBOL TABLE
@@ -3141,7 +3343,7 @@ _IDLOC2                           00008002
 _IDLOC3                           00008003
 _ISR_0008                         00000008
 _ISR_000D                         0000000D
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 55
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 58
 
 
 SYMBOL TABLE
@@ -3149,72 +3351,79 @@ SYMBOL TABLE
 
 _ISR_0084                         00000084
 _ISR_008B                         0000008B
-_ISR_00C5                         000000C5
-_ISR_00C9                         000000C9
-_ISR_00CA                         000000CA
-_ISR_00CE                         000000CE
+_ISR_00E4                         000000E4
+_ISR_00E8                         000000E8
+_ISR_00E9                         000000E9
 _ISR_00ED                         000000ED
-_ISR_00EE                         000000EE
-_ISR_00F5                         000000F5
-_ISR_00FC                         000000FC
-_ISR_00FD                         000000FD
-_ISR_0119                         00000119
+_ISR_010C                         0000010C
+_ISR_010D                         0000010D
+_ISR_0114                         00000114
+_ISR_011B                         0000011B
 _ISR_011C                         0000011C
-_ISR_011D                         0000011D
-_ISR_0123                         00000123
-_ISR_012B                         0000012B
-_ISR_0132                         00000132
 _ISR_0138                         00000138
-_ISR_0141                         00000141
+_ISR_013B                         0000013B
+_ISR_013C                         0000013C
 _ISR_0142                         00000142
-_ISR_0149                         00000149
-_ISR_014D                         0000014D
-_ISR_014E                         0000014E
-_ISR_0156                         00000156
-_ISR_015B                         0000015B
-_ISR_0179                         00000179
-_ISR_017A                         0000017A
-_ISR_018B                         0000018B
-_ISR_0195                         00000195
-_ISR_01A7                         000001A7
-_ISR_01A8                         000001A8
+_ISR_014A                         0000014A
+_ISR_0151                         00000151
+_ISR_015E                         0000015E
+_ISR_0163                         00000163
+_ISR_0167                         00000167
+_ISR_016B                         0000016B
+_ISR_016C                         0000016C
+_ISR_0171                         00000171
+_ISR_0175                         00000175
+_ISR_017B                         0000017B
+_ISR_017F                         0000017F
+_ISR_0183                         00000183
+_ISR_0188                         00000188
+_ISR_018E                         0000018E
+_ISR_0192                         00000192
+_ISR_0197                         00000197
+_ISR_019C                         0000019C
 _ISR_01B9                         000001B9
-_ISR_01C3                         000001C3
+_ISR_01BA                         000001BA
+_ISR_01CB                         000001CB
 _ISR_01D5                         000001D5
-_ISR_01D6                         000001D6
 _ISR_01E7                         000001E7
-_ISR_01F1                         000001F1
+_ISR_01E8                         000001E8
+_ISR_01F9                         000001F9
 _ISR_0203                         00000203
-_ISR_0204                         00000204
 _ISR_0215                         00000215
-_ISR_021F                         0000021F
-_ISR_022F                         0000022F
-_ISR_0240                         00000240
-_ISR_024A                         0000024A
-_ISR_025A                         0000025A
-_ISR_025D                         0000025D
-_ISR_025E                         0000025E
-_ISR_026E                         0000026E
+_ISR_0216                         00000216
+_ISR_0227                         00000227
+_ISR_0231                         00000231
+_ISR_0243                         00000243
+_ISR_0244                         00000244
+_ISR_0255                         00000255
+_ISR_025F                         0000025F
 _ISR_026F                         0000026F
-_ISR_0272                         00000272
-_ISR_0274                         00000274
-_ISR_0279                         00000279
-_ISR_027A                         0000027A
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 56
+_ISR_0280                         00000280
+_ISR_028A                         0000028A
+_ISR_029A                         0000029A
+_ISR_029D                         0000029D
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 59
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
-_ISR_02D7                         000002D7
+_ISR_029E                         0000029E
+_ISR_02AE                         000002AE
+_ISR_02AF                         000002AF
+_ISR_02B2                         000002B2
+_ISR_02B4                         000002B4
+_ISR_02B9                         000002B9
+_ISR_02BA                         000002BA
+_ISR_0317                         00000317
 _LPBOREN_OFF                      00003FFF
 _LPBOREN_ON                       000037FF
 _LVP_OFF                          00001FFF
 _LVP_ON                           00003FFF
 _MAIN_PROG_0006                   00000006
 _MAIN_PROG_000D                   0000000D
-_MAIN_PROG_0056                   00000056
-_MAIN_PROG_005A                   0000005A
+_MAIN_PROG_005C                   0000005C
+_MAIN_PROG_0064                   00000064
 _MCLRE_OFF                        00003FBF
 _MCLRE_ON                         00003FFF
 _PLLEN_OFF                        00003EFF
@@ -3232,17 +3441,19 @@ _WRT_BOOT                         00003FFE
 _WRT_HALF                         00003FFD
 _WRT_OFF                          00003FFF
 __12F1572                         00000001
-after_ball                        00000150
-ball_delayed                      00000146
+ball_at_left                      00000179
+ball_at_right                     0000018C
 ball_dx                           00000009
 ball_dy                           0000000A
+ball_in_middle                    0000015C
 ball_speed                        0000000B
 ball_timer                        0000000E
 ball_x                            00000007
 ball_y                            00000008
 balls                             000000A3
-bcd_add                           000002A5
+bcd_add                           000002E5
 black                             
+bottom_bound                      000000B6
 brick_wall                        00000030
 case                              
 chroma_invert                     
@@ -3250,54 +3461,56 @@ chroma_off
 chroma_on                         
 chroma_ref                        
 cyan                              
-d1                                000000A0
-d2                                000000A1
-d3                                000000A2
-dark_blue                         
-digit_offset                      000002C2
-digit_row                         000000DE
-digits                            0000005B
-draw_border                       
-draw_border_no_dly                00000158
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 57
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 60
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
+d1                                000000A0
+d2                                000000A1
+d3                                000000A2
+dark_blue                         
+digit_offset                      00000302
+digit_row                         000000FD
+digit_version                     00000002
+digits                            00000065
+draw_border                       
 draw_brick                        
-draw_empty                        00000258
-draw_paddle                       0000026C
-draw_row1                         00000172
-draw_row2                         000001A0
-draw_row3                         000001CE
-draw_row4                         000001FC
-draw_row5                         0000022A
-draw_score                        000000A8
-draw_top_wall                     000000F1
-draw_void                         0000010B
-draw_void_exit                    0000015E
+draw_empty                        00000298
+draw_paddle                       000002AC
+draw_row1                         000001B2
+draw_row2                         000001E0
+draw_row3                         0000020E
+draw_row4                         0000023C
+draw_row5                         0000026A
+draw_score                        000000C7
+draw_top_wall                     00000110
+draw_void                         0000012A
+draw_void_exit                    0000019E
 draw_wall                         
 dropn                             
 eeprom                            00000780
-even_field                        00000293
-field_end                         0000029D
+even_field                        000002D3
+field_end                         000002DD
 flags                             00000000
 green                             
-hi_line                           0000028C
-ibw                               000002CF
-inc_score                         000002B0
-init_brick_wall                   000002C8
+hi_line                           000002CC
+ibw                               0000030F
+inc_score                         000002F0
+init_brick_wall                   00000308
 isr                               00000004
 isr_exit                          00000029
 lcount                            00000001
 leave                             
 max_score                         00000780
 move_ball                         0000009D
+move_ball_exit                    000000BC
+move_y                            000000AD
 next_task                         
-no_ball                           0000011A
-no_ball_dly                       00000117
-no_wall_draw                      00000168
+no_ball                           00000139
+no_ball_dly                       00000136
+no_wall_draw                      000001A8
 paddle_pos                        00000006
 pickn                             
 pokew                             
@@ -3307,24 +3520,25 @@ porch_on
 post_last                         00000064
 post_vsync                        0000005B
 pre_vsync                         0000002E
-pushw                             
-q                                 0000000A
-r                                 00000002
-read_paddle                       0000007E
-row1                              00000030
-row2                              00000031
-row3                              00000032
-row3_exit                         000001F2
-row4                              00000033
-row5                              00000034
-score                             0000000C
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  12:11:20         PAGE 58
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-6-2019  17:17:59         PAGE 61
 
 
 SYMBOL TABLE
   LABEL                             VALUE 
 
-score_exit                        000000D4
+pushw                             
+q                                 0000000A
+r                                 00000002
+read_paddle                       0000007E
+right_bound                       000000A7
+row1                              00000030
+row2                              00000031
+row3                              00000032
+row3_exit                         00000232
+row4                              00000033
+row5                              00000034
+score                             0000000C
+score_exit                        000000F3
 set_presync                       0000003B
 set_vsync                         00000053
 slice                             00000002
@@ -3333,24 +3547,24 @@ sound_timer                       000000A4
 stack                             00000020
 swap_var                          
 swapw                             
-t0delay                           000002D3
+t0delay                           00000313
 task                              00000003
 task_switch                       00000012
 tdelay                            
 temp                              00000004
-test_loop                         00000051
-top_wall_exit                     00000101
+test_loop                         00000057
+top_wall_exit                     00000120
 user_input                        00000076
-video_first                       000000A0
+video_first                       000000BF
 vsync                             00000046
 vsync_end                         00000068
-wait_field_end                    00000286
+wait_field_end                    000002C6
 white                             
 yellow                            
-yes_ball                          00000136
+yes_ball                          00000155
 
 Errors   :     0
 Warnings :     0 reported,     1 suppressed
-Messages :     0 reported,   249 suppressed
+Messages :     0 reported,   275 suppressed
 
 

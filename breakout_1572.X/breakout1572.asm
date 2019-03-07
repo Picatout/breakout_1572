@@ -449,7 +449,7 @@ PADDLE_LIMIT equ 93
 BALL_LEFT_BOUND equ 0
 BALL_RIGHT_BOUND equ 100
 BALL_TOP_BOUND equ 54
-BALL_BOTTOM_BOUND equ 240 ;(BALL_TOP_BOUND+7*BRICK_HEIGHT+118)
+BALL_BOTTOM_BOUND equ 230 ;(BALL_TOP_BOUND+7*BRICK_HEIGHT+118)
  
  
 user_input
@@ -501,7 +501,41 @@ sound
    
 ; task 6, move recking ball and check collision    
 move_ball
-    
+    decfsz ball_timer
+    bra move_ball_exit
+    movfw ball_speed
+    movwf ball_timer
+    movfw ball_dx
+    addwf ball_x
+    skpz
+    bra right_bound
+    comf ball_dx
+    bra move_y
+right_bound    
+    movfw ball_x
+    sublw BALL_RIGHT_BOUND
+    skpnc
+    bra move_y
+    decf ball_x
+    comf ball_dx
+move_y
+    movfw ball_dy
+    addwf ball_y
+    movlw BALL_TOP_BOUND
+    subwf ball_y,W
+    skpnc
+    bra bottom_bound
+    comf ball_dy
+    incf ball_dy
+    bra move_ball_exit
+bottom_bound
+    movfw ball_y
+    sublw BALL_BOTTOM_BOUND
+    skpnc
+    bra move_ball_exit
+    comf ball_dy
+    incf ball_dy
+move_ball_exit    
     incf task
     incf lcount
     leave
@@ -510,7 +544,7 @@ move_ball
 ; task 7, wait for lcount==26, First visible video line is 27
 video_first
     incf lcount
-    movlw 26
+    movlw 27
     subwf lcount,W
     skpz
     leave
@@ -572,8 +606,27 @@ draw_score
 score_exit
     next_task 5*4
 
+digit_version equ 2
 ; display digit row    
 digit_row
+ if digit_version==1
+    rlf WREG
+    skpnc
+    bcf TRISA,VIDEO_OUT
+    rlf WREG
+    bra $+1
+    bsf TRISA,VIDEO_OUT
+    skpnc
+    bcf TRISA,VIDEO_OUT
+    rlf WREG
+    bra $+1
+    bsf TRISA,VIDEO_OUT
+    skpnc
+    bcf TRISA,VIDEO_OUT
+    nop
+    bra $+1
+    bsf TRISA,VIDEO_OUT
+ else
     rlf WREG
     skpnc
     bcf TRISA,VIDEO_OUT
@@ -592,6 +645,7 @@ digit_row
     bra $+1
     bra $+1
     bsf TRISA,VIDEO_OUT
+ endif
     return
     
 ; task 9,  draw top wall, 8 screen lines    
@@ -629,39 +683,55 @@ no_ball
     draw_border BORDER_WIDTH
     bra draw_void_exit
 yes_ball
-    tdelay LEFT_MARGIN-11
     banksel TRISA
-    bcf TRISA, VIDEO_OUT
     movfw ball_x
-    skpz
-    bra ball_delayed
-    tdelay 8
-    bsf TRISA,VIDEO_OUT
-    nop
-    bra after_ball
-ball_delayed
-    bsf TRISA,VIDEO_OUT
-    movfw ball_x
-    decfsz WREG
-    bra $-1
-    bcf TRISA,VIDEO_OUT
-    tdelay 8
-    bsf TRISA, VIDEO_OUT
-after_ball
-;    movlw PADDLE_LIMIT
-;    subwf ball_x,W
-    movfw ball_x
-    sublw BALL_RIGHT_BOUND-3
     skpnz
+    bra ball_at_left
+    sublw BALL_RIGHT_BOUND
+    skpnz
+    bra ball_at_right
+ball_in_middle    
+    tdelay LEFT_MARGIN-17
     bcf TRISA,VIDEO_OUT
-    addlw 1
+    tdelay 3
+    movfw ball_x
+    bsf TRISA,VIDEO_OUT
     decfsz WREG
     bra $-1
-    nop
-draw_border_no_dly    
     bcf TRISA, VIDEO_OUT
+    tdelay 8
+    bsf TRISA,VIDEO_OUT
+    movfw ball_x
+    sublw BALL_RIGHT_BOUND
+    decfsz WREG
+    bra $-1
+;    nop
+;    nop
+    bcf TRISA,VIDEO_OUT
     tdelay 4
-    bsf TRISA, VIDEO_OUT
+    bsf TRISA,VIDEO_OUT
+    bra draw_void_exit
+ball_at_left
+    tdelay LEFT_MARGIN-15
+    bcf TRISA,VIDEO_OUT
+    tdelay 12
+    bsf TRISA,VIDEO_OUT
+    tdelay 300
+    nop
+    bcf TRISA,VIDEO_OUT
+    tdelay 4
+    bsf TRISA,VIDEO_OUT
+    bra draw_void_exit
+ball_at_right
+    tdelay LEFT_MARGIN-18
+    bcf TRISA,VIDEO_OUT
+    tdelay 4
+    bsf TRISA,VIDEO_OUT
+    tdelay 300
+    nop
+    bcf TRISA,VIDEO_OUT
+    tdelay 12
+    bsf TRISA,VIDEO_OUT
 draw_void_exit    
     incf slice
     incf lcount
@@ -1016,11 +1086,17 @@ START
     banksel balls
     movlw 3
     movwf balls
-    movlw BALL_RIGHT_BOUND-3
+    movlw BALL_RIGHT_BOUND
     movwf ball_x
 ;    clrf ball_x
+    decf ball_x
     movlw BALL_BOTTOM_BOUND-40
     movwf ball_y
+    incf ball_dx
+    movlw 4
+    movwf ball_dy
+    movlw 2
+    movwf ball_speed
 test_loop
     movlw 60
     banksel sound_timer
@@ -1030,6 +1106,10 @@ test_loop
     bra $-1
     movlw 1
     call inc_score
+    btfss score,1
+    bra test_loop
+    clrf score
+    clrf score+1
     bra test_loop
 ; end test code    
  ; all processing done in ISR    
