@@ -1,5 +1,29 @@
-
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;	         BREAKOUT game
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;             IMPLEMENTATION NOTES
+;  PWM3 is used to generate NTSC synchronization signal.
+;  An interrupt is triggered at begin of each horizontal scan line.
+;  Inside this interrupt there is a round robin task scheduler.
+;  All video display and game logic is done inside these tasks.
+;  After MCU initialization the main() procedure is an empty loop.
+;  The PIC12F1572 is clocked by an external oscillator running at
+;  8 times NTSC chroma frequency  28.636Mhz.    
+;  The CPU Fcy is 2*NTSC chroma frequency 7.159Mhz. This give a Tcy
+;  short of 140 nanoseconds.
+;  NTSC horizontal frequency being 15734 Hertz code inside the ISR
+;  must execute in less than 454 Tcy.    
+;  The overhead before entering a task in at most 58Tcy.
+;  The 'next_task' macro and the 'isr_exit' code use 17Tcy at most.
+;  To play safe any task should execute in less than 379Tcy.
+;  VISIBLE video lines:
+;   For the visibles video lines tasks some delay is introduce
+;   before any display attempt to ensure the game left side is
+;   inside visible part of the scan line.
+;   Each visible line must be terminate by returning video_output to black
+;   otherwise the sync signal will be mangled.    
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    
     include p12f1572.inc
     
     __config _CONFIG1, _FOSC_ECH & _WDTE_OFF & _MCLRE_OFF
@@ -13,7 +37,7 @@ EEPROM_SIZE equ 128 ; high endurance flash words
  
 Fosc equ 28636000 ; external oscillator frequency
 Fcy  equ (Fosc/4) ; cpu frequency, machine cycle  T=1/Fcy
-
+Tcy equ 140 ; CPU cycle in nanoseconds (139.683nS)
  
 ; NTSC signal 
 Fhorz equ 15734 ; horizontal frequency
@@ -150,7 +174,7 @@ chroma_invert macro
     
 ;set video output to black    
 black macro
-    banksel TRISA
+;    banksel TRISA
     bsf TRISA,CHROMA
     bsf TRISA,VIDEO_OUT
 ;    goto $+1
@@ -158,7 +182,7 @@ black macro
     
 ; set video output to white    
 white macro    
-    banksel TRISA
+;    banksel TRISA
     bsf TRISA,CHROMA
     bcf TRISA,VIDEO_OUT
 ;    goto $+1
@@ -167,7 +191,7 @@ white macro
 ; set video output to yellow    
 yellow macro
 ;    chroma_ref
-    banksel TRISA
+;    banksel TRISA
     bcf TRISA,VIDEO_OUT
     bcf TRISA,CHROMA
     endm
@@ -175,7 +199,7 @@ yellow macro
 ; set video output to cyan   
 cyan macro
 ;    chroma_invert
-    banksel TRISA
+;    banksel TRISA
     bcf TRISA,VIDEO_OUT
     bcf TRISA,CHROMA
     endm
@@ -183,7 +207,7 @@ cyan macro
 ; set video output to green
 green macro
 ;    chroma_ref
-    banksel TRISA
+;    banksel TRISA
     bsf TRISA, VIDEO_OUT
     bcf TRISA,CHROMA
     endm
@@ -191,7 +215,7 @@ green macro
 ; set video output to dark blue    
 dark_blue macro
 ;    chroma_invert
-    banksel TRISA
+;    banksel TRISA
     bsf TRISA, VIDEO_OUT
     bcf TRISA,CHROMA
     endm
@@ -200,7 +224,7 @@ dark_blue macro
 ; draw a brick
 ; use 6T+BRICK_WIDTH
 ; if carry is 1 draw in color else draw black    
-BRICK_WIDTH equ 28   
+BRICK_WIDTH equ 29   
 draw_brick macro color
     local no_brick
     local brick_delay
@@ -217,7 +241,7 @@ brick_delay
     endm
 
 ; draw 8 bricks wall
-;  parameter in temp
+; parameter in temp
 draw_wall macro color
     local next_brick
     movlw 8
@@ -290,14 +314,13 @@ pokew macro n
     
     udata 0x20
 stack res 16 ; arguments stack
-brick_wall res 0  ; bricks data 1 byte per brick row.
+
+v_array   udata 0xA0
 row1 res 1; brick wall row1
 row2 res 1
 row3 res 1
 row4 res 1
 row5 res 1
-
-v_array   udata 0xA0
 d1 res 1 ; score msd digit pixels
 d2 res 1 ; score 2nd digit pixels
 d3 res 1 ; score lsd digit pixels
@@ -339,29 +362,30 @@ isr
     tdelay 16
     bsf TRISA,CHROMA
     porch_on
-task_switch    
+task_switch ; horizontal scan line used as round robin task scheduler   
     clrf PCLATH
     movfw task
     addwf PCL
-    goto pre_vsync ;task 0, vertical pre-equalization pulses, 6 slices
-    goto vsync ;task 1, vertical sync pulses, 6 slices
-    goto post_vsync ;task 2, vertical post-equalization pulses, 6 slices
-    goto vsync_end ;task 3, return to normal video line, 1 slice
-    goto user_input ;task 4,  read button and paddle, 1 slice
-    goto sound ;task 5, check sound timer expiration, 1 slice
-    goto move_ball ;task 6, move recking ball and check collision, etc, 1 slice
-    goto video_first ; task 7, wait up to lcount==19
-    goto draw_score ;task 8,  draw score en ball count, 6 slices
-    goto draw_top_wall ;task 9,  draw top wall, 4 slices
-    goto draw_void ;task 10 draw void space between top wall and top brick row, 8 slices
-    goto draw_row1 ;task 11, 4 slices
-    goto draw_row2 ;task 12, 4 slices
-    goto draw_row3 ;task 13,  4 slices
-    goto draw_row4 ;task 14,  4 slices
-    goto draw_row5 ;task 15, 4 slices
-    goto draw_empty;task 16, 188 slices
-    goto draw_paddle ;task 17, 4 slices
-    goto wait_field_end ;task 18, player used all the available recking balls, 12/13 slices
+    goto pre_vsync ;task 0, vertical pre-equalization pulses
+    goto vsync ;task 1, vertical sync pulses
+    goto post_vsync ;task 2, vertical post-equalization pulses
+    goto vsync_end ;task 3, return to normal video line
+    goto user_input ;task 4,  read button and paddle
+    goto sound ;task 5, check sound timer expiration
+    goto move_ball ;task 6, move recking ball.
+    goto collision ; task 7, check for collision with brick wall and paddle
+    goto video_first ; task 8, wait FIRST_VIDEO line.
+    goto draw_score ;task 9,  draw score en ball count
+    goto draw_top_wall ;task 10,  draw top wall
+    goto draw_void ;task 11, draw play space
+    goto draw_row1 ;task 12, draw top bricks row
+    goto draw_row2 ;task 13, draw second bricks row
+    goto draw_row3 ;task 14,  draw third bricks row
+    goto draw_row4 ;task 15,  draw fourth bricks row
+    goto draw_row5 ;task 16, draw fifth bricks row
+    goto draw_empty;task 17, draw empty space down to bottom
+    goto draw_paddle ;task 18, draw paddle
+    goto wait_field_end ;task 19, idle to end of video field
     reset ; error trap, task out of range
 isr_exit  
     porch_off
@@ -443,15 +467,24 @@ vsync_end
     movwf lcount
     leave
 
-;task 4, read button and paddle position
+; constants used in video display
+; values are in Tcy for x dimension.
+; values are in scan lines for y dimension.    
+FIRST_VIDEO_LINE equ 30 ; first video line displayed
+LAST_VIDEO_LINE	 equ 250 ; last video line displayed
+LEFT_MARGIN equ 24  ;  delay Tcy before any display
+COURT_WIDTH equ 304 
+BRICK_HEIGHT equ 8  
+BORDER_WIDTH equ 4
 PADDLE_WIDTH equ 32
 PADDLE_LIMIT equ 93
-BALL_LEFT_BOUND equ 0
-BALL_RIGHT_BOUND equ 100
-BALL_TOP_BOUND equ 54
+BALL_LEFT_BOUND equ 0 ; delay from left border
+BALL_RIGHT_BOUND equ 100 ; delay inside borders
+BALL_TOP_BOUND equ 58 
 BALL_BOTTOM_BOUND equ 230 ;(BALL_TOP_BOUND+7*BRICK_HEIGHT+118)
  
  
+;task 4, read button and paddle position
 user_input
     incf task
     incf lcount
@@ -499,7 +532,7 @@ sound
     leave
 
    
-; task 6, move recking ball and check collision    
+; task 6, move recking ball.   
 move_ball
     decfsz ball_timer
     bra move_ball_exit
@@ -540,11 +573,18 @@ move_ball_exit
     incf lcount
     leave
 
+collision
     
-; task 7, wait for lcount==26, First visible video line is 27
+    
+collision_exit
+    incf task
+    incf lcount
+    leave
+   
+; task 7, wait for first video line
 video_first
     incf lcount
-    movlw 27
+    movlw FIRST_VIDEO_LINE
     subwf lcount,W
     skpz
     leave
@@ -557,15 +597,9 @@ video_first
 ; Each video line must be completed by setting color to black.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
-; constants used in video display
-LEFT_MARGIN equ 24
-COURT_WIDTH equ 304
-BRICK_HEIGHT equ 8
-BORDER_WIDTH equ 4
-FIRST_VIDEO_LINE equ 26
  
 ; task 8, draw score en ball count
-draw_score
+draw_score ; lcount enter at 30 leave at 50
     banksel TRISA
     movfw slice
     lsrf WREG
@@ -649,9 +683,10 @@ digit_row
     return
     
 ; task 9,  draw top wall, 8 screen lines    
-draw_top_wall
+draw_top_wall ;lcount enter at 50 leave at 58
     btfss flags, F_EVEN
     bra top_wall_exit
+    banksel TRISA
     tdelay LEFT_MARGIN-2
     white
     tdelay COURT_WIDTH+3*BORDER_WIDTH+1
@@ -660,7 +695,7 @@ top_wall_exit
     next_task BRICK_HEIGHT
 
 ; task 10,  only on even field draw vertical side bands.    
-draw_void
+draw_void ;enter at 58 leave at 74| 255-58
     btfss flags, F_EVEN
     bra no_wall_draw
     movfw ball_y
@@ -735,12 +770,12 @@ ball_at_right
 draw_void_exit    
     incf slice
     incf lcount
-    movlw 8*BRICK_HEIGHT+118
-    subwf slice,W
+    movlw LAST_VIDEO_LINE+1
+    subwf lcount,W
     skpz
     leave
-    movlw 18
     clrf slice
+    movlw 19
     movwf task
     leave
     ;    next_task 125*BRICK_HEIGHT
@@ -748,12 +783,12 @@ no_wall_draw
     next_task 2*BRICK_HEIGHT
     
 ; task 11, draw top brick row
-draw_row1 ; yellow
+draw_row1 ; lcount enter at 74 leave at 82
     chroma_ref
-    banksel row1
+    banksel TRISA
     movfw row1
     movwf temp
-    tdelay LEFT_MARGIN-4
+    tdelay LEFT_MARGIN-3
 ;    draw_border BORDER_WIDTH
     draw_wall yellow
     black
@@ -762,12 +797,12 @@ draw_row1 ; yellow
     next_task BRICK_HEIGHT
     
 ; task 12, draw 2nd brick row    
-draw_row2 ;cyan
+draw_row2 ;lcount enter at 82 leave at 90
     chroma_invert
     banksel row2
     movfw row2
     movwf temp
-    tdelay LEFT_MARGIN-4
+    tdelay LEFT_MARGIN-3
 ;    draw_border BORDER_WIDTH
     draw_wall cyan
     black
@@ -776,14 +811,14 @@ draw_row2 ;cyan
     next_task BRICK_HEIGHT
 
 ; task 13, draw 3rd brick row    
-draw_row3 ; green
+draw_row3 ; lcount enter at 90 leave at 98
 ;    btfss flags, F_EVEN
 ;    bra row3_exit
     chroma_ref
     banksel row3
     movfw row3
     movwf temp
-    tdelay LEFT_MARGIN-4
+    tdelay LEFT_MARGIN-3
 ;    draw_border BORDER_WIDTH
     draw_wall green
     black
@@ -793,12 +828,12 @@ row3_exit
     next_task BRICK_HEIGHT
     
 ; task 14, draw 4th brick row    
-draw_row4 ; dark blue
+draw_row4 ; lcount enter at 98 leave at 106
     chroma_invert
     banksel row4
     movfw row4
     movwf temp
-    tdelay LEFT_MARGIN-4
+    tdelay LEFT_MARGIN-3
 ;    draw_border BORDER_WIDTH
     draw_wall dark_blue
     black
@@ -807,11 +842,11 @@ draw_row4 ; dark blue
     next_task BRICK_HEIGHT
 
 ; task 15, draw 5th brick row    
-draw_row5 ; white
+draw_row5 ; lcount enter at 106 leave at 114
     banksel row5
     movfw row5
     movwf temp
-    tdelay LEFT_MARGIN-3
+    tdelay LEFT_MARGIN-2
 ;    draw_border BORDER_WIDTH
     draw_wall white
     black
@@ -821,16 +856,16 @@ draw_row5 ; white
     next_task BRICK_HEIGHT
 
 ; task 16,draw all rows between paddle and lower brick row    
-draw_empty
+draw_empty ; lcount enter at 114 leave at LAST_VIDEO-112-BRICK_HEIGHT 
     tdelay LEFT_MARGIN
 ;    draw_border BORDER_WIDTH
     tdelay 320
 ;    draw_border BORDER_WIDTH
     black
-    next_task 118
+    next_task LAST_VIDEO_LINE-114-BRICK_HEIGHT
 
     
-; task 17, draw paddle at bottom screen    
+; task 18, draw paddle at bottom screen    
 draw_paddle
     tdelay LEFT_MARGIN+2
     movfw paddle_pos
@@ -864,9 +899,9 @@ draw_paddle
 ;    decfsz WREG
 ;    bra $-1
 ;    draw_border BORDER_WIDTH
-    next_task 8
+    next_task BRICK_HEIGHT
 
-; task 18,  wait end of this field, reset task to zero    
+; task 19,  wait end of this field, reset task to zero    
 wait_field_end
     incf lcount
     skpnz
@@ -971,9 +1006,9 @@ digit_offset
     return
     
 init_brick_wall
-    movlw high brick_wall
+    movlw high row1
     movwf FSR1H
-    movlw low brick_wall
+    movlw low row1
     movwf FSR1L
     movlw 5
     movwf temp
