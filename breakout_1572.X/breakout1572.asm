@@ -53,6 +53,7 @@ F_START equ 2   ; game started
 F_OVER equ 3    ; game over
 F_SOUND equ 4   ; sound enabled 
 F_SYNC equ 5    ; vertical synchronization phase
+F_PAUSE equ 6   ; game pause after a ball lost
  
 ;pins assignment
 AUDIO EQU RA0
@@ -224,16 +225,16 @@ dark_blue macro
 ; draw a brick
 ; use 6T+BRICK_WIDTH
 ; if carry is 1 draw in color else draw black    
-BRICK_WIDTH equ 29   
+BRICK_WIDTH equ 21   
 draw_brick macro color
     local no_brick
     local brick_delay
     skpc
     bra no_brick
     color
+    nop
     bra brick_delay
 no_brick
-    nop
     black
     bra brick_delay 
 brick_delay    
@@ -472,17 +473,22 @@ vsync_end
 ; values are in scan lines for y dimension.    
 FIRST_VIDEO_LINE equ 30 ; first video line displayed
 LAST_VIDEO_LINE	 equ 250 ; last video line displayed
-LEFT_MARGIN equ 24  ;  delay Tcy before any display
-COURT_WIDTH equ 304 
-BRICK_HEIGHT equ 8  
-BORDER_WIDTH equ 4
-PADDLE_WIDTH equ 32
-PADDLE_LIMIT equ 93
-BALL_LEFT_BOUND equ 0 ; delay from left border
-BALL_RIGHT_BOUND equ 100 ; delay inside borders
-BALL_TOP_BOUND equ 58 
-BALL_BOTTOM_BOUND equ 230 ;(BALL_TOP_BOUND+7*BRICK_HEIGHT+118)
- 
+LEFT_MARGIN equ 52  ;  delay Tcy before any display
+COURT_WIDTH equ 248 ; Tcy
+BRICK_HEIGHT equ 8  ; scan lines
+BORDER_WIDTH equ 4  ; Tcy
+PADDLE_WIDTH equ 32 ; Tcy
+PADDLE_LIMIT equ 74 ; Tcy
+BALL_LEFT_BOUND equ 0 ; Tcy
+BALL_RIGHT_BOUND equ 82 ; Tcy
+BALL_TOP_BOUND equ 58  ; scan lines
+BALL_BOTTOM_BOUND equ LAST_VIDEO_LINE-BRICK_HEIGHT ;
+PADDLE_Y equ LAST_VIDEO_LINE-BRICK_HEIGHT ; 
+ROW1_Y equ 74
+ROW2_Y equ 82
+ROW3_Y equ 90
+ROW4_Y equ 98
+ROW5_Y equ 106
  
 ;task 4, read button and paddle position
 user_input
@@ -574,13 +580,168 @@ move_ball_exit
     leave
 
 collision
+    banksel row1
+; pre-compute x column (brick bit mask)    
+; column = 7-(3*ball_x/32)
+    lslf ball_x,W
+    addwf ball_x,W
+    lsrf WREG
+    swapf WREG
+    andlw 15
+    sublw 7
+; create mask    
+    movwf temp
+    movlw 1
+    pushw
+    movfw temp
+    skpnz
+    bra $+4
+    lslf T
+    decfsz WREG
+    bra $-2
+; ball lost?
+;    movlw BALL_BOTTOM_BOUND
+;    subwf ball_y
+;    skpz
+;    bra row1_coll
+;    decfsz ball_count
+;    bra $+3
+;    bsf flags, F_OVER ; game over
+;    bcf flags, F_START
+;    
+;    bcf flags, F_PAUSE ; pause game
     
-    
+; row1 collision?    
+row1_coll    
+    movlw ROW1_Y-BRICK_HEIGHT+1
+    pushw
+    movlw ROW1_Y+BRICK_HEIGHT
+    pushw
+    movfw ball_y
+    call between
+    skpc
+    bra row2_coll
+; ball inside row1 bounds
+    movfw T
+    andwf row1, W
+    skpnz
+    bra collision_exit
+    comf T,W
+    andwf row1
+    movlw 9
+    call inc_score
+    bra bounce_y
+; row2 collision?    
+row2_coll
+    movlw ROW2_Y-BRICK_HEIGHT+1
+    pushw
+    movlw ROW2_Y+BRICK_HEIGHT
+    pushw
+    movfw ball_y
+    call between
+    skpc
+    bra row3_coll
+    movfw T
+    andwf row2, W
+    skpnz
+    bra collision_exit
+    comf T,W
+    addwf row2
+    movlw 6
+    call inc_score
+    bra bounce_y
+; row3 collision?    
+row3_coll
+    movlw ROW3_Y-BRICK_HEIGHT+1
+    pushw
+    movlw ROW3_Y+BRICK_HEIGHT
+    pushw
+    movfw ball_y
+    call between
+    skpc
+    bra row4_coll
+    movfw T
+    andwf row3,W
+    skpnz
+    bra collision_exit
+    comf T,W
+    andwf row3
+    movlw 3
+    call inc_score
+    bra bounce_y
+; row4 collision?    
+row4_coll
+    movlw ROW4_Y-BRICK_HEIGHT+1
+    pushw
+    movlw ROW4_Y+BRICK_HEIGHT
+    pushw
+    movfw ball_y
+    call between
+    skpc
+    bra row5_coll
+    movfw T
+    andwf row4,W
+    skpnz
+    bra collision_exit
+    comf T,W
+    andwf row4
+    movlw 2
+    call inc_score
+    bra bounce_y
+; row5 collision?    
+row5_coll    
+    movlw ROW5_Y-BRICK_HEIGHT+1
+    pushw
+    movlw ROW5_Y+BRICK_HEIGHT
+    pushw
+    movfw ball_y
+    call between
+    skpc
+    bra collision_exit
+    movfw T
+    andwf row5,W
+    skpnz
+    bra collision_exit
+    comf T,W
+    andwf row5
+    movlw 1
+    call inc_score
+bounce_y
+    comf ball_dy
+    incf ball_dy
 collision_exit
+    popw
     incf task
     incf lcount
     leave
-   
+
+; check if  lb <= x < hb
+; input:
+;    WREG  x
+;    stack ( lb hb -- )     
+; output:
+;   Carry bit set if true    
+between
+    movwf temp
+    pickn 1
+    subwf temp,W
+    skpc
+    bra between_exit
+    movfw T
+    subwf temp
+    movfw STATUS
+    xorlw 1
+    movwf STATUS
+between_exit    
+    dropn 2
+    return
+    
+; check if brick is there
+;  TOS contain ball column    
+brick_hit
+    
+    return
+    
 ; task 7, wait for first video line
 video_first
     incf lcount
@@ -751,7 +912,7 @@ ball_at_left
     bcf TRISA,VIDEO_OUT
     tdelay 12
     bsf TRISA,VIDEO_OUT
-    tdelay 300
+    tdelay COURT_WIDTH
     nop
     bcf TRISA,VIDEO_OUT
     tdelay 4
@@ -762,7 +923,7 @@ ball_at_right
     bcf TRISA,VIDEO_OUT
     tdelay 4
     bsf TRISA,VIDEO_OUT
-    tdelay 300
+    tdelay COURT_WIDTH
     nop
     bcf TRISA,VIDEO_OUT
     tdelay 12
@@ -952,7 +1113,7 @@ field_end
 ;   T -> sum
 ;   C -> overflow
 bcd_add
-    addwfc T
+    addwfc T    
     movlw 10
     subwf T,W
     skpc
@@ -967,7 +1128,7 @@ bcd_add
 ; increment user score
 ; This is a BCD addition where a single digit is added to score.   
 ; score is stored as big indian
-; argument: ( n -- )
+; argument: 
 ;   WREG ->  bdc digit to add to score variable
 inc_score
     pushw
@@ -1132,22 +1293,8 @@ START
     movwf ball_dy
     movlw 2
     movwf ball_speed
-test_loop
-    movlw 60
-    banksel sound_timer
-    movwf sound_timer
-    bsf flags, F_SOUND
-    btfsc flags, F_SOUND
-    bra $-1
-    movlw 1
-    call inc_score
-    btfss score,1
-    bra test_loop
-    clrf score
-    clrf score+1
-    bra test_loop
 ; end test code    
- ; all processing done in ISR    
+; all processing done in ISR    
     goto $
 
 ; digits character table
