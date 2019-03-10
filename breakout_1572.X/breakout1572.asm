@@ -27,7 +27,7 @@
     include p12f1572.inc
     
     __config _CONFIG1, _FOSC_ECH & _WDTE_OFF & _MCLRE_OFF
-    __config _CONFIG2, _PLLEN_OFF
+    __config _CONFIG2, _PLLEN_OFF & _LVP_OFF
     
     radix dec
 
@@ -49,11 +49,10 @@ HALF_LINE equ ((Fosc/Fhorz/2)-1)
 ; boolean flags 
 F_HI_LINE equ 0 ; lcount > 255
 F_EVEN equ 1    ; even field
-F_START equ 2   ; game started 
-F_OVER equ 3    ; game over
-F_SOUND equ 4   ; sound enabled 
-F_SYNC equ 5    ; vertical synchronization phase
-F_PAUSE equ 6   ; game pause after a ball lost
+F_SYNC equ 2    ; vertical synchronization phase
+F_SOUND equ 3   ; sound enabled 
+F_START equ 4   ; game started 
+F_PAUSE equ 5   ; game pause after a ball lost
  
 ;pins assignment
 AUDIO EQU RA0
@@ -315,7 +314,8 @@ pokew macro n
     
     udata 0x20
 stack res 16 ; arguments stack
-
+seed res 4 ; prng seed
+ 
 v_array   udata 0xA0
 row1 res 1; brick wall row1
 row2 res 1
@@ -342,6 +342,7 @@ ball_dy res 1
 ball_speed res 1
 score res 2 ; score stored in Binary Coded Decimal
 ball_timer res 1 
+ticks res 1
  
 ;; code 
 RES_VECT  CODE    0x0000            ; processor reset vector
@@ -364,17 +365,16 @@ isr
     bsf TRISA,CHROMA
     porch_on
 task_switch ; horizontal scan line used as round robin task scheduler   
-    clrf PCLATH
     movfw task
-    addwf PCL
+    brw
     goto pre_vsync ;task 0, vertical pre-equalization pulses
     goto vsync ;task 1, vertical sync pulses
     goto post_vsync ;task 2, vertical post-equalization pulses
     goto vsync_end ;task 3, return to normal video line
     goto user_input ;task 4,  read button and paddle
-    goto sound ;task 5, check sound timer expiration
-    goto move_ball ;task 6, move recking ball.
-    goto collision ; task 7, check for collision with brick wall and paddle
+    goto move_ball ;task 5, move recking ball.
+    goto collision ; task 6, check for collision with brick wall and paddle
+    goto sound ;task 7, check sound timer expiration
     goto video_first ; task 8, wait FIRST_VIDEO line.
     goto draw_score ;task 9,  draw score en ball count
     goto draw_top_wall ;task 10,  draw top wall
@@ -464,6 +464,7 @@ vsync_end
     movwf PWM3PRL
     bsf PWM3LDCON,7
     incf task
+    incf ticks
     movlw 9
     movwf lcount
     leave
@@ -478,12 +479,15 @@ COURT_WIDTH equ 248 ; Tcy
 BRICK_HEIGHT equ 8  ; scan lines
 BORDER_WIDTH equ 4  ; Tcy
 PADDLE_WIDTH equ 32 ; Tcy
+PADDLE_TICKNESS equ 8 ; scan lines
 PADDLE_LIMIT equ 74 ; Tcy
+BALL_WIDTH equ 8 ; Tcy
+BALL_HEIGHT equ 8 ; scan lines 
 BALL_LEFT_BOUND equ 0 ; Tcy
 BALL_RIGHT_BOUND equ 82 ; Tcy
 BALL_TOP_BOUND equ 58  ; scan lines
-BALL_BOTTOM_BOUND equ LAST_VIDEO_LINE-BRICK_HEIGHT ;
-PADDLE_Y equ LAST_VIDEO_LINE-BRICK_HEIGHT ; 
+BALL_BOTTOM_BOUND equ LAST_VIDEO_LINE;-BRICK_HEIGHT ;
+PADDLE_Y equ LAST_VIDEO_LINE-PADDLE_TICKNESS+1 ; 
 ROW1_Y equ 74
 ROW2_Y equ 82
 ROW3_Y equ 90
@@ -494,13 +498,40 @@ ROW5_Y equ 106
 user_input
     incf task
     incf lcount
-    btfsc flags, F_START
-    goto read_paddle
-; read start button
-    banksel LATA
-    btfss LATA,START_BTN
-    bsf flags, F_START
+    call read_paddle
+    btfsc flags,F_START
+    bra game_running
+; game not running
+    call read_button
+    skpz
+    bra skip_2_tasks
+; start game    
+    call game_init
     leave
+game_running
+    btfss flags, F_PAUSE
+    leave
+; game on pause    
+wait_trigger
+    call read_button
+    skpz
+    bra skip_2_tasks
+    bcf flags,F_PAUSE
+    call set_ball_dx
+    leave
+; while game not running skip 'move_ball' and 'collision' tasks    
+skip_2_tasks
+    incf task
+    incf task
+    call lfsr_rand
+    leave
+
+read_button
+    banksel PORTA
+    movfw PORTA
+    andlw 1<<START_BTN
+    return
+    
 read_paddle
     banksel TRISA
     bsf TRISA, PADDLE
@@ -520,25 +551,10 @@ read_paddle
     movwf paddle_pos
     banksel TRISA
     bcf TRISA, AUDIO
-    leave
-
-; task 5,  sound timer
-sound
-    incf task
-    incf lcount
-    btfss flags, F_SOUND
-    leave
-    banksel sound_timer
-    decfsz sound_timer
-    leave
-    bcf flags, F_SOUND
-    banksel PWM2CON
-    bcf PWM2CON,OE
-    bcf PWM2CON,EN
-    leave
-
+    return
+    
    
-; task 6, move recking ball.   
+; task 5, move recking ball.   
 move_ball
     decfsz ball_timer
     bra move_ball_exit
@@ -548,7 +564,9 @@ move_ball
     addwf ball_x
     skpz
     bra right_bound
+    incf ball_x
     comf ball_dx
+    incf ball_dx
     bra move_y
 right_bound    
     movfw ball_x
@@ -557,6 +575,7 @@ right_bound
     bra move_y
     decf ball_x
     comf ball_dx
+    incf ball_dx
 move_y
     movfw ball_dy
     addwf ball_y
@@ -579,6 +598,7 @@ move_ball_exit
     incf lcount
     leave
 
+; task 6, collision detection
 collision
     banksel row1
 ; pre-compute x column (brick bit mask)    
@@ -599,18 +619,48 @@ collision
     lslf T
     decfsz WREG
     bra $-2
-; ball lost?
-;    movlw BALL_BOTTOM_BOUND
-;    subwf ball_y
-;    skpz
-;    bra row1_coll
-;    decfsz ball_count
-;    bra $+3
-;    bsf flags, F_OVER ; game over
-;    bcf flags, F_START
-;    
-;    bcf flags, F_PAUSE ; pause game
-    
+; ball/paddle test
+    movlw PADDLE_Y-BALL_HEIGHT+1
+    pushw
+    movlw PADDLE_Y+PADDLE_TICKNESS
+    pushw
+    movfw ball_y
+    call between
+    skpnc
+    bra check_paddle_bounce
+    movfw ball_y
+    sublw PADDLE_Y
+    skpc
+    bra ball_lost
+    bra row1_coll
+ball_lost    
+    bsf flags, F_PAUSE ; pause game
+    decfsz balls
+    bra $+2
+    bcf flags, F_START
+    movlw 4
+    addwf paddle_pos,W
+    movwf ball_x
+    movlw PADDLE_Y-BRICK_HEIGHT
+    movwf ball_y
+    movlw -4
+    movwf ball_dy
+    bra collision_exit
+; if ball_x over paddle bounce ball
+check_paddle_bounce
+    movfw paddle_pos
+    pushw
+    movlw (PADDLE_WIDTH-BALL_WIDTH)/3
+    addwf paddle_pos,W
+    pushw
+    movfw ball_x
+    call between
+    skpc
+    bra collision_exit
+    movlw -4
+    movwf ball_dy
+    call set_ball_dx
+    bra collision_exit
 ; row1 collision?    
 row1_coll    
     movlw ROW1_Y-BRICK_HEIGHT+1
@@ -646,7 +696,7 @@ row2_coll
     skpnz
     bra collision_exit
     comf T,W
-    addwf row2
+    andwf row2
     movlw 6
     call inc_score
     bra bounce_y
@@ -736,13 +786,22 @@ between_exit
     dropn 2
     return
     
-; check if brick is there
-;  TOS contain ball column    
-brick_hit
+; task 7,  sound timer
+sound
+    incf task
+    incf lcount
+    btfss flags, F_SOUND
+    leave
+    banksel sound_timer
+    decfsz sound_timer
+    leave
+    bcf flags, F_SOUND
+    banksel PWM2CON
+    bcf PWM2CON,OE
+    bcf PWM2CON,EN
+    leave
     
-    return
-    
-; task 7, wait for first video line
+; task 8, wait for first video line
 video_first
     incf lcount
     movlw FIRST_VIDEO_LINE
@@ -887,22 +946,26 @@ yes_ball
     skpnz
     bra ball_at_right
 ball_in_middle    
-    tdelay LEFT_MARGIN-17
+    movlw 1
+    subwf ball_x,W
+    skpnz
+    addlw 1
+    movwf temp
+    tdelay LEFT_MARGIN-22
     bcf TRISA,VIDEO_OUT
     tdelay 3
-    movfw ball_x
+    movfw temp
     bsf TRISA,VIDEO_OUT
     decfsz WREG
     bra $-1
+;    nop
     bcf TRISA, VIDEO_OUT
-    tdelay 8
+    tdelay BALL_WIDTH
     bsf TRISA,VIDEO_OUT
     movfw ball_x
     sublw BALL_RIGHT_BOUND
     decfsz WREG
     bra $-1
-;    nop
-;    nop
     bcf TRISA,VIDEO_OUT
     tdelay 4
     bsf TRISA,VIDEO_OUT
@@ -912,7 +975,7 @@ ball_at_left
     bcf TRISA,VIDEO_OUT
     tdelay 12
     bsf TRISA,VIDEO_OUT
-    tdelay COURT_WIDTH
+    tdelay COURT_WIDTH-6
     nop
     bcf TRISA,VIDEO_OUT
     tdelay 4
@@ -939,7 +1002,6 @@ draw_void_exit
     movlw 19
     movwf task
     leave
-    ;    next_task 125*BRICK_HEIGHT
 no_wall_draw
     next_task 2*BRICK_HEIGHT
     
@@ -1038,29 +1100,7 @@ draw_paddle
     bcf TRISA,VIDEO_OUT
     tdelay PADDLE_WIDTH
     bsf TRISA,VIDEO_OUT
-;    draw_border BORDER_WIDTH
-;    movfw paddle_pos
-;    skpnz
-;    bcf TRISA,VIDEO_OUT
-;    skpnz
-;    bra at_left+2
-;    decfsz WREG
-;    bra $-1
-;at_left
-;    nop
-;    bcf TRISA,VIDEO_OUT
-;    tdelay PADDLE_WIDTH
-;    movfw paddle_pos
-;    sublw PADDLE_LIMIT
-;    nop
-;    skpnz
-;    bra $+5
-;    nop
-;    bsf TRISA,VIDEO_OUT
-;    decfsz WREG
-;    bra $-1
-;    draw_border BORDER_WIDTH
-    next_task BRICK_HEIGHT
+    next_task PADDLE_TICKNESS
 
 ; task 19,  wait end of this field, reset task to zero    
 wait_field_end
@@ -1180,6 +1220,79 @@ ibw
     bra ibw
     return
 
+;    LFSR 32 bits
+;    REF:  http://www.ece.cmu.edu/~koopman/lfsr/index.html
+;    must be initialized with 0xFFFFFFFF
+LFSR_MASK equ 0x7FFFF159
+lfsr_rand
+    rrf seed+3,W   ; rotation du LFSR 1 bit vers la droite
+    rrf seed, F
+    rrf seed+1,F
+    rrf seed+2,F
+    rrf seed+3,F
+    btfsc seed+3,7
+    goto lfsr_rand_exit
+    movlw LFSR_MASK & 0xFF
+    xorwf seed
+    movlw (LFSR_MASK>>8) & 0xFF
+    xorwf seed+1
+    movlw (LFSR_MASK>>16) & 0xFF
+    xorwf seed+2
+    movlw (LFSR_MASK>>24) & 0xFF
+    xorwf seed+3
+lfsr_rand_exit
+    movlw 0x1F
+    andwf seed,W  ; modulo 32
+    return
+    
+set_ball_dx
+    call lfsr_rand ;random
+    movlw 7
+    andwf seed,W
+    lslf WREG
+    brw
+    movlw 0
+    bra set_ball_dx_exit
+    movlw 1
+    bra set_ball_dx_exit
+    movlw -1
+    bra set_ball_dx_exit
+    movlw 0
+    bra set_ball_dx_exit
+    movlw 1
+    bra set_ball_dx_exit
+    movlw -1
+    bra set_ball_dx_exit
+    movlw -1
+    bra set_ball_dx_exit
+    movlw 1
+set_ball_dx_exit
+    movwf ball_dx
+    return
+    
+game_init
+    clrf score
+    clrf score+1
+    call init_brick_wall
+    banksel balls
+    movlw 3
+    movwf balls
+    clrf ball_timer
+    incf ball_timer
+    movlw 4
+    addwf paddle_pos,W
+    movwf ball_x
+    movlw PADDLE_Y-BRICK_HEIGHT
+    movwf ball_y
+    call set_ball_dx
+    movlw -4
+    movwf ball_dy
+    movlw 2
+    movwf ball_speed
+    bsf flags, F_START
+    bcf flags, F_PAUSE
+    return
+    
 ; delay by TIMER0
 ; parameter
 ;   WREG -> 2*Tcy+7cy    
@@ -1210,7 +1323,12 @@ START
     movwi FSR0++
     btfss FSR0H,0
     bra $-2
-    call init_brick_wall
+; initialize LFSR seed
+    banksel seed
+    comf seed
+    comf seed+1
+    comf seed+2
+    comf seed+3
 ;   setup arguments stack pointer
     movlw high (stack+STACK_SIZE)
     movwf FSR0H
@@ -1231,7 +1349,6 @@ START
 ; pin setup
     banksel WPUA
     clrf WPUA
-    bsf WPUA,START_BTN
     banksel TRISA
     bcf TRISA,SYNC_OUT
     banksel LATA
@@ -1270,30 +1387,15 @@ START
     movwf PWM3CON
     bsf PWM3LDCON,7
     bsf PWM3INTE,PRIE
+; enbable interrupt    
     banksel PIR3
     bcf PIR3,PWM3IF
     banksel PIE3
     bsf PIE3,PWM3IE
     bsf INTCON,PEIE
     bsf INTCON,GIE
-    bsf flags, F_EVEN
+    clrf flags
     bsf flags, F_SYNC
-; test code
-    banksel balls
-    movlw 3
-    movwf balls
-    movlw BALL_RIGHT_BOUND
-    movwf ball_x
-;    clrf ball_x
-    decf ball_x
-    movlw BALL_BOTTOM_BOUND-40
-    movwf ball_y
-    incf ball_dx
-    movlw 4
-    movwf ball_dy
-    movlw 2
-    movwf ball_speed
-; end test code    
 ; all processing done in ISR    
     goto $
 

@@ -248,7 +248,7 @@ L device:R R1
 U 1 1 5C76F9A1
 P 6150 2550
 F 0 "R1" V 6050 2550 50  0000 C CNN
-F 1 "1k2" V 6150 2550 50  0000 C CNN
+F 1 "1k" V 6150 2550 50  0000 C CNN
 F 2 "" V 6080 2550 50  0001 C CNN
 F 3 "" H 6150 2550 50  0001 C CNN
 	1    6150 2550
@@ -263,21 +263,10 @@ Wire Wire Line
 	6300 2775 6425 2775
 Text Label 6000 2550 2    50   ~ 0
 chroma
-Text Label 5700 2775 2    50   ~ 0
+Text Label 6000 2775 2    50   ~ 0
 video_y
 Text Label 6000 3025 2    50   ~ 0
 sync
-$Comp
-L device:D_ALT D1
-U 1 1 5C770167
-P 5850 2775
-F 0 "D1" H 5850 2875 50  0000 C CNN
-F 1 "1N4148" H 5875 2675 50  0000 C CNN
-F 2 "" H 5850 2775 50  0001 C CNN
-F 3 "" H 5850 2775 50  0001 C CNN
-	1    5850 2775
-	-1   0    0    1   
-$EndComp
 $Comp
 L device:Battery BT1
 U 1 1 5C7703E9
