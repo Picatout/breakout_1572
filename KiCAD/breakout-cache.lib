@@ -1,23 +1,24 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# Oscillators_ASE-xxxMHz
+# Oscillators_CXO_DIP8
 #
-DEF Oscillators_ASE-xxxMHz X 0 10 Y Y 1 F N
+DEF Oscillators_CXO_DIP8 X 0 10 Y Y 1 F N
 F0 "X" -200 250 50 H V L CNN
-F1 "Oscillators_ASE-xxxMHz" 50 -250 50 H V L CNN
-F2 "Oscillators:Oscillator_SMD_Abracon_ASE-4pin_3.2x2.5mm" 700 -350 50 H I C CNN
+F1 "Oscillators_CXO_DIP8" 50 -250 50 H V L CNN
+F2 "Oscillators:Oscillator_DIP-8" 450 -350 50 H I C CNN
 F3 "" -100 0 50 H I C CNN
+ALIAS TFT660
 $FPLIST
- Oscillator*SMD*Abracon*ASE*3.2x2.5mm*
+ Oscillator*DIP*8*
 $ENDFPLIST
 DRAW
 S -200 200 200 -200 0 1 10 f
-P 10 0 1 0 -50 -30 -40 -30 -40 30 -20 30 -20 -30 0 -30 0 30 20 30 20 -30 30 -30 N
+P 9 0 1 0 -75 -25 -50 -25 -50 25 -25 25 -25 -25 0 -25 0 25 25 25 25 -25 N
 X EN 1 -300 0 100 R 50 50 1 1 I
-X GND 2 0 -300 100 U 50 50 1 1 W
-X OUT 3 300 0 100 L 50 50 1 1 O
-X Vdd 4 0 300 100 D 50 50 1 1 W
+X GND 4 0 -300 100 U 50 50 1 1 W
+X OUT 5 300 0 100 L 50 50 1 1 O
+X Vcc 8 0 300 100 D 50 50 1 1 W
 ENDDRAW
 ENDDEF
 #

@@ -21,8 +21,24 @@
 ;   before any display attempt to ensure the game left side is
 ;   inside visible part of the scan line.
 ;   Each visible line must be terminate by returning video_output to black
-;   otherwise the sync signal will be mangled.    
+;   otherwise the sync signal will be mangled. 
+;    
+;  VIDEO DISPLAY ZONES
+;  scan lines     display
+;  =======================    
+;    30-49     |   score and balls count
+;    50-57     |   top wall
+;    58-250    |   play ground
+;    58-73     |   empty zone
+;    74-81     |   mauve bricks
+;    82-89     |   yellow bricks
+;    90-97     |   blue bricks
+;    98-105    |   dark green bricks
+;    106-113   |   gray bricks
+;    114-250   |   empty zone
+;    243-250   |   paddle zone    
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ 
     
     include p12f1572.inc
     
@@ -188,24 +204,26 @@ white macro
 ;    goto $+1
     endm
 
-; set video output to yellow    
-yellow macro
+#define gray white
+    
+; set video output to mauve    
+mauve macro
 ;    chroma_ref
 ;    banksel TRISA
     bcf TRISA,VIDEO_OUT
     bcf TRISA,CHROMA
     endm
 
-; set video output to cyan   
-cyan macro
+; set video output to yellow   
+yellow macro
 ;    chroma_invert
 ;    banksel TRISA
     bcf TRISA,VIDEO_OUT
     bcf TRISA,CHROMA
     endm
     
-; set video output to green
-green macro
+; set video output to blue
+blue macro
 ;    chroma_ref
 ;    banksel TRISA
     bsf TRISA, VIDEO_OUT
@@ -213,7 +231,7 @@ green macro
     endm
     
 ; set video output to dark blue    
-dark_blue macro
+dark_green macro
 ;    chroma_invert
 ;    banksel TRISA
     bsf TRISA, VIDEO_OUT
@@ -333,7 +351,8 @@ flags  res 1 ; boolean variables
 lcount res 1 ; video field line counter
 slice res 1 ; task slice counter, a task may use more than one slice.
 task res 1 ; where in video phase 
-temp res 2 ; temporary storage
+temp res 1 ; temporary storage
+temp2 res 1 ; 
 paddle_pos res 1 
 ball_x res 1
 ball_y res 1
@@ -342,7 +361,7 @@ ball_dy res 1
 ball_speed res 1
 score res 2 ; score stored in Binary Coded Decimal
 ball_timer res 1 
-ticks res 1
+;heading res 1 ; ball direction:0=N,2=NW,3=NE,4=S,6=SW,7=SE 
  
 ;; code 
 RES_VECT  CODE    0x0000            ; processor reset vector
@@ -464,7 +483,6 @@ vsync_end
     movwf PWM3PRL
     bsf PWM3LDCON,7
     incf task
-    incf ticks
     movlw 9
     movwf lcount
     leave
@@ -479,7 +497,7 @@ COURT_WIDTH equ 248 ; Tcy
 BRICK_HEIGHT equ 8  ; scan lines
 BORDER_WIDTH equ 4  ; Tcy
 PADDLE_WIDTH equ 32 ; Tcy
-PADDLE_TICKNESS equ 8 ; scan lines
+PADDLE_THICKNESS equ 8 ; scan lines
 PADDLE_LIMIT equ 74 ; Tcy
 BALL_WIDTH equ 8 ; Tcy
 BALL_HEIGHT equ 8 ; scan lines 
@@ -487,7 +505,7 @@ BALL_LEFT_BOUND equ 0 ; Tcy
 BALL_RIGHT_BOUND equ 82 ; Tcy
 BALL_TOP_BOUND equ 58  ; scan lines
 BALL_BOTTOM_BOUND equ LAST_VIDEO_LINE;-BRICK_HEIGHT ;
-PADDLE_Y equ LAST_VIDEO_LINE-PADDLE_TICKNESS+1 ; 
+PADDLE_Y equ LAST_VIDEO_LINE-PADDLE_THICKNESS+1 ; 
 ROW1_Y equ 74
 ROW2_Y equ 82
 ROW3_Y equ 90
@@ -521,6 +539,9 @@ wait_trigger
     leave
 ; while game not running skip 'move_ball' and 'collision' tasks    
 skip_2_tasks
+    movfw paddle_pos
+    addlw 4
+    movwf ball_x
     incf task
     incf task
     call lfsr_rand
@@ -605,6 +626,7 @@ collision
 ; column = 7-(3*ball_x/32)
     lslf ball_x,W
     addwf ball_x,W
+    pushw
     lsrf WREG
     swapf WREG
     andlw 15
@@ -622,7 +644,7 @@ collision
 ; ball/paddle test
     movlw PADDLE_Y-BALL_HEIGHT+1
     pushw
-    movlw PADDLE_Y+PADDLE_TICKNESS
+    movlw PADDLE_Y+PADDLE_THICKNESS
     pushw
     movfw ball_y
     call between
@@ -680,7 +702,7 @@ row1_coll
     andwf row1
     movlw 9
     call inc_score
-    bra bounce_y
+    bra brick_bounce
 ; row2 collision?    
 row2_coll
     movlw ROW2_Y-BRICK_HEIGHT+1
@@ -699,7 +721,7 @@ row2_coll
     andwf row2
     movlw 6
     call inc_score
-    bra bounce_y
+    bra brick_bounce
 ; row3 collision?    
 row3_coll
     movlw ROW3_Y-BRICK_HEIGHT+1
@@ -718,7 +740,7 @@ row3_coll
     andwf row3
     movlw 3
     call inc_score
-    bra bounce_y
+    bra brick_bounce
 ; row4 collision?    
 row4_coll
     movlw ROW4_Y-BRICK_HEIGHT+1
@@ -737,7 +759,7 @@ row4_coll
     andwf row4
     movlw 2
     call inc_score
-    bra bounce_y
+    bra brick_bounce
 ; row5 collision?    
 row5_coll    
     movlw ROW5_Y-BRICK_HEIGHT+1
@@ -756,11 +778,12 @@ row5_coll
     andwf row5
     movlw 1
     call inc_score
-bounce_y
+brick_bounce
     comf ball_dy
     incf ball_dy
+    call set_ball_dx
 collision_exit
-    popw
+    dropn 2
     incf task
     incf lcount
     leave
@@ -907,7 +930,7 @@ draw_top_wall ;lcount enter at 50 leave at 58
     btfss flags, F_EVEN
     bra top_wall_exit
     banksel TRISA
-    tdelay LEFT_MARGIN-2
+    tdelay LEFT_MARGIN -2
     white
     tdelay COURT_WIDTH+3*BORDER_WIDTH+1
     black
@@ -922,7 +945,7 @@ draw_void ;enter at 58 leave at 74| 255-58
     subwf lcount,W
     skpc
     bra no_ball_dly
-    movlw 8
+    movlw BALL_HEIGHT
     addwf ball_y,W
     subwf lcount,W
     skpc
@@ -958,7 +981,6 @@ ball_in_middle
     bsf TRISA,VIDEO_OUT
     decfsz WREG
     bra $-1
-;    nop
     bcf TRISA, VIDEO_OUT
     tdelay BALL_WIDTH
     bsf TRISA,VIDEO_OUT
@@ -1013,7 +1035,7 @@ draw_row1 ; lcount enter at 74 leave at 82
     movwf temp
     tdelay LEFT_MARGIN-3
 ;    draw_border BORDER_WIDTH
-    draw_wall yellow
+    draw_wall mauve
     black
     tdelay 3
 ;    draw_border BORDER_WIDTH
@@ -1027,7 +1049,7 @@ draw_row2 ;lcount enter at 82 leave at 90
     movwf temp
     tdelay LEFT_MARGIN-3
 ;    draw_border BORDER_WIDTH
-    draw_wall cyan
+    draw_wall yellow
     black
     tdelay 3
 ;    draw_border BORDER_WIDTH
@@ -1043,7 +1065,7 @@ draw_row3 ; lcount enter at 90 leave at 98
     movwf temp
     tdelay LEFT_MARGIN-3
 ;    draw_border BORDER_WIDTH
-    draw_wall green
+    draw_wall blue
     black
     tdelay 3
 ;    draw_border BORDER_WIDTH
@@ -1058,7 +1080,7 @@ draw_row4 ; lcount enter at 98 leave at 106
     movwf temp
     tdelay LEFT_MARGIN-3
 ;    draw_border BORDER_WIDTH
-    draw_wall dark_blue
+    draw_wall dark_green
     black
     tdelay 3
 ;    draw_border BORDER_WIDTH
@@ -1071,7 +1093,7 @@ draw_row5 ; lcount enter at 106 leave at 114
     movwf temp
     tdelay LEFT_MARGIN-2
 ;    draw_border BORDER_WIDTH
-    draw_wall white
+    draw_wall gray
     black
     tdelay 3
 ;    draw_border BORDER_WIDTH
@@ -1079,13 +1101,21 @@ draw_row5 ; lcount enter at 106 leave at 114
     next_task BRICK_HEIGHT
 
 ; task 16,draw all rows between paddle and lower brick row    
-draw_empty ; lcount enter at 114 leave at LAST_VIDEO-112-BRICK_HEIGHT 
+draw_empty ; lcount enter at 114 leave at LAST_VIDEO_LINE-PADDLE_THICKNESS+1
     tdelay LEFT_MARGIN
 ;    draw_border BORDER_WIDTH
     tdelay 320
 ;    draw_border BORDER_WIDTH
     black
-    next_task LAST_VIDEO_LINE-114-BRICK_HEIGHT
+    incf lcount
+    movlw LAST_VIDEO_LINE-PADDLE_THICKNESS+1
+    subwf lcount,W
+    skpz
+    leave
+    clrf slice
+    incf task
+    leave
+;    next_task LAST_VIDEO_LINE-114-BRICK_HEIGHT
 
     
 ; task 18, draw paddle at bottom screen    
@@ -1100,7 +1130,7 @@ draw_paddle
     bcf TRISA,VIDEO_OUT
     tdelay PADDLE_WIDTH
     bsf TRISA,VIDEO_OUT
-    next_task PADDLE_TICKNESS
+    next_task PADDLE_THICKNESS
 
 ; task 19,  wait end of this field, reset task to zero    
 wait_field_end
@@ -1279,9 +1309,6 @@ game_init
     movwf balls
     clrf ball_timer
     incf ball_timer
-    movlw 4
-    addwf paddle_pos,W
-    movwf ball_x
     movlw PADDLE_Y-BRICK_HEIGHT
     movwf ball_y
     call set_ball_dx
