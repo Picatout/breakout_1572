@@ -69,6 +69,8 @@ F_SYNC equ 2    ; vertical synchronization phase
 F_SOUND equ 3   ; sound enabled 
 F_START equ 4   ; game started 
 F_PAUSE equ 5   ; game pause after a ball lost
+F_OVER equ 6    ; game over
+ 
  
 ;pins assignment
 AUDIO EQU RA0
@@ -78,6 +80,31 @@ SYNC_OUT equ RA2
 START_BTN equ RA3 
 VIDEO_OUT equ RA4
 CLKIN equ RA5
+ 
+    ; constants used in video display
+; values are in Tcy for x dimension.
+; values are in scan lines for y dimension.    
+FIRST_VIDEO_LINE equ 30 ; first video line displayed
+LAST_VIDEO_LINE	 equ 250 ; last video line displayed
+LEFT_MARGIN equ 52  ;  delay Tcy before any display
+COURT_WIDTH equ 248 ; Tcy
+BRICK_HEIGHT equ 8  ; scan lines
+BORDER_WIDTH equ 4  ; Tcy
+PADDLE_WIDTH equ 32 ; Tcy
+PADDLE_THICKNESS equ 8 ; scan lines
+PADDLE_LIMIT equ 74 ; Tcy
+BALL_WIDTH equ 8 ; Tcy
+BALL_HEIGHT equ 8 ; scan lines 
+BALL_LEFT_BOUND equ 0 ; Tcy
+BALL_RIGHT_BOUND equ 82 ; Tcy
+BALL_TOP_BOUND equ 58  ; scan lines
+BALL_BOTTOM_BOUND equ LAST_VIDEO_LINE;-BRICK_HEIGHT ;
+PADDLE_Y equ LAST_VIDEO_LINE-PADDLE_THICKNESS+1 ; 
+ROW1_Y equ 74
+ROW2_Y equ 82
+ROW3_Y equ 90
+ROW4_Y equ 98
+ROW5_Y equ 106
  
 
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -125,7 +152,7 @@ swap_var macro var
     xorwf var
     endm
     
-    
+
 ; delay in machine cycle T
 ; parameters:
 ;   T   number of machine cycles    
@@ -390,10 +417,10 @@ task_switch ; horizontal scan line used as round robin task scheduler
     goto vsync ;task 1, vertical sync pulses
     goto post_vsync ;task 2, vertical post-equalization pulses
     goto vsync_end ;task 3, return to normal video line
-    goto user_input ;task 4,  read button and paddle
-    goto move_ball ;task 5, move recking ball.
-    goto collision ; task 6, check for collision with brick wall and paddle
-    goto sound ;task 7, check sound timer expiration
+    goto sound ;task 4, check sound timer expiration
+    goto user_input ;task 5,  read button and paddle
+    goto move_ball ;task 6, move recking ball.
+    goto collision ; task 7, check for collision with brick wall and paddle
     goto video_first ; task 8, wait FIRST_VIDEO line.
     goto draw_score ;task 9,  draw score en ball count
     goto draw_top_wall ;task 10,  draw top wall
@@ -487,36 +514,54 @@ vsync_end
     movwf lcount
     leave
 
-; constants used in video display
-; values are in Tcy for x dimension.
-; values are in scan lines for y dimension.    
-FIRST_VIDEO_LINE equ 30 ; first video line displayed
-LAST_VIDEO_LINE	 equ 250 ; last video line displayed
-LEFT_MARGIN equ 52  ;  delay Tcy before any display
-COURT_WIDTH equ 248 ; Tcy
-BRICK_HEIGHT equ 8  ; scan lines
-BORDER_WIDTH equ 4  ; Tcy
-PADDLE_WIDTH equ 32 ; Tcy
-PADDLE_THICKNESS equ 8 ; scan lines
-PADDLE_LIMIT equ 74 ; Tcy
-BALL_WIDTH equ 8 ; Tcy
-BALL_HEIGHT equ 8 ; scan lines 
-BALL_LEFT_BOUND equ 0 ; Tcy
-BALL_RIGHT_BOUND equ 82 ; Tcy
-BALL_TOP_BOUND equ 58  ; scan lines
-BALL_BOTTOM_BOUND equ LAST_VIDEO_LINE;-BRICK_HEIGHT ;
-PADDLE_Y equ LAST_VIDEO_LINE-PADDLE_THICKNESS+1 ; 
-ROW1_Y equ 74
-ROW2_Y equ 82
-ROW3_Y equ 90
-ROW4_Y equ 98
-ROW5_Y equ 106
- 
-;task 4, read button and paddle position
+; task 4,  sound timer
+sound
+    incf task
+    incf lcount
+    btfss flags, F_SOUND
+    leave
+    banksel sound_timer
+    decfsz sound_timer
+    leave
+    bcf flags, F_SOUND
+    banksel PWM2CON
+    bcf PWM2CON,OE
+    bcf PWM2CON,EN
+    leave
+
+; produce a pong sound
+; input: ( d i -- )
+;   d duration
+;   i index frequency table    
+pong
+    bsf flags, F_SOUND
+    banksel PWM2CON
+    movfw T
+    call frequency
+    movwf PWM2PRH
+    incf T,W
+    call frequency
+    movwf PWM2PRL
+    lsrf PWM2PRH,W
+    movwf PWM2DCH
+    rrf PWM2PRL,W
+    movwf PWM2DCL
+    bsf PWM2LDCON,LDA
+    bsf PWM2CON,OE
+    bsf PWM2CON,EN
+    banksel sound_timer
+    pickn 1
+    movwf sound_timer
+    dropn 2
+    return
+    
+;task 5, read button and paddle position
 user_input
     incf task
     incf lcount
     call read_paddle
+    btfsc flags, F_OVER
+    bra game_over
     btfsc flags,F_START
     bra game_running
 ; game not running
@@ -531,11 +576,32 @@ game_running
     leave
 ; game on pause    
 wait_trigger
+    btfss flags, F_SOUND
+    bra wait_trig_02
+    btfss flags, F_EVEN
+    bra wait_trig_02
+    banksel PWM2CON
+    lsrf PWM2PRH
+    rrf PWM2PRL
+    lsrf PWM2DCH
+    rrf PWM2DCL
+    bsf PWM2LDCON,LDA
+wait_trig_02    
     call read_button
     skpz
     bra skip_2_tasks
     bcf flags,F_PAUSE
     call set_ball_dx
+    leave
+; game over
+game_over
+    call read_button
+    skpz
+    bra skip_2_tasks
+    bcf flags,F_OVER
+    call game_init
+    incf task
+    incf lcount
     leave
 ; while game not running skip 'move_ball' and 'collision' tasks    
 skip_2_tasks
@@ -547,6 +613,7 @@ skip_2_tasks
     call lfsr_rand
     leave
 
+    
 read_button
     banksel PORTA
     movfw PORTA
@@ -554,6 +621,8 @@ read_button
     return
     
 read_paddle
+    banksel PWM2CON
+    bcf PWM2CON,OE
     banksel TRISA
     bsf TRISA, PADDLE
     banksel ADCON0
@@ -561,8 +630,13 @@ read_paddle
     movwf ADCON0
     btfsc ADCON0,NOT_DONE
     goto $-1
-    bcf ADCON0,ADON
+    movlw 4<<CHS0
+    movwf ADCON0
     movfw ADRESH
+    btfss flags, F_SOUND
+    bra $+3
+    banksel PWM2CON
+    bsf PWM2CON,OE
     movwf paddle_pos
     movlw PADDLE_LIMIT
     subwf paddle_pos,W
@@ -575,7 +649,7 @@ read_paddle
     return
     
    
-; task 5, move recking ball.   
+; task 6, move recking ball.   
 move_ball
     decfsz ball_timer
     bra move_ball_exit
@@ -619,7 +693,7 @@ move_ball_exit
     incf lcount
     leave
 
-; task 6, collision detection
+; task 7, collision detection
 collision
     banksel row1
 ; pre-compute x column (brick bit mask)    
@@ -667,12 +741,17 @@ ball_lost
     movwf ball_y
     movlw -4
     movwf ball_dy
+    movlw 60
+    pushw
+    movlw 2
+    pushw
+    call pong
     bra collision_exit
 ; if ball_x over paddle bounce ball
 check_paddle_bounce
     movfw paddle_pos
     pushw
-    movlw (PADDLE_WIDTH-BALL_WIDTH)/3
+    movlw (PADDLE_WIDTH-BALL_WIDTH)/3+2
     addwf paddle_pos,W
     pushw
     movfw ball_x
@@ -682,6 +761,10 @@ check_paddle_bounce
     movlw -4
     movwf ball_dy
     call set_ball_dx
+    movlw 2
+    pushw
+    pushw
+    call pong
     bra collision_exit
 ; row1 collision?    
 row1_coll    
@@ -782,6 +865,11 @@ brick_bounce
     comf ball_dy
     incf ball_dy
     call set_ball_dx
+    movlw 1
+    pushw
+    movlw 0
+    pushw
+    call pong
 collision_exit
     dropn 2
     incf task
@@ -809,21 +897,6 @@ between_exit
     dropn 2
     return
     
-; task 7,  sound timer
-sound
-    incf task
-    incf lcount
-    btfss flags, F_SOUND
-    leave
-    banksel sound_timer
-    decfsz sound_timer
-    leave
-    bcf flags, F_SOUND
-    banksel PWM2CON
-    bcf PWM2CON,OE
-    bcf PWM2CON,EN
-    leave
-    
 ; task 8, wait for first video line
 video_first
     incf lcount
@@ -841,7 +914,7 @@ video_first
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     
  
-; task 8, draw score en ball count
+; task 9, draw score en ball count
 draw_score ; lcount enter at 30 leave at 50
     banksel TRISA
     movfw slice
@@ -925,7 +998,7 @@ digit_row
  endif
     return
     
-; task 9,  draw top wall, 8 screen lines    
+; task 10,  draw top wall, 8 screen lines    
 draw_top_wall ;lcount enter at 50 leave at 58
     btfss flags, F_EVEN
     bra top_wall_exit
@@ -937,7 +1010,7 @@ draw_top_wall ;lcount enter at 50 leave at 58
 top_wall_exit
     next_task BRICK_HEIGHT
 
-; task 10,  only on even field draw vertical side bands.    
+; task 11,  only on even field draw vertical side bands.    
 draw_void ;enter at 58 leave at 74| 255-58
     btfss flags, F_EVEN
     bra no_wall_draw
@@ -1008,10 +1081,9 @@ ball_at_right
     bcf TRISA,VIDEO_OUT
     tdelay 4
     bsf TRISA,VIDEO_OUT
-    tdelay COURT_WIDTH
-    nop
+    tdelay COURT_WIDTH-2
     bcf TRISA,VIDEO_OUT
-    tdelay 12
+    tdelay 10
     bsf TRISA,VIDEO_OUT
 draw_void_exit    
     incf slice
@@ -1027,7 +1099,7 @@ draw_void_exit
 no_wall_draw
     next_task 2*BRICK_HEIGHT
     
-; task 11, draw top brick row
+; task 12, draw top brick row
 draw_row1 ; lcount enter at 74 leave at 82
     chroma_ref
     banksel TRISA
@@ -1041,7 +1113,7 @@ draw_row1 ; lcount enter at 74 leave at 82
 ;    draw_border BORDER_WIDTH
     next_task BRICK_HEIGHT
     
-; task 12, draw 2nd brick row    
+; task 13, draw 2nd brick row    
 draw_row2 ;lcount enter at 82 leave at 90
     chroma_invert
     banksel row2
@@ -1055,7 +1127,7 @@ draw_row2 ;lcount enter at 82 leave at 90
 ;    draw_border BORDER_WIDTH
     next_task BRICK_HEIGHT
 
-; task 13, draw 3rd brick row    
+; task 14, draw 3rd brick row    
 draw_row3 ; lcount enter at 90 leave at 98
 ;    btfss flags, F_EVEN
 ;    bra row3_exit
@@ -1072,7 +1144,7 @@ draw_row3 ; lcount enter at 90 leave at 98
 row3_exit    
     next_task BRICK_HEIGHT
     
-; task 14, draw 4th brick row    
+; task 15, draw 4th brick row    
 draw_row4 ; lcount enter at 98 leave at 106
     chroma_invert
     banksel row4
@@ -1086,7 +1158,7 @@ draw_row4 ; lcount enter at 98 leave at 106
 ;    draw_border BORDER_WIDTH
     next_task BRICK_HEIGHT
 
-; task 15, draw 5th brick row    
+; task 16, draw 5th brick row    
 draw_row5 ; lcount enter at 106 leave at 114
     banksel row5
     movfw row5
@@ -1100,7 +1172,7 @@ draw_row5 ; lcount enter at 106 leave at 114
     black
     next_task BRICK_HEIGHT
 
-; task 16,draw all rows between paddle and lower brick row    
+; task 17,draw all rows between paddle and lower brick row    
 draw_empty ; lcount enter at 114 leave at LAST_VIDEO_LINE-PADDLE_THICKNESS+1
     tdelay LEFT_MARGIN
 ;    draw_border BORDER_WIDTH
@@ -1218,6 +1290,15 @@ inc_score
     iorwf T,W
     movwf score+1
     dropn 1
+    btfss score,0
+    return
+    movlw 1
+    movwf ball_speed
+    movlw 0x68
+    subwf score+1,W
+    skpz
+    return
+    bsf flags,F_OVER
     return
     
 ;***********************************
@@ -1378,6 +1459,7 @@ START
     clrf WPUA
     banksel TRISA
     bcf TRISA,SYNC_OUT
+    bcf TRISA,AUDIO
     banksel LATA
     bsf LATA, VIDEO_OUT
 ; PWM1 chroma signal on RA1
@@ -1396,6 +1478,23 @@ START
     bsf PWM1LDCON,7
     movlw (1<<EN)|(1<<OE)
     movwf PWM1CON
+; PWM2 sound
+    banksel PWM2CON
+    clrf PWM2PHL
+    clrf PWM2PHH
+    clrf PWM2OFL
+    clrf PWM2OFH
+    movlw 3<<PWM2PS0 ; clock source FOSC/8
+    movwf PWM2CLKCON
+    movlw high 3578;7
+    movwf PWM2PRH
+    movlw low 3578;7
+    movwf PWM2PRL
+    lsrf PWM2PRH,W
+    movwf PWM2DCH
+    rrf PWM2PRL,W
+    movwf PWM2DCL
+    bsf PWM2LDCON,LDA
 ; PWM3 set to horizontal period 15734 hertz, output on RA2
     banksel PWM3CON
     clrf PWM3LDCON
@@ -1439,7 +1538,13 @@ digits
     dt  0xE0,0x20,0x20,0x20,0x20 ; 7
     dt  0xE0,0xA0,0xE0,0xA0,0xE0 ; 8
     dt  0xE0,0xA0,0xE0,0x20,0x60 ; 9
+    reset
     
+frequency
+    brw
+    dt high 35795, low 35795 ; 100 hertz
+    dt high 3579, low 3579 ; 1000 hertz
+    reset
     
 eeprom org (PROG_SIZE-EEPROM_SIZE)
 max_score 
