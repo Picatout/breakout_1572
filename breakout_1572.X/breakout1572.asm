@@ -529,6 +529,34 @@ sound
     bcf PWM2CON,EN
     leave
 
+; low pitch to high-pitch    
+sound_fx1
+    btfss flags, F_SOUND
+    return
+    btfss flags, F_EVEN
+    return
+    banksel PWM2CON
+    lsrf PWM2PRH
+    rrf PWM2PRL
+    lsrf PWM2DCH
+    rrf PWM2DCL
+    bsf PWM2LDCON,LDA
+    return
+    
+; high pitch to low-pitch    
+sound_fx2
+    btfss flags, F_SOUND
+    return
+    btfss flags, F_EVEN
+    return
+    banksel PWM2CON
+    lslf PWM2PRL
+    rlf PWM2PRH
+    lslf PWM2DCL
+    rlf PWM2DCH
+    bsf PWM2LDCON,LDA
+    return
+    
 ; produce a pong sound
 ; input: ( d i -- )
 ;   d duration
@@ -576,17 +604,7 @@ game_running
     leave
 ; game on pause    
 wait_trigger
-    btfss flags, F_SOUND
-    bra wait_trig_02
-    btfss flags, F_EVEN
-    bra wait_trig_02
-    banksel PWM2CON
-    lsrf PWM2PRH
-    rrf PWM2PRL
-    lsrf PWM2DCH
-    rrf PWM2DCL
-    bsf PWM2LDCON,LDA
-wait_trig_02    
+    call sound_fx2
     call read_button
     skpz
     bra skip_2_tasks
@@ -741,7 +759,7 @@ ball_lost
     movwf ball_y
     movlw -4
     movwf ball_dy
-    movlw 60
+    movlw 16
     pushw
     movlw 2
     pushw
