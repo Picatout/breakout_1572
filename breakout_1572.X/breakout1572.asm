@@ -89,6 +89,7 @@ LAST_VIDEO_LINE	 equ 250 ; last video line displayed
 LEFT_MARGIN equ 52  ;  delay Tcy before any display
 COURT_WIDTH equ 248 ; Tcy
 BRICK_HEIGHT equ 8  ; scan lines
+BRICK_WIDTH equ 14  ; Tcy
 BORDER_WIDTH equ 4  ; Tcy
 PADDLE_WIDTH equ 32 ; Tcy
 PADDLE_THICKNESS equ 8 ; scan lines
@@ -214,21 +215,25 @@ chroma_invert macro
 ;   colors macros
 ; each one take 5 T 
 ;;;;;;;;;;;;;;;;;;;;;;
-    
+OTHERS equ (0<<SYNC_OUT)|(0<<AUDIO)|(1<<START_BTN)    
+BLACK equ (1<<CHROMA)|(1<<VIDEO_OUT)|OTHERS
+WHITE equ (1<<CHROMA)|(0<<VIDEO_OUT)|OTHERS
+MAUVE equ (0<<CHROMA)|(0<<VIDEO_OUT)|OTHERS
+YELLOW equ (0<<CHROMA)|(0<<VIDEO_OUT)|OTHERS
+BLUE equ (0<<CHROMA)|(1<<VIDEO_OUT)|OTHERS
+DARK_GREEN equ (0<<CHROMA)|(1<<VIDEO_OUT)|OTHERS
+ 
 ;set video output to black    
 black macro
-;    banksel TRISA
-    bsf TRISA,CHROMA
-    bsf TRISA,VIDEO_OUT
+    movlw BLACK
+    movwf TRISA
 ;    goto $+1
     endm
     
 ; set video output to white    
 white macro    
-;    banksel TRISA
-    bsf TRISA,CHROMA
-    bcf TRISA,VIDEO_OUT
-;    goto $+1
+    movlw WHITE
+    movwf TRISA
     endm
 
 #define gray white
@@ -237,63 +242,43 @@ white macro
 mauve macro
 ;    chroma_ref
 ;    banksel TRISA
-    bcf TRISA,VIDEO_OUT
-    bcf TRISA,CHROMA
+    movlw MAUVE
+    movwf TRISA
     endm
 
 ; set video output to yellow   
 yellow macro
-;    chroma_invert
-;    banksel TRISA
-    bcf TRISA,VIDEO_OUT
-    bcf TRISA,CHROMA
+    movlw YELLOW
+    movwf TRISA
     endm
     
 ; set video output to blue
 blue macro
-;    chroma_ref
-;    banksel TRISA
-    bsf TRISA, VIDEO_OUT
-    bcf TRISA,CHROMA
+    movlw BLUE
+    movwf TRISA
     endm
     
 ; set video output to dark blue    
 dark_green macro
-;    chroma_invert
-;    banksel TRISA
-    bsf TRISA, VIDEO_OUT
-    bcf TRISA,CHROMA
+    movlw DARK_GREEN
+    movwf TRISA
     endm
 
     
-; draw a brick
-; use 6T+BRICK_WIDTH
-; if carry is 1 draw in color else draw black    
-BRICK_WIDTH equ 21   
-draw_brick macro color
-    local no_brick
-    local brick_delay
-    skpc
-    bra no_brick
-    color
-    nop
-    bra brick_delay
-no_brick
-    black
-    bra brick_delay 
-brick_delay    
-    tdelay BRICK_WIDTH
-    endm
-
 ; draw 8 bricks wall
-; parameter in temp
+; input in temp1
 draw_wall macro color
     local next_brick
-    movlw 8
+    movlw 14
     pushw
-next_brick    
-    lslf temp
-    draw_brick color
+next_brick
+    lslf temp1
+    rlf temp2
+    movlw BLACK
+    skpnc
+    movlw color
+    movwf TRISA
+    tdelay BRICK_WIDTH-9
     decfsz T
     bra next_brick
     dropn 1
@@ -362,11 +347,12 @@ stack res 16 ; arguments stack
 seed res 4 ; prng seed
  
 v_array   udata 0xA0
-row1 res 1; brick wall row1
-row2 res 1
-row3 res 1
-row4 res 1
-row5 res 1
+row1 res 2; brick wall row1
+row2 res 2
+row3 res 2
+row4 res 2
+row5 res 2
+row6 res 2
 d1 res 1 ; score msd digit pixels
 d2 res 1 ; score 2nd digit pixels
 d3 res 1 ; score lsd digit pixels
@@ -378,7 +364,7 @@ flags  res 1 ; boolean variables
 lcount res 1 ; video field line counter
 slice res 1 ; task slice counter, a task may use more than one slice.
 task res 1 ; where in video phase 
-temp res 1 ; temporary storage
+temp1 res 1 ; temporary storage
 temp2 res 1 ; 
 paddle_pos res 1 
 ball_x res 1
@@ -520,6 +506,8 @@ sound
     incf lcount
     btfss flags, F_SOUND
     leave
+    btfsc flags, F_PAUSE
+    call sound_fx1
     banksel sound_timer
     decfsz sound_timer
     leave
@@ -604,7 +592,6 @@ game_running
     leave
 ; game on pause    
 wait_trigger
-    call sound_fx2
     call read_button
     skpz
     bra skip_2_tasks
@@ -640,7 +627,7 @@ read_button
     
 read_paddle
     banksel PWM2CON
-    bcf PWM2CON,OE
+    bcf PWM2CON,EN
     banksel TRISA
     bsf TRISA, PADDLE
     banksel ADCON0
@@ -654,7 +641,7 @@ read_paddle
     btfss flags, F_SOUND
     bra $+3
     banksel PWM2CON
-    bsf PWM2CON,OE
+    bsf PWM2CON,EN
     movwf paddle_pos
     movlw PADDLE_LIMIT
     subwf paddle_pos,W
@@ -724,10 +711,10 @@ collision
     andlw 15
     sublw 7
 ; create mask    
-    movwf temp
+    movwf temp1
     movlw 1
     pushw
-    movfw temp
+    movfw temp1
     skpnz
     bra $+4
     lslf T
@@ -759,7 +746,7 @@ ball_lost
     movwf ball_y
     movlw -4
     movwf ball_dy
-    movlw 16
+    movlw 8
     pushw
     movlw 2
     pushw
@@ -901,13 +888,13 @@ collision_exit
 ; output:
 ;   Carry bit set if true    
 between
-    movwf temp
+    movwf temp1
     pickn 1
-    subwf temp,W
+    subwf temp1,W
     skpc
     bra between_exit
     movfw T
-    subwf temp
+    subwf temp1
     movfw STATUS
     xorlw 1
     movwf STATUS
@@ -974,46 +961,27 @@ draw_score ; lcount enter at 30 leave at 50
 score_exit
     next_task 5*4
 
-digit_version equ 2
-; display digit row    
+; display digit row pixels   
 digit_row
- if digit_version==1
-    rlf WREG
+    pushw
+    rlf T
+    movlw BLACK
     skpnc
-    bcf TRISA,VIDEO_OUT
-    rlf WREG
-    bra $+1
-    bsf TRISA,VIDEO_OUT
+    movlw WHITE
+    movwf TRISA
+    rlf T
+    movlw BLACK
     skpnc
-    bcf TRISA,VIDEO_OUT
-    rlf WREG
-    bra $+1
-    bsf TRISA,VIDEO_OUT
+    movlw WHITE
+    movwf TRISA
+    rlf T
+    movlw BLACK
     skpnc
-    bcf TRISA,VIDEO_OUT
-    nop
-    bra $+1
+    movlw WHITE
+    movwf TRISA
+    tdelay 3
+    dropn 1
     bsf TRISA,VIDEO_OUT
- else
-    rlf WREG
-    skpnc
-    bcf TRISA,VIDEO_OUT
-    skpc
-    bsf TRISA,VIDEO_OUT
-    rlf WREG
-    skpnc
-    bcf TRISA,VIDEO_OUT
-    skpc
-    bsf TRISA,VIDEO_OUT
-    rlf WREG
-    skpnc
-    bcf TRISA,VIDEO_OUT
-    skpc
-    bsf TRISA,VIDEO_OUT
-    bra $+1
-    bra $+1
-    bsf TRISA,VIDEO_OUT
- endif
     return
     
 ; task 10,  draw top wall, 8 screen lines    
@@ -1064,18 +1032,18 @@ ball_in_middle
     subwf ball_x,W
     skpnz
     addlw 1
-    movwf temp
+    movwf temp1
     tdelay LEFT_MARGIN-22
     bcf TRISA,VIDEO_OUT
     tdelay 3
-    movfw temp
+    movfw temp1
     bsf TRISA,VIDEO_OUT
     decfsz WREG
     bra $-1
     bcf TRISA, VIDEO_OUT
-    tdelay BALL_WIDTH
-    bsf TRISA,VIDEO_OUT
+    tdelay BALL_WIDTH-1
     movfw ball_x
+    bsf TRISA,VIDEO_OUT
     sublw BALL_RIGHT_BOUND
     decfsz WREG
     bra $-1
@@ -1122,10 +1090,10 @@ draw_row1 ; lcount enter at 74 leave at 82
     chroma_ref
     banksel TRISA
     movfw row1
-    movwf temp
-    tdelay LEFT_MARGIN-3
+    movwf temp1
+    tdelay LEFT_MARGIN-4
 ;    draw_border BORDER_WIDTH
-    draw_wall mauve
+    draw_wall MAUVE
     black
     tdelay 3
 ;    draw_border BORDER_WIDTH
@@ -1136,10 +1104,10 @@ draw_row2 ;lcount enter at 82 leave at 90
     chroma_invert
     banksel row2
     movfw row2
-    movwf temp
-    tdelay LEFT_MARGIN-3
+    movwf temp1
+    tdelay LEFT_MARGIN-4
 ;    draw_border BORDER_WIDTH
-    draw_wall yellow
+    draw_wall YELLOW
     black
     tdelay 3
 ;    draw_border BORDER_WIDTH
@@ -1152,10 +1120,10 @@ draw_row3 ; lcount enter at 90 leave at 98
     chroma_ref
     banksel row3
     movfw row3
-    movwf temp
-    tdelay LEFT_MARGIN-3
+    movwf temp1
+    tdelay LEFT_MARGIN-4
 ;    draw_border BORDER_WIDTH
-    draw_wall blue
+    draw_wall BLUE
     black
     tdelay 3
 ;    draw_border BORDER_WIDTH
@@ -1167,10 +1135,10 @@ draw_row4 ; lcount enter at 98 leave at 106
     chroma_invert
     banksel row4
     movfw row4
-    movwf temp
-    tdelay LEFT_MARGIN-3
+    movwf temp1
+    tdelay LEFT_MARGIN-4
 ;    draw_border BORDER_WIDTH
-    draw_wall dark_green
+    draw_wall MAUVE
     black
     tdelay 3
 ;    draw_border BORDER_WIDTH
@@ -1180,10 +1148,10 @@ draw_row4 ; lcount enter at 98 leave at 106
 draw_row5 ; lcount enter at 106 leave at 114
     banksel row5
     movfw row5
-    movwf temp
+    movwf temp1
     tdelay LEFT_MARGIN-2
 ;    draw_border BORDER_WIDTH
-    draw_wall gray
+    draw_wall WHITE
     black
     tdelay 3
 ;    draw_border BORDER_WIDTH
@@ -1264,26 +1232,6 @@ field_end
 
 ; helper functions
 
-; add 2 BCD digits
-; parameters:
-;   WREG -> first digit
-;   T -> second digit
-;   C -> carry from previous digits add    
-; output:
-;   T -> sum
-;   C -> overflow
-bcd_add
-    addwfc T    
-    movlw 10
-    subwf T,W
-    skpc
-    return
-    movlw 6
-    addwf T
-    movlw 15
-    andwf T
-    bsf STATUS,C
-    return
     
 ; increment user score
 ; This is a BCD addition where a single digit is added to score.   
@@ -1291,31 +1239,32 @@ bcd_add
 ; argument: 
 ;   WREG ->  bdc digit to add to score variable
 inc_score
-    pushw
-    clrc
+    addwf score+1
+    btfsc STATUS,DC
+    bra $+6
     movlw 15
     andwf score+1,W
-    call bcd_add
-    clrw 
-    pushw
+    sublw 9
+    skpnc
+    bra $+3
+    movlw 6
+    addwf score+1
     swapf score+1,W
     andlw 15
-    call bcd_add
+    sublw 9
     skpnc
+    bra game_over_test
+    movlw 0x60
+    addwf score+1
     incf score
-    popw
-    swapf WREG
-    iorwf T,W
-    movwf score+1
-    dropn 1
-    btfss score,0
-    return
     movlw 1
     movwf ball_speed
+game_over_test ; all bricks destroyed?
+    btfss score,0
+    return
     movlw 0x68
     subwf score+1,W
-    skpz
-    return
+    skpnz
     bsf flags,F_OVER
     return
     
@@ -1335,17 +1284,17 @@ digit_offset
     popw
     return
     
-init_brick_wall
+brick_wall_init
     movlw high row1
     movwf FSR1H
     movlw low row1
     movwf FSR1L
-    movlw 5
-    movwf temp
+    movlw 12
+    movwf temp1
     movlw 0xff
 ibw    
     movwi FSR1++
-    decfsz temp
+    decfsz temp1
     bra ibw
     return
 
@@ -1402,7 +1351,7 @@ set_ball_dx_exit
 game_init
     clrf score
     clrf score+1
-    call init_brick_wall
+    call brick_wall_init
     banksel balls
     movlw 3
     movwf balls

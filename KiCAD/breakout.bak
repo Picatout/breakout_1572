@@ -25,17 +25,6 @@ F 3 "" H 5550 4250 60  0001 C CNN
 	1    5550 4450
 	1    0    0    -1  
 $EndComp
-$Comp
-L Oscillators:ASE-xxxMHz X1
-U 1 1 5C76ED76
-P 4300 4400
-F 0 "X1" H 4525 4300 50  0000 L CNN
-F 1 "28.636Mhz" H 4350 4650 50  0000 L CNN
-F 2 "Oscillators:Oscillator_SMD_Abracon_ASE-4pin_3.2x2.5mm" H 5000 4050 50  0001 C CNN
-F 3 "http://www.abracon.com/Oscillators/ASV.pdf" H 4200 4400 50  0001 C CNN
-	1    4300 4400
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	4600 4400 5100 4400
 $Comp
@@ -193,8 +182,6 @@ F 3 "" H 4875 5325 50  0001 C CNN
 	1    4875 5325
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	5050 4600 5075 4600
 $Comp
 L conn:Conn_Coaxial J1
 U 1 1 5C76F7FB
@@ -342,13 +329,13 @@ NoConn ~ 4000 4400
 $Comp
 L device:R R7
 U 1 1 5C83F1D9
-P 4900 4600
-F 0 "R7" V 5000 4600 50  0000 C CNN
-F 1 "10K" V 4900 4575 50  0000 C CNN
-F 2 "" V 4830 4600 50  0001 C CNN
-F 3 "" H 4900 4600 50  0001 C CNN
-	1    4900 4600
-	0    1    1    0   
+P 4750 4750
+F 0 "R7" V 4850 4750 50  0000 C CNN
+F 1 "10K" V 4750 4725 50  0000 C CNN
+F 2 "" V 4680 4750 50  0001 C CNN
+F 3 "" H 4750 4750 50  0001 C CNN
+	1    4750 4750
+	-1   0    0    1   
 $EndComp
 Wire Wire Line
 	4750 4600 4750 4250
@@ -367,9 +354,6 @@ F 3 "" H 5075 4750 50  0001 C CNN
 	1    5075 4750
 	1    0    0    -1  
 $EndComp
-Connection ~ 5075 4600
-Wire Wire Line
-	5075 4600 5100 4600
 Wire Wire Line
 	5075 4900 5075 4950
 $Comp
@@ -377,7 +361,7 @@ L device:C C2
 U 1 1 5C83FD1B
 P 5525 3925
 F 0 "C2" V 5475 4025 50  0000 C CNN
-F 1 "100nF" V 5575 4075 50  0000 C CNN
+F 1 "220nF" V 5575 4075 50  0000 C CNN
 F 2 "" H 5563 3775 50  0001 C CNN
 F 3 "" H 5525 3925 50  0001 C CNN
 	1    5525 3925
@@ -401,7 +385,7 @@ L device:C C3
 U 1 1 5C84052A
 P 5525 5100
 F 0 "C3" H 5350 5125 50  0000 C CNN
-F 1 "100nF" H 5400 5000 50  0000 C CNN
+F 1 "220nF" H 5400 5000 50  0000 C CNN
 F 2 "" H 5563 4950 50  0001 C CNN
 F 3 "" H 5525 5100 50  0001 C CNN
 	1    5525 5100
@@ -420,25 +404,37 @@ Wire Wire Line
 	5525 5325 4875 5325
 Connection ~ 4875 5325
 $Comp
-L device:C C?
+L device:C C4
 U 1 1 5C840FAE
 P 6125 3525
-F 0 "C?" H 6275 3525 50  0000 C CNN
-F 1 "220pF" H 6275 3625 50  0000 C CNN
+F 0 "C4" H 6275 3525 50  0000 C CNN
+F 1 "100pF" H 6275 3625 50  0000 C CNN
 F 2 "" H 6163 3375 50  0001 C CNN
 F 3 "" H 6125 3525 50  0001 C CNN
 	1    6125 3525
 	-1   0    0    1   
 $EndComp
-Wire Wire Line
-	6200 3675 6325 3675
 Connection ~ 6325 3675
 Wire Wire Line
 	6125 3375 6325 3375
 Connection ~ 6125 3375
+$Comp
+L Oscillators:CXO_DIP8 X1
+U 1 1 5C8529EE
+P 4300 4400
+F 0 "X1" H 4025 4675 50  0000 L CNN
+F 1 "28.636Mhz" H 4400 4650 50  0000 L CNN
+F 2 "Oscillators:Oscillator_DIP-8" H 4750 4050 50  0001 C CNN
+F 3 "http://cdn-reichelt.de/documents/datenblatt/B400/OSZI.pdf" H 4200 4400 50  0001 C CNN
+	1    4300 4400
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
-	6200 3700 6200 3675
+	4750 4900 4750 4950
 Wire Wire Line
-	6200 3675 6125 3675
-Connection ~ 6200 3675
+	4750 4950 5075 4950
+Wire Wire Line
+	5075 4600 5100 4600
+Wire Wire Line
+	6125 3675 6325 3675
 $EndSCHEMATC
