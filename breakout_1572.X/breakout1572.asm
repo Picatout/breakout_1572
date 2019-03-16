@@ -341,7 +341,7 @@ d2 res 1 ; score 2nd digit pixels
 d3 res 1 ; score lsd digit pixels
 balls res 1 ; number of recking balls available 
 sound_timer res 1 ; duration in multiple of 16.7msec. 
-  
+ 
     udata_shr
 flags  res 1 ; boolean variables
 lcount res 1 ; video field line counter
@@ -357,7 +357,7 @@ ball_dy res 1
 ball_speed res 1
 score res 2 ; score stored in Binary Coded Decimal
 ball_timer res 1 
-;heading res 1 ; ball direction:0=N,2=NW,3=NE,4=S,6=SW,7=SE 
+old_dx res 1 ; previous value of ball_dx at paddle_bounce
  
 ;; code 
 RES_VECT  CODE    0x0000            ; processor reset vector
@@ -745,18 +745,30 @@ paddle_test
     bra wall_test
 ; if ball_x over paddle bounce ball
 check_paddle_bounce
-    movfw paddle_pos
+    movlw BALL_WIDTH/3
+    subwf paddle_pos,W
     pushw
-    movlw (PADDLE_WIDTH-BALL_WIDTH)/3+2
+    movlw (PADDLE_WIDTH-BALL_WIDTH)/3+(BALL_WIDTH/3)
     addwf paddle_pos,W
     pushw
     movfw ball_x
     call between
     skpc
     bra collision_exit
+paddle_bounce 
+    movfw ball_dx
+    movwf old_dx
+    movfw paddle_pos
+    subwf ball_x,W
+    asrf WREG
+    asrf WREG
+    asrf WREG
+    movwf ball_dx
+    xorwf old_dx,W
+    skpnz
+    call set_ball_dx
     movlw -4
     movwf ball_dy
-    call set_ball_dx
     movlw 2
     pushw
     pushw
