@@ -71,7 +71,6 @@ F_START equ 4   ; game started
 F_PAUSE equ 5   ; game pause after a ball lost
 F_OVER equ 6    ; game over
  
- 
 ;pins assignment
 AUDIO EQU RA0
 PADDLE equ RA0
@@ -89,7 +88,7 @@ LAST_VIDEO_LINE	 equ 250 ; last video line displayed
 LEFT_MARGIN equ 52  ;  delay Tcy before any display
 COURT_WIDTH equ 248 ; Tcy
 BRICK_HEIGHT equ 8  ; scan lines
-BRICK_WIDTH equ 14  ; Tcy
+BRICK_WIDTH equ 16  ; Tcy
 BORDER_WIDTH equ 4  ; Tcy
 PADDLE_WIDTH equ 32 ; Tcy
 PADDLE_THICKNESS equ 8 ; scan lines
@@ -101,6 +100,7 @@ BALL_RIGHT_BOUND equ 82 ; Tcy
 BALL_TOP_BOUND equ 58  ; scan lines
 BALL_BOTTOM_BOUND equ LAST_VIDEO_LINE;-BRICK_HEIGHT ;
 PADDLE_Y equ LAST_VIDEO_LINE-PADDLE_THICKNESS+1 ; 
+BRICKS_ROWS equ 5 ; number of bricks rows
 ROW1_Y equ 74
 ROW2_Y equ 82
 ROW3_Y equ 90
@@ -265,24 +265,6 @@ dark_green macro
     endm
 
     
-; draw 8 bricks wall
-; input in temp1
-draw_wall macro color
-    local next_brick
-    movlw 14
-    pushw
-next_brick
-    lslf temp1
-    rlf temp2
-    movlw BLACK
-    skpnc
-    movlw color
-    movwf TRISA
-    tdelay BRICK_WIDTH-9
-    decfsz T
-    bra next_brick
-    dropn 1
-    endm
     
     
 ; draw left and right borders
@@ -353,6 +335,7 @@ row3 res 2
 row4 res 2
 row5 res 2
 row6 res 2
+mask res 1 
 d1 res 1 ; score msd digit pixels
 d2 res 1 ; score 2nd digit pixels
 d3 res 1 ; score lsd digit pixels
@@ -390,7 +373,8 @@ isr
     btfsc flags, F_SYNC
     goto task_switch
  ; chroma sync
-    tdelay 30
+    tdelay 28
+    chroma_ref
     banksel TRISA
     bcf TRISA,CHROMA
     tdelay 16
@@ -615,7 +599,7 @@ skip_2_tasks
     movwf ball_x
     incf task
     incf task
-    call lfsr_rand
+    call lfsr16
     leave
 
     
@@ -700,40 +684,41 @@ move_ball_exit
 
 ; task 7, collision detection
 collision
-    banksel row1
-; pre-compute x column (brick bit mask)    
-; column = 7-(3*ball_x/32)
+    movlw high row1
+    movwf FSR1H
+    movlw low row1
+    movwf FSR1L
+    banksel mask
+; pre-compute ball column and compute brick mask
+; column = 3*ball_x/16
     lslf ball_x,W
     addwf ball_x,W
-    pushw
-    lsrf WREG
     swapf WREG
     andlw 15
-    sublw 7
-; create mask    
     movwf temp1
-    movlw 1
-    pushw
+    movlw 8
+    subwf temp1,W
+    skpc
+    bra $+3
+    movwf temp1
+    addfsr FSR1,1
+; create mask    
+    movlw 0x80
+    movwf mask
     movfw temp1
     skpnz
     bra $+4
-    lslf T
-    decfsz WREG
+    lsrf mask
+    decfsz temp1
     bra $-2
-; ball/paddle test
-    movlw PADDLE_Y-BALL_HEIGHT+1
-    pushw
-    movlw PADDLE_Y+PADDLE_THICKNESS
-    pushw
-    movfw ball_y
-    call between
-    skpnc
-    bra check_paddle_bounce
-    movfw ball_y
-    sublw PADDLE_Y
+    btfsc ball_dy,7
+    bra wall_test ; ball going up
+fallout_test
+; if ball_y > LAST_VIDEO_LINE-BALL_HEIGTH/2 then ball lost
+    movlw LAST_VIDEO_LINE-BALL_HEIGHT/2
+    subwf ball_y,W
     skpc
-    bra ball_lost
-    bra row1_coll
+    bra paddle_test
 ball_lost    
     bsf flags, F_PAUSE ; pause game
     decfsz balls
@@ -752,6 +737,12 @@ ball_lost
     pushw
     call pong
     bra collision_exit
+paddle_test    
+; paddle bounce test
+    movlw PADDLE_Y-BALL_HEIGHT+1
+    subwf ball_y,W
+    skpc
+    bra wall_test
 ; if ball_x over paddle bounce ball
 check_paddle_bounce
     movfw paddle_pos
@@ -771,112 +762,104 @@ check_paddle_bounce
     pushw
     call pong
     bra collision_exit
-; row1 collision?    
-row1_coll    
-    movlw ROW1_Y-BRICK_HEIGHT+1
+; brick wall collision test    
+wall_test
+    movlw ROW1_Y
+    movwf temp1
+    movlw ROW5_Y+BRICK_HEIGHT
+    movwf temp2
+    movlw BALL_HEIGHT-1
+    btfss ball_dy,7
+    bra going_down
+    addwf temp1
+    addwf temp2
+    bra $+3
+going_down
+    subwf temp1
+    subwf temp2
+    movfw temp1
     pushw
-    movlw ROW1_Y+BRICK_HEIGHT
+    movfw temp2
     pushw
     movfw ball_y
     call between
     skpc
-    bra row2_coll
-; ball inside row1 bounds
-    movfw T
-    andwf row1, W
+    bra collision_exit
+    movfw temp1
+    subwf ball_y,W
+    lsrf WREG
+    lsrf WREG
+    lsrf WREG
+    brw
+    bra row1_test
+    bra row2_test
+    bra row3_test
+    bra row4_test
+    bra row5_test
+    reset
+row1_test
+    movfw mask
+    andwf INDF1,W
     skpnz
     bra collision_exit
-    comf T,W
-    andwf row1
+    comf mask,W
+    andwf INDF1
     movlw 9
     call inc_score
     bra brick_bounce
-; row2 collision?    
-row2_coll
-    movlw ROW2_Y-BRICK_HEIGHT+1
-    pushw
-    movlw ROW2_Y+BRICK_HEIGHT
-    pushw
-    movfw ball_y
-    call between
-    skpc
-    bra row3_coll
-    movfw T
-    andwf row2, W
+row2_test
+    addfsr FSR1,2
+    movfw mask
+    andwf INDF1, W
     skpnz
     bra collision_exit
-    comf T,W
-    andwf row2
+    comf mask,W
+    andwf INDF1
     movlw 6
     call inc_score
     bra brick_bounce
-; row3 collision?    
-row3_coll
-    movlw ROW3_Y-BRICK_HEIGHT+1
-    pushw
-    movlw ROW3_Y+BRICK_HEIGHT
-    pushw
-    movfw ball_y
-    call between
-    skpc
-    bra row4_coll
-    movfw T
-    andwf row3,W
+row3_test
+    addfsr FSR1,4
+    movfw mask
+    andwf INDF1,W
     skpnz
     bra collision_exit
-    comf T,W
-    andwf row3
+    comf mask,W
+    andwf INDF1
     movlw 3
     call inc_score
     bra brick_bounce
-; row4 collision?    
-row4_coll
-    movlw ROW4_Y-BRICK_HEIGHT+1
-    pushw
-    movlw ROW4_Y+BRICK_HEIGHT
-    pushw
-    movfw ball_y
-    call between
-    skpc
-    bra row5_coll
-    movfw T
-    andwf row4,W
+row4_test
+    addfsr FSR1,6
+    movfw mask
+    andwf INDF1,W
     skpnz
     bra collision_exit
-    comf T,W
-    andwf row4
+    comf mask,W
+    andwf INDF1
     movlw 2
     call inc_score
     bra brick_bounce
-; row5 collision?    
-row5_coll    
-    movlw ROW5_Y-BRICK_HEIGHT+1
-    pushw
-    movlw ROW5_Y+BRICK_HEIGHT
-    pushw
-    movfw ball_y
-    call between
-    skpc
-    bra collision_exit
-    movfw T
-    andwf row5,W
+row5_test    
+    addfsr FSR1,8
+    movfw mask
+    andwf INDF1,W
     skpnz
     bra collision_exit
-    comf T,W
-    andwf row5
+    comf mask,W
+    andwf INDF1
     movlw 1
     call inc_score
 brick_bounce
     comf ball_dy
     incf ball_dy
-    call set_ball_dx
+    ;call set_ball_dx
     movlw 1
     pushw
     movlw 0
     pushw
     call pong
 collision_exit
-    dropn 2
     incf task
     incf lcount
     leave
@@ -888,13 +871,13 @@ collision_exit
 ; output:
 ;   Carry bit set if true    
 between
-    movwf temp1
+    movwf temp2
     pickn 1
-    subwf temp1,W
+    subwf temp2,W
     skpc
     bra between_exit
     movfw T
-    subwf temp1
+    subwf temp2
     movfw STATUS
     xorlw 1
     movwf STATUS
@@ -1084,6 +1067,31 @@ draw_void_exit
     leave
 no_wall_draw
     next_task 2*BRICK_HEIGHT
+
+; draw 16 bricks wall
+; input:
+;   row in temp1,temp2
+;   color in WREG
+; output:
+;   none    
+draw_wall; macro color
+;    local next_brick
+    pushw
+    movlw 16
+    pushw
+next_brick
+    lslf temp2
+    rlf temp1
+    movlw BLACK
+    skpnc
+    pickn 1 ;movlw color
+    movwf TRISA
+    tdelay BRICK_WIDTH-9
+    decfsz T
+    bra next_brick
+    dropn 2
+    ;endm
+    return
     
 ; task 12, draw top brick row
 draw_row1 ; lcount enter at 74 leave at 82
@@ -1091,12 +1099,13 @@ draw_row1 ; lcount enter at 74 leave at 82
     banksel TRISA
     movfw row1
     movwf temp1
-    tdelay LEFT_MARGIN-4
-;    draw_border BORDER_WIDTH
-    draw_wall MAUVE
+    movfw row1+1
+    movwf temp2
+    tdelay LEFT_MARGIN-11
+    movlw YELLOW
+    call draw_wall
     black
     tdelay 3
-;    draw_border BORDER_WIDTH
     next_task BRICK_HEIGHT
     
 ; task 13, draw 2nd brick row    
@@ -1105,65 +1114,66 @@ draw_row2 ;lcount enter at 82 leave at 90
     banksel row2
     movfw row2
     movwf temp1
-    tdelay LEFT_MARGIN-4
-;    draw_border BORDER_WIDTH
-    draw_wall YELLOW
+    movfw row2+1
+    movwf temp2
+    tdelay LEFT_MARGIN-11
+    movlw MAUVE
+    call draw_wall
     black
     tdelay 3
-;    draw_border BORDER_WIDTH
     next_task BRICK_HEIGHT
 
 ; task 14, draw 3rd brick row    
 draw_row3 ; lcount enter at 90 leave at 98
-;    btfss flags, F_EVEN
-;    bra row3_exit
-    chroma_ref
+    chroma_invert
     banksel row3
     movfw row3
     movwf temp1
-    tdelay LEFT_MARGIN-4
-;    draw_border BORDER_WIDTH
-    draw_wall BLUE
+    movfw row3+1
+    movwf temp2
+    tdelay LEFT_MARGIN-11
+    movlw BLUE
+    call draw_wall
     black
     tdelay 3
-;    draw_border BORDER_WIDTH
 row3_exit    
     next_task BRICK_HEIGHT
     
 ; task 15, draw 4th brick row    
 draw_row4 ; lcount enter at 98 leave at 106
-    chroma_invert
+    chroma_ref
     banksel row4
     movfw row4
     movwf temp1
-    tdelay LEFT_MARGIN-4
-;    draw_border BORDER_WIDTH
-    draw_wall MAUVE
+    movfw row4+1
+    movwf temp2
+    tdelay LEFT_MARGIN-11
+    movlw YELLOW
+    call draw_wall
     black
     tdelay 3
-;    draw_border BORDER_WIDTH
     next_task BRICK_HEIGHT
 
 ; task 16, draw 5th brick row    
 draw_row5 ; lcount enter at 106 leave at 114
+    chroma_invert
     banksel row5
     movfw row5
     movwf temp1
-    tdelay LEFT_MARGIN-2
-;    draw_border BORDER_WIDTH
-    draw_wall WHITE
+    movfw row5+1
+    movwf temp2
+    tdelay LEFT_MARGIN-11
+    movlw MAUVE
+    call draw_wall
     black
     tdelay 3
-;    draw_border BORDER_WIDTH
     black
     next_task BRICK_HEIGHT
 
 ; task 17,draw all rows between paddle and lower brick row    
 draw_empty ; lcount enter at 114 leave at LAST_VIDEO_LINE-PADDLE_THICKNESS+1
     tdelay LEFT_MARGIN
-;    draw_border BORDER_WIDTH
     tdelay 320
-;    draw_border BORDER_WIDTH
     black
     incf lcount
     movlw LAST_VIDEO_LINE-PADDLE_THICKNESS+1
@@ -1173,7 +1183,6 @@ draw_empty ; lcount enter at 114 leave at LAST_VIDEO_LINE-PADDLE_THICKNESS+1
     clrf slice
     incf task
     leave
-;    next_task LAST_VIDEO_LINE-114-BRICK_HEIGHT
 
     
 ; task 18, draw paddle at bottom screen    
@@ -1260,9 +1269,11 @@ inc_score
     movlw 1
     movwf ball_speed
 game_over_test ; all bricks destroyed?
-    btfss score,0
+    movlw 3
+    subwf score,W
+    skpz
     return
-    movlw 0x68
+    movlw 0x36
     subwf score+1,W
     skpnz
     bsf flags,F_OVER
@@ -1292,39 +1303,36 @@ brick_wall_init
     movlw 12
     movwf temp1
     movlw 0xff
-ibw    
+bw_init
     movwi FSR1++
     decfsz temp1
-    bra ibw
+    bra bw_init
     return
 
-;    LFSR 32 bits
-;    REF:  http://www.ece.cmu.edu/~koopman/lfsr/index.html
-;    must be initialized with 0xFFFFFFFF
-LFSR_MASK equ 0x7FFFF159
-lfsr_rand
-    rrf seed+3,W   ; rotation du LFSR 1 bit vers la droite
-    rrf seed, F
-    rrf seed+1,F
-    rrf seed+2,F
-    rrf seed+3,F
-    btfsc seed+3,7
-    goto lfsr_rand_exit
-    movlw LFSR_MASK & 0xFF
-    xorwf seed
-    movlw (LFSR_MASK>>8) & 0xFF
-    xorwf seed+1
-    movlw (LFSR_MASK>>16) & 0xFF
-    xorwf seed+2
-    movlw (LFSR_MASK>>24) & 0xFF
-    xorwf seed+3
-lfsr_rand_exit
-    movlw 0x1F
-    andwf seed,W  ; modulo 32
+; REF: https://en.wikipedia.org/wiki/LFSR#Fibonacci_LFSRs    
+lfsr16
+    banksel seed
+    movfw seed+1
+    movwf temp1
+    lslf WREG
+    lslf WREG
+    movwf temp2
+    xorwf temp1
+    lslf temp2
+    movfw temp2
+    xorwf temp1
+    lslf temp2
+    lslf temp2,W
+    xorwf temp1
+    lslf temp1
+    rlf seed
+    rlf seed+1
+    movfw seed
     return
     
+
 set_ball_dx
-    call lfsr_rand ;random
+    call lfsr16 ;random
     movlw 7
     andwf seed,W
     lslf WREG
