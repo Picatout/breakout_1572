@@ -1111,7 +1111,7 @@ draw_row1 ; lcount enter at 74 leave at 82
 ; task 13, draw 2nd brick row    
 draw_row2 ;lcount enter at 82 leave at 90
     chroma_invert
-    banksel row2
+    banksel TRISA
     movfw row2
     movwf temp1
     movfw row2+1
@@ -1126,7 +1126,7 @@ draw_row2 ;lcount enter at 82 leave at 90
 ; task 14, draw 3rd brick row    
 draw_row3 ; lcount enter at 90 leave at 98
     chroma_invert
-    banksel row3
+    banksel TRISA
     movfw row3
     movwf temp1
     movfw row3+1
@@ -1142,7 +1142,7 @@ row3_exit
 ; task 15, draw 4th brick row    
 draw_row4 ; lcount enter at 98 leave at 106
     chroma_ref
-    banksel row4
+    banksel TRISA
     movfw row4
     movwf temp1
     movfw row4+1
@@ -1157,7 +1157,7 @@ draw_row4 ; lcount enter at 98 leave at 106
 ; task 16, draw 5th brick row    
 draw_row5 ; lcount enter at 106 leave at 114
     chroma_invert
-    banksel row5
+    banksel TRISA
     movfw row5
     movwf temp1
     movfw row5+1
