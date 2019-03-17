@@ -70,6 +70,7 @@ F_SOUND equ 3   ; sound enabled
 F_START equ 4   ; game started 
 F_PAUSE equ 5   ; game pause after a ball lost
 F_OVER equ 6    ; game over
+F_COOL equ 7    ; player got maximum score
  
 ;pins assignment
 AUDIO EQU RA0
@@ -323,9 +324,10 @@ row4 res 2
 row5 res 2
 row6 res 2
 mask res 1 
-d1 res 1 ; score msd digit pixels
-d2 res 1 ; score 2nd digit pixels
-d3 res 1 ; score lsd digit pixels
+pixels res 4
+;d1 res 1 ; score msd digit pixels
+;d2 res 1 ; score 2nd digit pixels
+;d3 res 1 ; score lsd digit pixels
 balls res 1 ; number of recking balls available 
 sound_timer res 1 ; sound duration in multiple of 16.7msec. 
  
@@ -925,22 +927,22 @@ draw_score ; lcount enter at 30 leave at 50
     call digit_offset
     addwf T,W
     call digits
-    movwf d3
+    movwf pixels+2
     swapf score+1,W
     andlw 0xf
     call digit_offset
     addwf T,W
     call digits
-    movwf d2
+    movwf pixels+1
     movlw 0xf
     andwf score,W
     call digit_offset
     addwf T,W
     call digits
     call digit_row
-    movfw d2
+    movfw pixels+1
     call digit_row
-    movfw d3
+    movfw pixels+2
     call digit_row
     tdelay 60
     bcf TRISA,VIDEO_OUT
@@ -1079,36 +1081,6 @@ draw_void_exit
 no_wall_draw
     next_task 2*BRICK_HEIGHT
 
-; display end message
-display_end_msg
-    movlw 40
-    pushw
-    movlw 80
-    pushw
-    movfw slice
-    call between
-    skpc
-    return
-    tdelay 16
-    banksel TRISA
-    movlw 40
-    subwf slice,W
-    lsrf WREG
-    lsrf WREG
-    lsrf WREG
-    lslf WREG
-    pushw
-    call end_msg
-    movwf temp1
-    popw
-    incf WREG
-    call end_msg
-    movwf temp2
-    movlw YELLOW
-    call draw_wall
-    black
-    return
-    
 ; draw 16 bricks wall
 ; input:
 ;   row in temp1,temp2
@@ -1131,7 +1103,6 @@ next_brick
     decfsz T
     bra next_brick
     dropn 2
-    ;endm
     return
     
 ; task 12, draw top brick row
@@ -1211,11 +1182,43 @@ draw_row5 ; lcount enter at 106 leave at 114
     black
     next_task BRICK_HEIGHT
 
+MSG_FIRST equ 40
+MSG_HEIGHT equ 40
+MSG_PIXELS_COUNT equ 16 
 ; task 17
 ; draw all rows between paddle and lower brick row    
 draw_empty ; lcount enter at 114 leave at LAST_VIDEO_LINE-PADDLE_THICKNESS+1
-    btfsc flags, F_OVER
-    call display_end_msg
+    movlw MSG_FIRST
+    pushw
+    movlw MSG_FIRST+MSG_HEIGHT
+    pushw
+    movfw slice
+    call between
+    skpc
+    bra no_msg
+    btfss flags, F_OVER
+    bra no_msg
+    movlw YELLOW ; message color
+    pushw
+    movlw MSG_PIXELS_COUNT
+    pushw
+    btfss flags, F_COOL
+    bra display_end
+; perfect score display 'COOL' message
+    movlw high cool_msg
+    movwf FSR1H
+    movlw low cool_msg
+    movwf FSR1L
+    call display_msg
+    bra no_msg
+; display 'END!' message    
+display_end
+    movlw high end_msg
+    movwf FSR1H
+    movlw low end_msg
+    movwf FSR1L
+    call display_msg
+no_msg    
     incf slice
     incf lcount
     movlw LAST_VIDEO_LINE-PADDLE_THICKNESS+1
@@ -1226,6 +1229,41 @@ draw_empty ; lcount enter at 114 leave at LAST_VIDEO_LINE-PADDLE_THICKNESS+1
     incf task
     leave
 
+; display end message
+; message as a maximum of 24 pixels    
+display_msg
+;    tdelay 8
+    banksel TRISA
+    movlw MSG_FIRST
+    subwf slice,W
+    lsrf WREG
+    lsrf WREG
+    lsrf WREG
+    movwf temp1
+    lslf WREG
+    addwf temp1,W
+    addwf FSR1L
+    skpnc
+    incf FSR1H
+    moviw FSR1++
+    movwf pixels
+    moviw FSR1++
+    movwf pixels+1
+    moviw FSR1++
+    movwf pixels+2
+next_pixel
+    lslf pixels+2
+    rlf pixels+1
+    rlf pixels
+    movlw BLACK
+    skpnc
+    pickn 1 ;movlw color
+    movwf TRISA
+    decfsz T
+    bra next_pixel
+    dropn 2
+    black
+    return
     
 ; task 18, draw paddle at bottom screen    
 draw_paddle
@@ -1317,8 +1355,10 @@ game_over_test ; all bricks destroyed?
     return
     movlw 0x36
     subwf score+1,W
-    skpnz
-    bsf flags,F_OVER
+    skpz
+    return
+    bsf flags,F_OVER ; game over
+    bsf flags,F_COOL ; with maximum score.
     return
     
 ;***********************************
@@ -1414,9 +1454,8 @@ game_init
     movwf ball_dy
     movlw 2
     movwf ball_speed
+    clrf flags
     bsf flags, F_START
-    bcf flags, F_PAUSE
-    bcf flags, F_OVER
     return
     
 ; delay by TIMER0
@@ -1540,6 +1579,8 @@ initialize
     bsf INTCON,GIE
     clrf flags
     bsf flags, F_SYNC
+; test code
+    
 ; all processing done in ISR    
     goto $
 
@@ -1566,12 +1607,20 @@ frequency
   
 ;display END! when game is over    
 end_msg
-    brw
-    dt 0xe8,0xc8
-    dt 0x8e,0xa8
-    dt 0xea,0xa8
-    dt 0x8a,0xa0
-    dt 0xea,0xc8
+;    brw
+    data 0xe8,0xc8,0
+    data 0x8e,0xa8,0
+    data 0xea,0xa8,0
+    data 0x8a,0xa0,0
+    data 0xea,0xc8,0
+  
+cool_msg
+;    brw
+    data 0xee,0xe8,0
+    data 0x8a,0xa8,0
+    data 0x8a,0xa8,0
+    data 0x8a,0xa8,0
+    data 0xee,0xee,0
     
 eeprom org (PROG_SIZE-EEPROM_SIZE)
 max_score 
