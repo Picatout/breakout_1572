@@ -23,20 +23,29 @@
 ;   Each visible line must be terminate by returning video_output to black
 ;   otherwise the sync signal will be mangled. 
 ;    
-;  VIDEO DISPLAY ZONES
-;  scan lines     display
-;  =======================    
-;    30-49     |   score and balls count
-;    50-57     |   top wall
-;    58-250    |   play ground
-;    58-73     |   empty zone
-;    74-81     |   first bricks row
-;    82-89     |   second bricks row
-;    90-97     |   third bricks row
-;    98-105    |   fourth bricks row
-;    106-113   |   fifth bricks row
-;    114-250   |   empty zone
-;    243-250   |   paddle zone    
+;  SCHEDULER
+;  scan lines  | slices  |   usage
+;  =================================
+;    0-2       |  6      | task 0, vertical pre-equalization
+;    3-5       |  6      | task 1, vertical sync
+;    6-8       |  6      | task 2, vertical post-equalization
+;    9         |  1      | task 3, synchronization end
+;    10        |  1      | task 4, sound timer
+;    11        |  1      | task 5, user input
+;    12        |  1      | task 6, move ball
+;    13        |  1      | task 7, collision control
+;    14-29     |  26     | task 8, do nothing until first visible line    
+;    30-49     |  20     | task 9, display score and balls count
+;    50-57     |  8      | task 10, even field draw top wall, odd field do nothing
+;    58-250    |  193    | task 11, even field draw sides line and ball skip to task 19, odd skip 16 lines
+;    74-81     |  8      | task 12, odd field draw first bricks row, even field skipped
+;    82-89     |  8      | task 13, odd field draw second bricks row, even field skipped
+;    90-97     |  8      | task 14, odd field draw third bricks row, even field skipped
+;    98-105    |  8      | task 15, odd field draw fourth bricks row, even field skipped
+;    106-113   |  8      | task 16, odd field draw fifth bricks row, even field skipped
+;    114-242   |  129	 | task 17, odd field display game messages, even field skipped
+;    243-250   |  8      | task 18, odd filed draw paddle, even field skipped
+;    251-262/3 |  12/13  | task 19, wait end of field    
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
     
@@ -129,8 +138,8 @@ next_task macro s
     leave
     clrf slice
     incf task
-    movlw s
-    addwf lcount
+;    movlw s
+;    addwf lcount
     leave
     endm
     
@@ -145,20 +154,53 @@ swap_var macro var
 
 ; delay in machine cycle T
 ; parameters:
-;   T   number of machine cycles    
-tdelay macro T
-    variable q=(T)/3
-    variable r=(T)%3
-    if (q)
-    movlw q
-    decfsz WREG
-    bra $-1
+;   mc   number of machine cycles    
+tdelay macro mc 
+    if mc==0
+    exitm
     endif
+    if mc==1
+    nop
+    exitm
+    endif
+    if mc==2
+    bra $+1
+    exitm
+    endif
+    if mc==3
+    nop
+    bra $+1
+    exitm
+    endif
+    if mc==4
+    call _4tcy
+    exitm
+    endif
+    if mc==5
+    call _5tcy
+    exitm
+    endif
+    if mc==6
+    call _6tcy
+    exitm
+    endif
+    if mc==7
+    call _7tcy
+    exitm
+    endif
+    if mc>7
+    variable q=(mc-5)/3
+    variable r=(mc-5)%3
+    movlw q
+    call _3ntcy
     if (r==2)
     bra $+1
+    exitm
     endif 
     if (r==1)
     nop
+    exitm
+    endif
     endif
     endm
 
@@ -479,15 +521,15 @@ vsync_end
     movwf PWM3PRL
     bsf PWM3LDCON,7
     incf task
-    movlw 9
-    movwf lcount
+;    movlw 9
+;    movwf lcount
     leave
 
 ; task 4,  sound timer
 ; if sound active process it.    
 sound
     incf task
-    incf lcount
+;    incf lcount
     btfss flags, F_SOUND
     leave
     btfsc flags, F_PAUSE
@@ -561,7 +603,6 @@ sound_init
 ;task 5, read button and paddle position
 user_input
     incf task
-    incf lcount
     call read_paddle
     btfsc flags, F_OVER
     bra game_over
@@ -593,7 +634,7 @@ game_over
     bcf flags,F_OVER
     call game_init
     incf task
-    incf lcount
+;    incf lcount
     leave
 ; while game not running skip 'move_ball' and 'collision' tasks    
 skip_2_tasks
@@ -603,6 +644,8 @@ skip_2_tasks
     incf task
     incf task
     call lfsr16
+    movlw 12
+    movwf lcount
     leave
 
     
@@ -682,7 +725,7 @@ bottom_bound
     incf ball_dy
 move_ball_exit    
     incf task
-    incf lcount
+;    incf lcount
     leave
 
 ; task 7, collision detection
@@ -874,7 +917,8 @@ brick_bounce
     call sound_init
 collision_exit
     incf task
-    incf lcount
+    movlw 14
+    movwf lcount
     leave
 
 ; check if  lb <= x < hb
@@ -899,6 +943,7 @@ between_exit
     return
     
 ; task 8, wait for first video line
+; inter with lcount==    
 video_first
     incf lcount
     movlw FIRST_VIDEO_LINE
@@ -955,6 +1000,7 @@ draw_score ; lcount enter at 30 leave at 50
     call digits
     call digit_row
 score_exit
+    incf lcount
     next_task 5*4
 
 ; display digit row pixels   
@@ -990,6 +1036,7 @@ draw_top_wall ;lcount enter at 50 leave at 58
     tdelay COURT_WIDTH+3*BORDER_WIDTH+1
     black
 top_wall_exit
+    incf lcount
     next_task BRICK_HEIGHT
 
 ; task 11,  only on even field draw vertical side bands.    
@@ -1079,6 +1126,7 @@ draw_void_exit
     movwf task
     leave
 no_wall_draw
+    incf lcount
     next_task 2*BRICK_HEIGHT
 
 ; draw 16 bricks wall
@@ -1118,6 +1166,7 @@ draw_row1 ; lcount enter at 74 leave at 82
     call draw_wall
     black
     tdelay 3
+    incf lcount
     next_task BRICK_HEIGHT
     
 ; task 13, draw 2nd brick row    
@@ -1133,6 +1182,7 @@ draw_row2 ;lcount enter at 82 leave at 90
     call draw_wall
     black
     tdelay 3
+    incf lcount
     next_task BRICK_HEIGHT
 
 ; task 14, draw 3rd brick row    
@@ -1148,7 +1198,8 @@ draw_row3 ; lcount enter at 90 leave at 98
     call draw_wall
     black
     tdelay 3
-row3_exit    
+row3_exit
+    incf lcount
     next_task BRICK_HEIGHT
     
 ; task 15, draw 4th brick row    
@@ -1164,6 +1215,7 @@ draw_row4 ; lcount enter at 98 leave at 106
     call draw_wall
     black
     tdelay 3
+    incf lcount
     next_task BRICK_HEIGHT
 
 ; task 16, draw 5th brick row    
@@ -1180,6 +1232,7 @@ draw_row5 ; lcount enter at 106 leave at 114
     black
     tdelay 3
     black
+    incf lcount
     next_task BRICK_HEIGHT
 
 MSG_FIRST equ 40
@@ -1277,6 +1330,7 @@ draw_paddle
     bcf TRISA,VIDEO_OUT
     tdelay PADDLE_WIDTH
     bsf TRISA,VIDEO_OUT
+    incf lcount
     next_task PADDLE_THICKNESS
 
 ; task 19,  wait end of this field, reset task to zero    
@@ -1311,7 +1365,7 @@ even_field
 field_end
     clrf task
     clrf slice
-    clrf lcount
+;    clrf lcount
     bcf flags, F_HI_LINE
     bsf flags, F_SYNC
 ; toggle odd/even field flag    
@@ -1321,6 +1375,23 @@ field_end
 
 ; helper functions
 
+; delay = (3*n+5)*tcy    
+;input:
+;   WREG <- n    
+_3ntcy
+    decfsz WREG
+    bra $-1
+    return
+    
+_7tcy ; call here for 7*tcy delay using a single instruction
+    nop
+_6tcy ; call here for 6*tcy delay using a single instruction
+    nop
+_5tcy ; call here for 5*tcy delay using a single instruction
+    nop
+_4tcy ; call here for 4*Tcy delay using a single instruction    
+    return
+    
     
 ; increment user score
 ; This is a BCD addition where a single digit is added to score.   
