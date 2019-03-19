@@ -96,7 +96,7 @@ CLKIN equ RA5
 FIRST_VIDEO_LINE equ 31 ; first video line displayed
 LAST_VIDEO_LINE	 equ 251 ; last video line displayed
 LEFT_MARGIN equ 52  ;  delay Tcy before any display
-COURT_WIDTH equ 248 ; Tcy
+PLAY_WIDTH equ 256 ; Tcy
 BRICK_HEIGHT equ 8  ; scan lines
 BRICK_WIDTH equ 16  ; Tcy
 BORDER_WIDTH equ 4  ; Tcy
@@ -107,7 +107,7 @@ BALL_WIDTH equ 8 ; Tcy
 BALL_HEIGHT equ 8 ; scan lines 
 BALL_LEFT_BOUND equ 0 ; Tcy
 BALL_RIGHT_BOUND equ 82 ; Tcy
-BALL_TOP_BOUND equ 58  ; scan lines
+BALL_TOP_BOUND equ 59  ; scan lines
 BALL_BOTTOM_BOUND equ LAST_VIDEO_LINE;-BRICK_HEIGHT ;
 PADDLE_Y equ LAST_VIDEO_LINE-PADDLE_THICKNESS+1 ; 
 BRICKS_ROWS equ 5 ; number of bricks rows
@@ -1021,17 +1021,27 @@ draw_top_wall
     btfss flags, F_EVEN
     bra top_wall_exit
     banksel TRISA
-    tdelay LEFT_MARGIN -2
+    tdelay LEFT_MARGIN
     white
-    tdelay COURT_WIDTH+3*BORDER_WIDTH+1
+    tdelay PLAY_WIDTH+3*BORDER_WIDTH+1
     black
 top_wall_exit
     next_task BRICK_HEIGHT
 
-; task 11,  only on even field draw vertical side bands.    
+; task 11,  only on even field draw vertical side bars and ball.    
 draw_void 
     btfss flags, F_EVEN
-    bra no_wall_draw
+    bra no_walls
+draw_walls 
+    banksel TRISA
+    ; right border
+    movlw BORDER_WIDTH
+    pushw
+    movlw WHITE
+    pushw
+    ; after ball
+    movfw ball_x
+    
     movfw ball_y
     subwf lcount,W
     skpc
@@ -1048,11 +1058,10 @@ no_ball
     tdelay LEFT_MARGIN-13
     draw_border BORDER_WIDTH
     black
-    tdelay COURT_WIDTH
+    tdelay PLAY_WIDTH
     draw_border BORDER_WIDTH
     bra draw_void_exit
 yes_ball
-    banksel TRISA
     movfw ball_x
     skpnz
     bra ball_at_left
@@ -1088,7 +1097,7 @@ ball_at_left
     bcf TRISA,VIDEO_OUT
     tdelay 12
     bsf TRISA,VIDEO_OUT
-    tdelay COURT_WIDTH-6
+    tdelay PLAY_WIDTH-6
     nop
     bcf TRISA,VIDEO_OUT
     tdelay 4
@@ -1099,7 +1108,7 @@ ball_at_right
     bcf TRISA,VIDEO_OUT
     tdelay 4
     bsf TRISA,VIDEO_OUT
-    tdelay COURT_WIDTH-2
+    tdelay PLAY_WIDTH-2
     bcf TRISA,VIDEO_OUT
     tdelay 10
     bsf TRISA,VIDEO_OUT
@@ -1113,7 +1122,7 @@ draw_void_exit
     movlw 19
     movwf task
     leave
-no_wall_draw
+no_walls
     next_task 2*BRICK_HEIGHT
 
 ; draw 16 bricks wall
@@ -1367,6 +1376,30 @@ _6tcy ; call here for 6*tcy delay using a single instruction
 _5tcy ; call here for 5*tcy delay using a single instruction
     nop
 _4tcy ; call here for 4*Tcy delay using a single instruction    
+    return
+
+;division by 3
+; input:
+;   WREG value to divide
+; output:
+;   WREG  quotient
+;   temp1  remainder    
+div3
+    movwf temp1
+    clrf temp2
+    movlw 0xc0
+    pushw
+div3_loop
+    movfw T
+    subwf temp1,W
+    skpnc
+    movwf temp1
+    rlf temp2
+    lsrf T
+    skpc
+    bra div3_loop
+    dropn 1
+    movfw temp2
     return
     
     
