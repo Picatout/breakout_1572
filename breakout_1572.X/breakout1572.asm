@@ -95,7 +95,7 @@ CLKIN equ RA5
 ; values are in scan lines for y dimension.    
 FIRST_VIDEO_LINE equ 31 ; first video line displayed
 LAST_VIDEO_LINE	 equ 251 ; last video line displayed
-LEFT_MARGIN equ 52  ;  delay Tcy before any display
+LEFT_MARGIN equ 54  ;  delay Tcy before any display
 PLAY_WIDTH equ 256 ; Tcy
 BRICK_HEIGHT equ 8  ; scan lines
 BRICK_WIDTH equ 16  ; Tcy
@@ -431,7 +431,7 @@ task_switch ; round robin task scheduler
     goto video_first ; task 8, wait FIRST_VIDEO line.
     goto draw_score ;task 9,  draw score en ball count
     goto draw_top_wall ;task 10,  draw top wall
-    goto draw_void ;task 11, draw play space
+    goto draw_sides ;task 11, draw play space
     goto draw_row1 ;task 12, draw top bricks row
     goto draw_row2 ;task 13, draw second bricks row
     goto draw_row3 ;task 14,  draw third bricks row
@@ -637,7 +637,7 @@ game_over
 ; while game not running skip 'move_ball' and 'collision' tasks    
 skip_2_tasks
     movfw paddle_pos
-    addlw 4
+    addlw 2
     movwf ball_x
     incf task
     incf task
@@ -688,9 +688,15 @@ move_ball
     movwf ball_timer
     movfw ball_dx
     addwf ball_x
-    skpz
+    btfss ball_dx,7
     bra right_bound
-    incf ball_x
+left_bound
+    skpnz
+    bra $+3
+    btfss ball_x,7
+    bra move_y
+    movlw 1
+    movwf ball_x
     comf ball_dx
     incf ball_dx
     bra move_y
@@ -766,10 +772,10 @@ ball_lost
     bra $+3
     bcf flags, F_START
     bsf flags, F_OVER
-    movlw 4
+    movlw 2
     addwf paddle_pos,W
     movwf ball_x
-    movlw PADDLE_Y-BRICK_HEIGHT
+    movlw PADDLE_Y-BALL_HEIGHT+1
     movwf ball_y
     movlw -4
     movwf ball_dy
@@ -925,7 +931,7 @@ between
     pickn 1
     subwf temp2,W
     skpc
-    bra between_exit
+    bra between_exit2
     movfw T
     subwf temp2
     movfw STATUS
@@ -934,6 +940,10 @@ between
 between_exit    
     dropn 2
     return
+; add tcy to have constant tcy for this routine whatever the path    
+between_exit2
+    bra $+1
+    bra between_exit
     
 ; task 8, wait for first video line
 video_first
@@ -1023,98 +1033,58 @@ draw_top_wall
     banksel TRISA
     tdelay LEFT_MARGIN
     white
-    tdelay PLAY_WIDTH+3*BORDER_WIDTH+1
+    tdelay PLAY_WIDTH+2*BORDER_WIDTH
     black
 top_wall_exit
     next_task BRICK_HEIGHT
 
-; task 11,  only on even field draw vertical side bars and ball.    
-draw_void 
-    btfss flags, F_EVEN
-    bra no_walls
-draw_walls 
+; task 11,  only on even field draw vertical sides and ball.    
+draw_sides 
     banksel TRISA
-    ; right border
-    movlw BORDER_WIDTH
-    pushw
-    movlw WHITE
-    pushw
-    ; after ball
-    movfw ball_x
-    
+    btfss flags, F_EVEN
+    bra right_side
+left_side 
+; compute zones parameters and put them on stack
+    ; is there a ball?
     movfw ball_y
-    subwf lcount,W
+    pushw
+    addlw BALL_HEIGHT
+    pushw
+    movfw lcount
+    call between
+    movlw WHITE
     skpc
-    bra no_ball_dly
-    movlw BALL_HEIGHT
-    addwf ball_y,W
-    subwf lcount,W
-    skpc
-    bra yes_ball
-    bra no_ball
-no_ball_dly
-    tdelay 6
-no_ball    
-    tdelay LEFT_MARGIN-13
-    draw_border BORDER_WIDTH
-    black
-    tdelay PLAY_WIDTH
-    draw_border BORDER_WIDTH
-    bra draw_void_exit
-yes_ball
-    movfw ball_x
-    skpnz
-    bra ball_at_left
-    sublw BALL_RIGHT_BOUND
-    skpnz
-    bra ball_at_right
-ball_in_middle    
-    movlw 1
-    subwf ball_x,W
-    skpnz
-    addlw 1
-    movwf temp1
-    tdelay LEFT_MARGIN-22
-    bcf TRISA,VIDEO_OUT
-    tdelay 3
-    movfw temp1
-    bsf TRISA,VIDEO_OUT
-    decfsz WREG
-    bra $-1
-    bcf TRISA, VIDEO_OUT
-    tdelay BALL_WIDTH-1
-    movfw ball_x
-    bsf TRISA,VIDEO_OUT
-    sublw BALL_RIGHT_BOUND
-    decfsz WREG
-    bra $-1
-    bcf TRISA,VIDEO_OUT
-    tdelay 4
-    bsf TRISA,VIDEO_OUT
-    bra draw_void_exit
-ball_at_left
-    tdelay LEFT_MARGIN-15
-    bcf TRISA,VIDEO_OUT
-    tdelay 12
-    bsf TRISA,VIDEO_OUT
-    tdelay PLAY_WIDTH-6
+    movlw BLACK
+    ; ball color on stack
+    pushw  ; ( c -- )
+    ; left margin
+    tdelay 30
+    ; draw left border
+    movlw WHITE
+    movwf TRISA
     nop
-    bcf TRISA,VIDEO_OUT
-    tdelay 4
-    bsf TRISA,VIDEO_OUT
-    bra draw_void_exit
-ball_at_right
-    tdelay LEFT_MARGIN-18
-    bcf TRISA,VIDEO_OUT
-    tdelay 4
-    bsf TRISA,VIDEO_OUT
-    tdelay PLAY_WIDTH-2
-    bcf TRISA,VIDEO_OUT
-    tdelay 10
-    bsf TRISA,VIDEO_OUT
-draw_void_exit    
+    movfw ball_x
+    pushw
+    black
+    decfsz T
+    bra $-1
+;    skpz
+;    bra $+6
+;    movlw BLACK
+;    movwf TRISA
+;    movfw ball_x
+;    decfsz WREG
+;    bra $-1
+    pickn 1 
+    movwf TRISA
+    dropn 2
+    tdelay 5
+    ; draw black zone after ball
+    movlw BLACK
+    movwf TRISA
+draw_sides_exit    
     incf slice
-    movlw LAST_VIDEO_LINE+1
+    movlw LAST_VIDEO_LINE-PADDLE_THICKNESS
     subwf lcount,W
     skpz
     leave
@@ -1122,7 +1092,14 @@ draw_void_exit
     movlw 19
     movwf task
     leave
-no_walls
+right_side
+    movlw LEFT_MARGIN/3+85
+    decfsz WREG
+    bra $-1
+    tdelay 2
+    white
+    tdelay 4
+    black
     next_task 2*BRICK_HEIGHT
 
 ; draw 16 bricks wall
@@ -1131,8 +1108,7 @@ no_walls
 ;   color in WREG
 ; output:
 ;   none    
-draw_wall; macro color
-;    local next_brick
+draw_bricks; macro color
     pushw
     movlw 16
     pushw
@@ -1157,11 +1133,12 @@ draw_row1
     movwf temp1
     movfw row1+1
     movwf temp2
-    tdelay LEFT_MARGIN-11
+    tdelay LEFT_MARGIN-9
     movlw YELLOW
-    call draw_wall
+    call draw_bricks
+    white
+    tdelay BORDER_WIDTH
     black
-    tdelay 3
     next_task BRICK_HEIGHT
     
 ; task 13, draw 2nd brick row    
@@ -1172,11 +1149,12 @@ draw_row2
     movwf temp1
     movfw row2+1
     movwf temp2
-    tdelay LEFT_MARGIN-11
+    tdelay LEFT_MARGIN-9
     movlw MAUVE
-    call draw_wall
+    call draw_bricks
+    white 
+    tdelay BORDER_WIDTH
     black
-    tdelay 3
     next_task BRICK_HEIGHT
 
 ; task 14, draw 3rd brick row    
@@ -1187,11 +1165,12 @@ draw_row3
     movwf temp1
     movfw row3+1
     movwf temp2
-    tdelay LEFT_MARGIN-11
+    tdelay LEFT_MARGIN-9
     movlw BLUE
-    call draw_wall
+    call draw_bricks
+    white 
+    tdelay BORDER_WIDTH
     black
-    tdelay 3
 row3_exit
     next_task BRICK_HEIGHT
     
@@ -1203,11 +1182,12 @@ draw_row4
     movwf temp1
     movfw row4+1
     movwf temp2
-    tdelay LEFT_MARGIN-11
+    tdelay LEFT_MARGIN-9
     movlw YELLOW
-    call draw_wall
+    call draw_bricks
+    white 
+    tdelay BORDER_WIDTH
     black
-    tdelay 3
     next_task BRICK_HEIGHT
 
 ; task 16, draw 5th brick row    
@@ -1218,11 +1198,11 @@ draw_row5
     movwf temp1
     movfw row5+1
     movwf temp2
-    tdelay LEFT_MARGIN-11
+    tdelay LEFT_MARGIN-9
     movlw MAUVE
-    call draw_wall
-    black
-    tdelay 3
+    call draw_bricks
+    white 
+    tdelay BORDER_WIDTH
     black
     next_task BRICK_HEIGHT
 
@@ -1232,6 +1212,7 @@ MSG_PIXELS_COUNT equ 16
 ; task 17
 ; draw all rows between paddle and lower brick row    
 draw_empty
+    banksel TRISA
     movlw MSG_FIRST
     pushw
     movlw MSG_FIRST+MSG_HEIGHT
@@ -1241,7 +1222,7 @@ draw_empty
     skpc
     bra no_msg
     btfss flags, F_OVER
-    bra no_msg
+    bra no_msg+1
     movlw YELLOW ; message color
     pushw
     movlw MSG_PIXELS_COUNT
@@ -1254,7 +1235,9 @@ draw_empty
     movlw low cool_msg
     movwf FSR1L
     call display_msg
-    bra no_msg
+    movlw 30
+    nop
+    bra after_msg_dly
 ; display 'END!' message    
 display_end
     movlw high end_msg
@@ -1262,7 +1245,19 @@ display_end
     movlw low end_msg
     movwf FSR1L
     call display_msg
-no_msg    
+    movlw 30
+    bra after_msg_dly
+no_msg
+    bra $+1
+    tdelay LEFT_MARGIN+2
+    movlw 78
+after_msg_dly
+    decfsz WREG
+    bra $-1
+    white
+    tdelay 4
+    black
+draw_empty_exit    
     incf slice
     movlw LAST_VIDEO_LINE-PADDLE_THICKNESS+1
     subwf lcount,W
