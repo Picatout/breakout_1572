@@ -39,10 +39,10 @@
 ;    30-49     |  20     | task 10, display score and balls count
 ;    50-57     |  8      | task 11, draw top border
 ;    58-73     |  16     | task 12, draw space over bricks rows
-;    74-113    |  40     | task 13, draw bricks rows
-;    114-242   |  129	 | task 14, draw space below bricks rows
-;    243-250   |  8      | task 15, draw paddle
-;    251-262/3 |  11/12  | task 16, wait end of field    
+;    74-121    |  48     | task 13, draw 6 bricks rows
+;    122-241   |  120	 | task 14, draw space below bricks rows
+;    242-249   |  8      | task 15, draw paddle
+;    250-262/3 |  11/12  | task 16, wait end of field    
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
     
@@ -92,8 +92,8 @@ CLKIN equ RA5
 ; values are in scan lines for y dimension.    
 FIRST_VIDEO_LINE equ 30 ; first video line displayed
 FIRST_BRICK_Y equ 74 ; lcount first brick scan line
-LAST_VIDEO_LINE	 equ 250 ; last video line displayed
-LEFT_MARGIN equ 48  ; tcy delay before any display
+LAST_VIDEO_LINE	 equ 249 ; last video line displayed
+LEFT_MARGIN equ 69  ; tcy delay before any display
 PLAY_WIDTH equ 48 ; pixels
 PIXEL_WIDTH equ 5; pixel width in tcy 
 BRICK_HEIGHT equ 8  ; scan lines
@@ -111,13 +111,13 @@ BALL_TOP_BOUND equ 58  ; scan lines
 BALL_BOTTOM_BOUND equ LAST_VIDEO_LINE
 PADDLE_Y equ LAST_VIDEO_LINE-PADDLE_THICKNESS+1 ; 
 PADDLE_MASK equ 0xFC 
-BRICKS_ROWS equ 5 ; number of bricks rows
+BRICKS_ROWS equ 6 ; number of bricks rows
 ROW1_Y equ 74
 ROW2_Y equ 82
 ROW3_Y equ 90
 ROW4_Y equ 98
 ROW5_Y equ 106
- 
+ROW6_Y equ 114 
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; assembler macros ;;
@@ -243,6 +243,7 @@ chroma_invert macro
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;   colors macros
+;   TRISA configuration    
 ;;;;;;;;;;;;;;;;;;;;;;;
 OTHERS equ (0<<SYNC_OUT)|(0<<AUDIO)|(1<<START_BTN)    
 BLACK equ (1<<CHROMA)|(1<<VIDEO_OUT)|OTHERS
@@ -313,17 +314,7 @@ display_byte macro n
     display_bit n
     endm
     
-; draw left and right borders
-; parameters:
-;   width delay determine width
-draw_border macro width
-    banksel TRISA
-    bsf TRISA,CHROMA
-    bcf TRISA,VIDEO_OUT
-    tdelay width
-    bsf TRISA,VIDEO_OUT
-    endm
-    
+   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  stack manipulation macros
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
@@ -390,7 +381,8 @@ row4 res 6
 fill4 res 2 
 row5 res 6
 fill5 res 2
-row6 res 6 
+row6 res 6
+fill6 res 2 
 fg_color res 1
 paddle_byte res 1 ; paddle offset in vbuffer
 paddle_mask res 2 ; paddle mask to put in vbuffer 
@@ -593,19 +585,19 @@ sound_fx1
     bsf PWM2LDCON,LDA
     return
     
-; sound effect, high pitch to low-pitch    
-sound_fx2
-    btfss flags, F_SOUND
-    return
-    btfss flags, F_EVEN
-    return
-    banksel PWM2CON
-    lslf PWM2PRL
-    rlf PWM2PRH
-    lslf PWM2DCL
-    rlf PWM2DCH
-    bsf PWM2LDCON,LDA
-    return
+;; sound effect, high pitch to low-pitch    
+;sound_fx2
+;    btfss flags, F_SOUND
+;    return
+;    btfss flags, F_EVEN
+;    return
+;    banksel PWM2CON
+;    lslf PWM2PRL
+;    rlf PWM2PRH
+;    lslf PWM2DCL
+;    rlf PWM2DCH
+;    bsf PWM2LDCON,LDA
+;    return
     
 ; initialize sound generation.
 ; input:
@@ -668,7 +660,7 @@ game_over
     skpz
     bra skip_2_tasks
     call game_init
-    incf task
+;    incf task
     leave
 ; while game not running skip 'move_ball' and 'collision' tasks    
 skip_2_tasks
@@ -676,8 +668,8 @@ skip_2_tasks
     addlw 2
     movwf ball_x
     call compute_ball_mask
-    incf task
-    incf task
+    incf task ; skip move_ball
+    incf task ; skip collision
     call lfsr16
     leave
 
@@ -715,13 +707,10 @@ read_paddle
     banksel TRISA
     bcf TRISA, AUDIO
 ; create paddle mask
-    movlw 2
-    addwf paddle_pos,W
-    movwf ball_x
     call compute_paddle_mask
     return
 
-; paddle_mask and paddle_pos used when it is time to display paddle
+; paddle_mask and paddle_byte used when it is time to display paddle
 ; paddle_byte=paddle_pos/8
 ; paddle_mask=PADDLE_MASK>>(paddle_pos%8)    
 compute_paddle_mask
@@ -773,10 +762,13 @@ right_bound
 move_y
     movfw ball_dy
     addwf ball_y
+    btfss ball_dy,7
+    bra bottom_bound
+top_bound    
     movlw BALL_TOP_BOUND
     subwf ball_y,W
     skpnc
-    bra bottom_bound
+    bra move_ball_exit
     movlw BALL_TOP_BOUND
     movwf ball_y
     comf ball_dy
@@ -784,11 +776,15 @@ move_y
     bra move_ball_exit
 bottom_bound
     movfw ball_y
-    sublw BALL_BOTTOM_BOUND
-    skpc
+    sublw PADDLE_Y-BALL_HEIGHT-1
+    skpnc
     bra move_ball_exit
-ball_lost    
+    call paddle_bounce
+    skpnc
+    bra move_ball_exit
+ball_lost
     bsf flags, F_PAUSE ; pause game
+    banksel balls
     decfsz balls
     bra $+3
     bcf flags, F_START
@@ -810,10 +806,64 @@ move_ball_exit
     incf task
     leave
 
+; check if ball is bouncing on paddle
+; input:
+;   none
+; output:
+;   C set if bounced    
+paddle_bounce
+; if ball_x over paddle bounce ball
+    movfw paddle_pos
+    skpnz
+    decf WREG
+    pushw
+    movfw paddle_pos
+    addlw PADDLE_WIDTH
+    pushw
+    movfw ball_x
+    call between
+    skpnc
+    bra bounced
+    bcf STATUS,C
+    return
+bounced
+    movlw PADDLE_Y-BALL_HEIGHT
+    movwf ball_y
+    comf ball_dy
+    incf ball_dy
+; bounce direction depend where paddle was hit.    
+    movfw paddle_pos
+    subwf ball_x,W
+    skpc
+    bra bounce_left
+    skpnz
+    bra bounce_left
+    movlw PADDLE_WIDTH-2
+    addwf paddle_pos,W
+    subwf ball_x,W
+    movlw 1
+    skpnc
+    movwf ball_dx ; bounce right
+    bra paddle_sound
+bounce_left
+    movlw -1
+    movwf ball_dx
+paddle_sound    
+    movlw 2
+    pushw
+    call sound_init
+; skip collision task
+    incf task
+; report bounce    
+    bsf STATUS,C
+    return
+    
+    
 ; compute ball_mask and ball_byte
 ; ball_mask= BALL_MASK>>(ball_x%8)
 ; ball_byte= ball_x/8     
 compute_ball_mask
+    banksel vbuffer
     lsrf ball_x,W
     lsrf WREG
     lsrf WREG
@@ -833,106 +883,60 @@ compute_ball_mask
     
 ; task 8, collision detection
 collision
-    banksel vbuffer
-    movlw high row1
-    movwf FSR1H
-    movlw low row1
-    movwf FSR1L
-    btfsc ball_dy,7
-    bra bricks_test
-paddle_test    
-; paddle bounce test
-    movlw PADDLE_Y-BALL_HEIGHT+1
-    subwf ball_y,W
-    skpc
-    bra bricks_test
-; if ball_x over paddle bounce ball
-check_paddle_bounce
-    movfw paddle_pos
+    movlw ROW1_Y
     pushw
-    addlw PADDLE_WIDTH
+    movlw ROW6_Y+BRICK_HEIGHT
     pushw
-    movfw ball_x
+    movfw ball_y
     call between
     skpc
     bra collision_exit
-paddle_bounce 
-    movlw BALL_BOTTOM_BOUND
-    movwf ball_y
+    banksel row1
+    clrf FSR1H
+    movlw low row1
+    movwf FSR1L
+    movlw ROW1_Y
+    subwf ball_y,W
+    andlw 0xf8
+    pushw
+    addwf FSR1L
+    movfw ball_byte
+    addwf FSR1L
+    movlw 0xf0
+    btfsc ball_x,2
+    swapf WREG
+    andwf INDF1,W
+    skpnz
+    bra collision_exit
+    movlw 0x0f
+    btfsc ball_x,2
+    swapf WREG
+    andwf INDF1
     comf ball_dy
     incf ball_dy
-    movfw ball_x
-    subwf paddle_pos,W
-    movlw -1
-    skpnz
-    movwf ball_dx
-    movlw PADDLE_WIDTH-1
-    addwf paddle_pos,W
+    movfw ball_dy
+    addwf ball_y
+    popw
+    lsrf WREG
+    lsrf WREG
+    brw
+    movlw 9
+    bra add_score
+    movlw 9
+    bra add_score
+    movlw 7
+    bra add_score
+    movlw 5
+    bra add_score
+    movlw 3
+    bra add_score
     movlw 1
-    skpnz
-    movwf ball_dx
-    movlw 2
-    pushw
-    call sound_init
-    bra collision_exit
-; brick wall collision test    
-bricks_test
-; initialize pointer
-     clrf FSR1H
-     movlw low row1
-     movwf FSR1L
-; over which brick pixel the ball is?
-; bricks are 4 pixels wide    
-; if pixel==3 ball bridge 2 bricks     
-     movlw 3
-     andwf ball_x,W
-     movwf temp1
-     btfsc ball_dy,7
-     bra going_up
-going_down
-     movlw ROW1_Y-BALL_HEIGHT+1
-     pushw
-     movlw ROW5_Y+1
-     pushw
-     call between
-     skpc
-     bra collision_exit ; no collision
-     movfw ball_y
-     sublw ROW1_Y-BALL_HEIGHT+1
-     andlw 0xf8
-     addwf FSR1L
-     movfw ball_mask
-     andwf INDF1,W
-     skpnz
-     bra collision_exit
-remove_brick     
-     movlw 0x0f
-     btfsc ball_x,3
-     swapf WREG
-     andwf INDF1
-     bra pong_sound
-going_up
-     movlw ROW1_Y
-     pushw
-     movlw ROW5_Y+BRICK_HEIGHT-1
-     pushw
-     movfw ball_y
-     call between
-     skpc
-     bra collision_exit
-     movfw ball_y
-     sublw ROW5_Y+BRICK_HEIGHT-1
-     andlw 0xf8
-     addwf FSR1L
-     movfw ball_mask
-     addwf INDF1,W
-     skpnz
-     bra collision_exit
-     bra remove_brick
+add_score    
+    call inc_score
 pong_sound
-     movlw 1
-     pushw
-     movlw 0
+    movlw 1
+    pushw
+    movlw 0
     call sound_init
 collision_exit
     incf task
@@ -1018,28 +1022,21 @@ draw_score
     pushw
     movlw 0xf
     andwf score,W
-    call digit_offset
-    addwf T,W
     call digits
     iorwf vbuffer
     swapf score+1,W
     andlw 0xf
-    call digit_offset
-    addwf T,W
     call digits
     swapf WREG
     iorwf vbuffer
     movlw 0xf
     andwf score+1,W
-    call digit_offset
-    addwf T,W
     call digits
     iorwf vbuffer+1
     movfw balls
-    call digit_offset
-    addwf T,W
     call digits
     iorwf vbuffer+5
+    tdelay 9
     call display_vbuffer
     dropn 1
 score_exit
@@ -1118,7 +1115,7 @@ rows_common
     movwf fg_color
     clrf FSR1H
     call copy_row
-    tdelay LEFT_MARGIN-28
+    tdelay 3
     white
     call display_vbuffer
     white
@@ -1127,22 +1124,22 @@ rows_common
     next_task BRICKS_ROWS*BRICK_HEIGHT
     
 ; task 13, draw brick rows
-; lcount 74-113   
+; lcount 74-121   
 draw_bricks
+    banksel vbuffer
+    call put_ball_in_buffer
     movlw low row1
     movwf FSR1L
-    movlw FIRST_BRICK_Y
-    subwf lcount,W
-    lsrf WREG
-    lsrf WREG
-    lsrf WREG
+    movlw 0xf8
+    andwf slice,W
     addwf FSR1L
     banksel PWM1CON
     bcf PWM1CON,POL
-    btfsc WREG,1
+    btfsc WREG,4
     bsf PWM1CON,POL
     banksel TRISA
-    lslf WREG
+    lsrf WREG
+    lsrf WREG
     brw
     movlw YELLOW
     bra rows_common
@@ -1162,7 +1159,7 @@ MSG_HEIGHT equ 40
 MSG_PIXELS_COUNT equ 16 
 ; task 14
 ; draw all rows below bricks to paddle
-; lcount 114-242 
+; lcount 122-241 
 draw_empty
     banksel TRISA
     btfsc flags, F_OVER
@@ -1205,7 +1202,7 @@ display_end
 msg
     call display_vbuffer
 draw_empty_exit
-    next_task LAST_VIDEO_LINE-ROW5_Y-BRICK_HEIGHT
+    next_task PADDLE_Y-ROW6_Y-BRICK_HEIGHT
 ;    incf slice
 ;    movlw LAST_VIDEO_LINE-PADDLE_THICKNESS+1
 ;    subwf lcount,W
@@ -1238,7 +1235,7 @@ display_msg
     return
     
 ; task 15, draw paddle at bottom screen  
-; lcount 243-250    
+; lcount 242-249    
 draw_paddle
     banksel TRISA
     clrf FSR1H
@@ -1317,31 +1314,6 @@ _5tcy ; call here for 5*tcy delay using a single instruction
 _4tcy ; call here for 4*Tcy delay using a single instruction    
     return
 
-;division by 3
-; input:
-;   WREG value to divide
-; output:
-;   WREG  quotient
-;   temp1  remainder    
-;div3
-;    movwf temp1
-;    clrf temp2
-;    movlw 0xc0
-;    pushw
-;div3_loop
-;    movfw T
-;    subwf temp1,W
-;    skpnc
-;    movwf temp1
-;    rlf temp2
-;    lsrf T
-;    skpc
-;    bra div3_loop
-;    dropn 1
-;    movfw temp2
-;    return
-;    
-    
 ; increment user score
 ; This is a BCD addition where a single digit is added to score.   
 ; score is stored as big indian
@@ -1366,14 +1338,19 @@ inc_score
     movlw 0x60
     addwf score+1
     incf score
+; double ball speed if score >=200
+    movlw 2
+    subwf score,W
+    skpc
+    return
     movlw 1
     movwf ball_speed
 game_over_test ; all bricks destroyed?
-    movlw 3
+    movlw 4
     subwf score,W
     skpz
     return
-    movlw 0x36
+    movlw 0x08
     subwf score+1,W
     skpz
     return
@@ -1381,21 +1358,6 @@ game_over_test ; all bricks destroyed?
     bsf flags,F_COOL ; with maximum score.
     return
     
-;***********************************
-; digit_offset, compute digit position in 'digits' table
-;   position = digit * 5
-; 
-; input: WREG -> digit value {0..9}
-;         
-; output: WREG -> displacement in table
-;***********************************
-digit_offset    
-    pushw 
-    lslf WREG
-    lslf WREG
-    addwf T
-    popw
-    return
     
 brick_wall_init
     movlw high row1
@@ -1615,14 +1577,28 @@ initialize
     bsf PIE3,PWM3IE
     bsf INTCON,PEIE
     bsf INTCON,GIE
+    call game_init
     clrf flags
     bsf flags, F_SYNC
 ; test code
+    bsf flags, F_START
 ; all processing done in ISR    
     goto $
 
-; digits character table
+;digits character table
+; input:
+;   T -> glyph row
+;   WREG -> digit
+; output:
+;   WREG -> pixels
+;   T -> glyph row    
 digits
+    pushw 
+    lslf WREG
+    lslf WREG
+    addwf T
+    popw
+    addwf T,W
     brw
     dt  0x40,0xA0,0xA0,0xA0,0x40 ; 0
     dt  0x40,0xC0,0x40,0x40,0xE0 ; 1
