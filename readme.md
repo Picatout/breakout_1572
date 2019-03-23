@@ -14,12 +14,12 @@ Introduction
   
   rangée | couleur | points
   -------|---------|--------
-     1   |  jaune  |  9
-     2   |  jaune  |  9
-     3   |  mauve  |  7
-     4   |  mauve  |  5
-     5   |  bleu   |  3
-     6   |  bleu   |  1
+  1 | jaune | 9
+  2 | jaune | 9
+  3 | mauve | 7
+  4 | mauve | 5
+  5 | bleu | 3
+  6 | bleu | 1
   
   Le pointage maximal est donc de 24*9+12*7+12*5+12*3+12=408
   
@@ -32,24 +32,24 @@ Objectif du projet
 	
 	Ce circuit peut générer les 6 couleurs suivantes.
 	
-	couleur      |  C (RA1) |  Y (RA4)
-  -------------|----------|-------------
-    noir       |    Z     |  Z
-    blanc      |    Z     |  1
-    jauce      |    R     |  1
-    mauve      |    I     |  1
-    bleu       |    I     |  Z
-    vert-foncé |    R     |  Z 
+couleur      |  C (RA1) |  Y (RA4)
+-------------|----------|-------------
+noir       |    Z     |  Z
+blanc      |    Z     |  1
+jauce      |    R     |  1
+mauve      |    I     |  1
+bleu       |    I     |  Z
+vert-foncé |    R     |  Z 
     
 
-    légende  |           description
-    ---------|--------------------------------------------------------
-       **Z** | broche en haute impédance
-       **R** | signal chroma en phase avec le chroma sync
-       **I** | signal chroma en inversion de phase avec le chroma sync
-       **1** | sortie Y au niveau Vdd.
-       **Y** | signal niveau luminance
-       **C** | signal chroma 3.579545Mhz
+légende | description
+---------|-----------
+**Z** | broche en haute impédance
+**R** | signal chroma en phase avec le chroma sync
+**I** | signal chroma en inversion de phase avec le chroma sync
+**1** | sortie Y au niveau Vdd.
+**Y** | signal niveau luminance
+**C** | signal chroma 3.579545Mhz
        
     Le signal vidéo n'est pas controlé avec le registre **LATA** mais avec le registre TRISA. Pour couper un signal le bit **TRISA** correspondant à la broche
     est mis à 1. Pour activé le signal il est mis à zéro.  Par exemple pour produire du blanc le bit corresponand à **RA4** dans **TRISA** est mis à **0** tandis
@@ -57,14 +57,14 @@ Objectif du projet
     
 	Le PIC12F1572 est disponible en format DIP 8 broches. L'utilisation des broches est la suivante.
 	
-	broche |  signal
-    -------|--------
-      RA0  |  sortie audio et lecteur du potentiomètre
-      RA1  |  sortie chroma  (C)
-      RA2  |  sortie synchronisation
-      RA3  |  entrée bouton
-      RA4  |  sortie luminance (Y)
-      RA5  |  entrée de l'oscillateur externe.
+broche |  signal
+-------|--------
+RA0  |  sortie audio et lecteur du potentiomètre
+RA1  |  sortie chroma  (C)
+RA2  |  sortie synchronisation
+RA3  |  entrée bouton
+RA4  |  sortie luminance (Y)
+RA5  |  entrée de l'oscillateur externe.
       
     L'oscillateur externe a été sélectionné à la fréquence de 28.636 Mhz parce que cette fréquence correspond à 8 fois la fréquence du signal chromatique du 
     standard NTSC. Ce qui permet de générer un signal chromatique en utilisant un périphérique PWM.  Le standard NTSC utilise la modulation de phase pour
