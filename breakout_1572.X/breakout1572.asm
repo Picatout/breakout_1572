@@ -99,9 +99,6 @@ PIXEL_WIDTH equ 5; pixel width in tcy
 BRICK_HEIGHT equ 8  ; scan lines
 BRICK_WIDTH equ 4  ; pixels
 BORDER_WIDTH equ 4  ; Tcy
-PADDLE_WIDTH equ 6 ; pixels
-PADDLE_THICKNESS equ 8 ; scan lines
-PADDLE_LIMIT equ PLAY_WIDTH-PADDLE_WIDTH ; pixels
 BALL_WIDTH equ 2 ; pixels
 BALL_MASK equ 0xC0 ;  
 BALL_HEIGHT equ 8 ; scan lines 
@@ -109,8 +106,11 @@ BALL_LEFT_BOUND equ 0 ; pixel
 BALL_RIGHT_BOUND equ (PLAY_WIDTH-BALL_WIDTH) ; pixels
 BALL_TOP_BOUND equ 58  ; scan lines
 BALL_BOTTOM_BOUND equ LAST_VIDEO_LINE
+PADDLE_WIDTH equ 8 ; pixels
+PADDLE_THICKNESS equ 4 ; scan lines
+PADDLE_LIMIT equ PLAY_WIDTH-PADDLE_WIDTH ; pixels
 PADDLE_Y equ LAST_VIDEO_LINE-PADDLE_THICKNESS+1 ; 
-PADDLE_MASK equ 0xFC 
+PADDLE_MASK equ 0xFF 
 BRICKS_ROWS equ 6 ; number of bricks rows
 ROW1_Y equ 74
 ROW2_Y equ 82
@@ -179,19 +179,11 @@ tdelay macro mc
     call _5tcy
     exitm
     endif
-    if mc==6
-    call _6tcy
-    exitm
-    endif
-    if mc==7
-    call _7tcy
-    exitm
-    endif
-    if mc>7
-    variable q=(mc-5)/3
-    variable r=(mc-5)%3+1
+    if mc>5
+    variable q=(mc-3)/3
+    variable r=mc-3-3*q
     movlw q
-    call _3ntcy
+    call _3ntcy ; tcy=3+3*q
     if (r==2)
     bra $+1
     exitm
@@ -814,19 +806,18 @@ move_ball_exit
 paddle_bounce
 ; if ball_x over paddle bounce ball
     movfw paddle_pos
-    skpnz
-    decf WREG
     pushw
-    movfw paddle_pos
+    skpnz
+    decf T
     addlw PADDLE_WIDTH
     pushw
     movfw ball_x
     call between
     skpnc
-    bra bounced
+    bra bouncing
     bcf STATUS,C
     return
-bounced
+bouncing
     movlw PADDLE_Y-BALL_HEIGHT
     movwf ball_y
     comf ball_dy
@@ -1080,7 +1071,7 @@ put_ball_in_buffer
     movwi [FSR1]
     return ; 37 tcy
 kill_time 
-    tdelay 8
+    tdelay 7
     return ; 37 tcy
     
 ; task 12,  only on even field draw vertical sides and ball.
@@ -1115,7 +1106,7 @@ rows_common
     movwf fg_color
     clrf FSR1H
     call copy_row
-    tdelay 3
+    tdelay 1
     white
     call display_vbuffer
     white
@@ -1134,9 +1125,12 @@ draw_bricks
     andwf slice,W
     addwf FSR1L
     banksel PWM1CON
-    bcf PWM1CON,POL
-    btfsc WREG,4
+    pushw
+    movlw 2<<3
+    subwf T,W
+    skpnc
     bsf PWM1CON,POL
+    popw
     banksel TRISA
     lsrf WREG
     lsrf WREG
@@ -1149,9 +1143,9 @@ draw_bricks
     bra rows_common
     movlw MAUVE
     bra rows_common
-    movlw WHITE
+    movlw BLUE
     bra rows_common
-    movlw WHITE
+    movlw BLUE
     bra rows_common
     
 MSG_FIRST equ 40
@@ -1165,7 +1159,9 @@ draw_empty
     btfsc flags, F_OVER
     bra print_msg
     call put_ball_in_buffer
-    tdelay LEFT_MARGIN-33
+    movlw WHITE
+    movwf fg_color
+    tdelay LEFT_MARGIN-35
     white
     call display_vbuffer
     white
@@ -1297,18 +1293,13 @@ field_end
 
 ; helper functions
 
-; delay = (3*n+5)*tcy    
+; delay = 4+(n-1)*3    
 ;input:
-;   WREG <- n    
+;   WREG <- n {1..255}
 _3ntcy
     decfsz WREG
     bra $-1
     return
-    
-_7tcy ; call here for 7*tcy delay using a single instruction
-    nop
-_6tcy ; call here for 6*tcy delay using a single instruction
-    nop
 _5tcy ; call here for 5*tcy delay using a single instruction
     nop
 _4tcy ; call here for 4*Tcy delay using a single instruction    
