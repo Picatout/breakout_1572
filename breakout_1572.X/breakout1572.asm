@@ -237,7 +237,7 @@ chroma_invert macro
 ;   colors macros
 ;   TRISA configuration    
 ;;;;;;;;;;;;;;;;;;;;;;;
-OTHERS equ (0<<SYNC_OUT)|(0<<AUDIO)|(1<<START_BTN)    
+OTHERS equ (0<<SYNC_OUT)|(1<<PADDLE)|(1<<START_BTN)    
 BLACK equ (1<<CHROMA)|(1<<VIDEO_OUT)|OTHERS
 WHITE equ (1<<CHROMA)|(0<<VIDEO_OUT)|OTHERS
 MAUVE equ (0<<CHROMA)|(0<<VIDEO_OUT)|OTHERS
@@ -399,7 +399,7 @@ ball_dy res 1
 ball_speed res 1
 score res 2 ; score stored in Binary Coded Decimal
 ball_timer res 1 
-old_dx res 1 ; previous value of ball_dx at paddle_bounce
+odd_fld_pread res 1 ; value of paddle read during odd field
  
 ;; cpu reset entry point
 RES_VECT  CODE    0x0000            
@@ -443,9 +443,9 @@ task_switch ; round robin task scheduler
     goto vsync ;task 1, vertical sync pulses
     goto post_vsync ;task 2, vertical post-equalization pulses
     goto vsync_end ;task 3, return to normal video line
-    goto reserved_task; task 4, do nothing, reserved 
+    goto read_paddle; task 4, read paddle potentiometer
     goto sound ;task 5, check sound timer expiration
-    goto user_input ;task 6,  read button and paddle
+    goto read_button ;task 6,  read button
     goto move_ball ;task 7, move recking ball.
     goto collision ; task 8, check for collision with brick wall and paddle
     goto video_first ; task 9, wait FIRST_VIDEO line.
@@ -541,10 +541,47 @@ vsync_end
     lsrf lcount
     leave
 
-; task 4, reserved slot
-reserved_task
+; task 4, read paddle potentiometer
+; paddle_pos is mean between 2 reading
+; first reading during odd field is saved
+; in 'odd_fld_pread' variable
+; second reading during even field
+; is added to first and result divided by 4
+; to get paddle_pos    
+read_paddle
     incf task
+    btfsc flags, F_SOUND
     leave
+    banksel ADCON0
+    movlw 3
+    movwf ADCON0
+    btfsc ADCON0,NOT_DONE
+    bra $-1
+    movfw ADRESH
+    pushw
+    movlw 4<<CHS0
+    movwf ADCON0
+    btfss flags, F_EVEN
+    bra even_field_read
+    popw
+    movwf odd_fld_pread
+    leave
+; potentiometer read during even field
+even_field_read    
+    popw
+    addwf odd_fld_pread
+    rrf odd_fld_pread
+    lsrf odd_fld_pread,W
+    movwf paddle_pos
+    movlw PADDLE_LIMIT
+    subwf paddle_pos,W
+    movlw PADDLE_LIMIT
+    skpnc
+    movwf paddle_pos
+; create paddle mask
+    call compute_paddle_mask
+    leave
+
     
 ; task 5,  sound timer
 ; if sound active process it.    
@@ -557,16 +594,17 @@ sound
     banksel sound_timer
     decfsz sound_timer
     leave
+sound_off    
     bcf flags, F_SOUND
     banksel PWM2CON
     bcf PWM2CON,OE
     bcf PWM2CON,EN
+    banksel TRISA
+    bsf TRISA,PADDLE
     leave
 
 ; sound effect, low pitch to high-pitch    
 sound_fx1
-    btfss flags, F_SOUND
-    return
     btfss flags, F_EVEN
     return
     banksel PWM2CON
@@ -579,8 +617,6 @@ sound_fx1
     
 ;; sound effect, high pitch to low-pitch    
 ;sound_fx2
-;    btfss flags, F_SOUND
-;    return
 ;    btfss flags, F_EVEN
 ;    return
 ;    banksel PWM2CON
@@ -618,18 +654,22 @@ sound_init
     pickn 1
     movwf sound_timer
     dropn 2
+    banksel TRISA
+    bcf TRISA,AUDIO
     return
     
 ;task 6, read button and paddle position
-user_input
+read_button
     incf task
-    call read_paddle
+    banksel PORTA
+    movfw PORTA
+    andlw 1<<START_BTN
+    movwf temp1
     btfsc flags, F_OVER
     bra game_over
     btfsc flags,F_START
     bra game_running
 ; game not running
-    call read_button
     skpz
     bra skip_2_tasks
 ; start game    
@@ -640,7 +680,6 @@ game_running
     leave
 ; game on pause    
 wait_trigger
-    call read_button
     skpz
     bra skip_2_tasks
     bcf flags,F_PAUSE
@@ -648,7 +687,6 @@ wait_trigger
     leave
 ; game over
 game_over
-    call read_button
     skpz
     bra skip_2_tasks
     call game_init
@@ -666,41 +704,7 @@ skip_2_tasks
     leave
 
     
-read_button
-    banksel PORTA
-    movfw PORTA
-    andlw 1<<START_BTN
-    return
     
-read_paddle
-    banksel PWM2CON
-    bcf PWM2CON,EN
-    banksel TRISA
-    bsf TRISA, PADDLE
-    banksel ADCON0
-    movlw 3
-    movwf ADCON0
-    btfsc ADCON0,NOT_DONE
-    goto $-1
-    movlw 4<<CHS0
-    movwf ADCON0
-    lsrf ADRESH,W
-    movwf paddle_pos
-    ;lsrf paddle_pos
-    movlw PADDLE_LIMIT
-    subwf paddle_pos,W
-    movlw PADDLE_LIMIT
-    skpnc
-    movwf paddle_pos
-    btfss flags, F_SOUND
-    bra $+3
-    banksel PWM2CON
-    bsf PWM2CON,EN
-    banksel TRISA
-    bcf TRISA, AUDIO
-; create paddle mask
-    call compute_paddle_mask
-    return
 
 ; paddle_mask and paddle_byte used when it is time to display paddle
 ; paddle_byte=paddle_pos/8
@@ -1507,7 +1511,6 @@ initialize
     clrf WPUA
     banksel TRISA
     bcf TRISA,SYNC_OUT
-    bcf TRISA,AUDIO
     banksel LATA
     bsf LATA, VIDEO_OUT
 ; PWM1 chroma signal on RA1
