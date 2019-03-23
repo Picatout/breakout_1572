@@ -457,7 +457,10 @@ task_switch ; round robin task scheduler
     goto draw_paddle ;task 15, draw paddle
     goto wait_field_end ;task 16, idle to end of video field
     reset ; error trap, task out of range
-isr_exit  
+isr_exit
+    banksel TRISA
+    btfsc flags, F_SOUND
+    bcf TRISA,AUDIO
     porch_off
     banksel PWM3INTF
     bcf PWM3INTF,PRIF
@@ -552,6 +555,8 @@ read_paddle
     incf task
     btfsc flags, F_SOUND
     leave
+    banksel TRISA
+    bsf TRISA, PADDLE
     banksel ADCON0
     movlw 3
     movwf ADCON0
@@ -580,6 +585,7 @@ even_field_read
     movwf paddle_pos
 ; create paddle mask
     call compute_paddle_mask
+    banksel TRISA
     leave
 
     
