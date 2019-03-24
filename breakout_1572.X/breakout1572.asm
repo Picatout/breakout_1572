@@ -1,20 +1,18 @@
-/*
-* Copyright Jacques Deschênes 2019 
-* This file is part of breakout_1572.
-*
-*     breakout_1572 is free software: you can redistribute it and/or modify
-*     it under the terms of the GNU General Public License as published by
-*     the Free Software Foundation, either version 3 of the License, or
-*     (at your option) any later version.
-*
-*     breakout_1572 is distributed in the hope that it will be useful,
-*     but WITHOUT ANY WARRANTY; without even the implied warranty of
-*     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*     GNU General Public License for more details.
-*
-*     You should have received a copy of the GNU General Public License
-*     along with breakout_1572.  If not, see <http://www.gnu.org/licenses/>.
-*/
+; Copyright Jacques Deschênes 2019 
+; This file is part of breakout_1572.
+;
+;     breakout_1572 is free software: you can redistribute it and/or modify
+;     it under the terms of the GNU General Public License as published by
+;     the Free Software Foundation, either version 3 of the License, or
+;     (at your option) any later version.
+;
+;     breakout_1572 is distributed in the hope that it will be useful,
+;     but WITHOUT ANY WARRANTY; without even the implied warranty of
+;     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;     GNU General Public License for more details.
+;
+;     You should have received a copy of the GNU General Public License
+;     along with breakout_1572.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;	         BREAKOUT game
@@ -76,61 +74,60 @@ PROG_SIZE equ 2048  ; program words
 EEPROM_SIZE equ 128 ; high endurance flash words
  
 Fosc equ 28636000 ; external oscillator frequency
-Fcy  equ (Fosc/4) ; cpu frequency, machine cycle  T=1/Fcy
-Tcy equ 140 ; CPU cycle in nanoseconds (139.683 nanosecond)
  
 ; NTSC signal 
 Fhorz equ 15734 ; horizontal frequency
-HPERIOD equ ((Fosc/Fhorz)-1)  ; horizontal period pwm count(63,55µS)
-HSYNC  equ 134  ;  (4,7µS) ; horz. sync. pwm pulse count
-HEQUAL equ 65 ; 2,3µS equalization pwm pulse count
-VSYNC_PULSE equ 776 ; 27,1µS vertical sync. pwm pulse count
-HALF_LINE equ ((Fosc/Fhorz/2)-1) 
+HPERIOD equ ((Fosc/Fhorz)-1)  ; PWM3PR count for horizontal period (63,55µS)
+HSYNC  equ 134  ;  (4,7µS) PWM3DC count for horz. sync pulse
+HEQUAL equ 65 ; PWM3DC count for 2,3µS equalization pulse
+VSYNC_PULSE equ 776 ; PWM3PR count for 27,1µS vertical sync. pulse
+HALF_LINE equ ((Fosc/Fhorz/2)-1) ; PWM3PR count for vsync lines,  half HPERIOD
 ; boolean flags 
-F_BIT8 equ 0    ; bit 8 of line counter
+F_BIT8 equ 0    ; bit 8 of scan line counter
 F_EVEN equ 1    ; even field
-F_SYNC equ 2    ; vertical synchronization phase
+F_SYNC equ 2    ; set during vertical synchronization phase
 F_SOUND equ 3   ; sound enabled 
 F_START equ 4   ; game started 
-F_PAUSE equ 5   ; game pause after a ball lost
+F_PAUSE equ 5   ; game paused after a ball lost
 F_OVER equ 6    ; game over
 F_COOL equ 7    ; player got maximum score
  
 ;pins assignment
-AUDIO EQU RA0
-PADDLE equ RA0
-CHROMA equ RA1
-SYNC_OUT equ RA2
-START_BTN equ RA3 
-VIDEO_OUT equ RA4
-CLKIN equ RA5
+AUDIO EQU RA0  ; PWM2 output for audio tones
+PADDLE equ RA0 ;  analog input for potentiometer controlling paddle position
+CHROMA equ RA1  ;   chroma signal output
+SYNC_OUT equ RA2  ; NTSC signal synchronization
+START_BTN equ RA3 ; start button input
+VIDEO_OUT equ RA4 ; video luminance output
+CLKIN equ RA5     ; external oscillateur input.
  
     ; constants used in video display
-; values are in Tcy for x dimension.
-; values are in scan lines for y dimension.    
-FIRST_VIDEO_LINE equ 30 ; first video line displayed
-FIRST_BRICK_Y equ 74 ; lcount first brick scan line
-LAST_VIDEO_LINE	 equ 249 ; last video line displayed
-LEFT_MARGIN equ 69  ; tcy delay before any display
+; values are in pixels for x dimension.
+; values are in number of scan lines for y dimension.
+; Tcy are delay counted in MCU cycles.    
+FIRST_VIDEO_LINE equ 30 ; first scan line displayed
+FIRST_BRICK_Y equ 74 ; top of first brick row scan line
+LAST_VIDEO_LINE	 equ 249 ; last scan line displayed
+LEFT_MARGIN equ 69  ; Tcy delay before any display
 PLAY_WIDTH equ 48 ; pixels
-PIXEL_WIDTH equ 5; pixel width in tcy 
+PIXEL_WIDTH equ 5; pixel width in Tcy 
 BRICK_HEIGHT equ 8  ; scan lines
 BRICK_WIDTH equ 4  ; pixels
 BORDER_WIDTH equ 4  ; Tcy
 BALL_WIDTH equ 2 ; pixels
-BALL_MASK equ 0xC0 ;  
+BALL_MASK equ 0xC0 ;  applied to vbuffer to display ball
 BALL_HEIGHT equ 8 ; scan lines 
-BALL_LEFT_BOUND equ 0 ; pixel
+BALL_LEFT_BOUND equ 0 ; pixels
 BALL_RIGHT_BOUND equ (PLAY_WIDTH-BALL_WIDTH) ; pixels
 BALL_TOP_BOUND equ 58  ; scan lines
-BALL_BOTTOM_BOUND equ LAST_VIDEO_LINE
+BALL_BOTTOM_BOUND equ LAST_VIDEO_LINE ;scan line
 PADDLE_WIDTH equ 8 ; pixels
 PADDLE_THICKNESS equ 4 ; scan lines
 PADDLE_LIMIT equ PLAY_WIDTH-PADDLE_WIDTH ; pixels
-PADDLE_Y equ LAST_VIDEO_LINE-PADDLE_THICKNESS+1 ; 
-PADDLE_MASK equ 0xFF 
+PADDLE_Y equ LAST_VIDEO_LINE-PADDLE_THICKNESS+1 ; scan line 
+PADDLE_MASK equ 0xFF ; applied to vbuffer to display paddle
 BRICKS_ROWS equ 6 ; number of bricks rows
-ROW1_Y equ 74
+ROW1_Y equ 74 ; row first scan line
 ROW2_Y equ 82
 ROW3_Y equ 90
 ROW4_Y equ 98
@@ -141,7 +138,7 @@ ROW6_Y equ 114
 ;; assembler macros ;;
 ;;;;;;;;;;;;;;;;;;;;;;
 
-; leave task 
+; leave task by exiting interrupt service routine. 
 leave macro
     goto isr_exit
     endm
@@ -161,17 +158,9 @@ next_task macro s
     endm
     
     
-; swap variable with WREG    
-swap_var macro var
-    xorwf var
-    xorwf var,W
-    xorwf var
-    endm
-    
-
-; delay in machine cycle T
+; delay in machine cycle Tcy
 ; parameters:
-;   mc   number of machine cycles    
+;   mc   number of machine cycles (Tcy)   
 tdelay macro mc 
     if mc==0
     exitm
@@ -198,10 +187,10 @@ tdelay macro mc
     exitm
     endif
     if mc>5
-    variable q=(mc-3)/3
+    variable q=(mc-3)/3 
     variable r=mc-3-3*q
     movlw q
-    call _3ntcy ; tcy=3+3*q
+    call _3ntcy ; Tcy=3+3*q
     if (r==2)
     bra $+1
     exitm
@@ -213,39 +202,13 @@ tdelay macro mc
     endif
     endm
 
-; enable weak pull on VIDEO_OUT
-; to create a porch
-porch_on macro
-    banksel WPUA
-    bsf WPUA,VIDEO_OUT
-    endm
-    
-; disable weak pull on VIDEO_OUT
-; to remove porch
-porch_off macro
-    banksel WPUA
-    bcf WPUA,VIDEO_OUT
-    endm
-    
-; enable chroma output
-chroma_on macro
-    banksel TRISA
-    bcf TRISA, CHROMA
-    endm
-    
-;disable chroma output    
-chroma_off macro
-    banksel TRISA
-    bsf TRISA,CHROMA
-    endm
-    
 ; output chroma reference    
 chroma_ref macro
     banksel PWM1CON
     bcf PWM1CON,POL
     endm
     
-; set chroma phase to 180 degree
+; set chroma phase to 180 degree from chroma_ref
 chroma_invert macro
     banksel PWM1CON
     bsf PWM1CON,POL
@@ -262,7 +225,8 @@ MAUVE equ (0<<CHROMA)|(0<<VIDEO_OUT)|OTHERS
 YELLOW equ (0<<CHROMA)|(0<<VIDEO_OUT)|OTHERS
 BLUE equ (0<<CHROMA)|(1<<VIDEO_OUT)|OTHERS
 DARK_GREEN equ (0<<CHROMA)|(1<<VIDEO_OUT)|OTHERS
- 
+
+; for the colors macros TRISA bank must be pre-selected 
 ;set video output to black    
 black macro
     movlw BLACK
@@ -275,8 +239,6 @@ white macro
     movwf TRISA
     endm
 
-#define gray white
-    
 ; set video output to mauve    
 mauve macro
     movlw MAUVE
@@ -295,7 +257,7 @@ blue macro
     movwf TRISA
     endm
     
-; set video output to dark blue    
+; set video output to dark green    
 dark_green macro
     movlw DARK_GREEN
     movwf TRISA
@@ -310,7 +272,8 @@ display_bit macro n
     movwf TRISA
     endm
     
-; display a byte of pixels    
+; display a byte of pixels from vbuffer
+; this macro expansion result in 8*5 -> 40 instructions    
 ; input:
 ;   n is byte number {0..5}    
 display_byte macro n
@@ -328,7 +291,7 @@ display_byte macro n
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;  stack manipulation macros
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
-STACK_SIZE equ 16 ; size of argument stack
+STACK_SIZE equ 8 ; size of argument stack
 #define T INDF0 ; indirect access to top of argument stack
 #define SP FSR0 ; use FSR0 as stack pointer 
 ; push WREG on T
@@ -339,13 +302,6 @@ pushw  macro
 ; pop WREG from T
 popw macro
     moviw SP++
-    endm
-    
-; swap WREG with 
-swapw  macro
-    xorwf T
-    xorwf T,W
-    xorwf T
     endm
 
 ; drop n elements from stack
@@ -359,11 +315,6 @@ pickn macro n
     moviw n[SP]
     endm
    
-; copy WREG to nth element of stack
-; n {0..31}, 0 is T
-pokew macro n
-    movwi n[SP]
-    endm
     
     
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -371,18 +322,18 @@ pokew macro n
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
  
     
-    udata 0x20 ; bank 0
-stack res 16 ; arguments stack
-seed res 2 ; prng seed used by lfsr16
+    udata 0x20 ; bank 0 
+stack res STACK_SIZE ; arguments stack
+seed res 2 ; pseudo random number generator used by lfsr16
  
 ; video display manipulate TRISA register
 ; to avoid banksel during video update
 ; place variables related to video in same bank as TRISA 
 v_array   udata 0xA0 ; bank 1
 vbuffer res 6
-temp3 res 1
+temp3 res 1 ; to simplify mask application on last byte of vbuffer 
 row1 res 6; brick wall row1
-fill1 res 2 
+fill1 res 2 ; to simplify computation, faster to multiply and divide by 8 rather than 6.
 row2 res 6
 fill2 res 2 
 row3 res 6
@@ -396,7 +347,7 @@ fill6 res 2
 fg_color res 1
 paddle_byte res 1 ; paddle offset in vbuffer
 paddle_mask res 2 ; paddle mask to put in vbuffer 
-ball_byte res 1 ; byte offset in vbuffer
+ball_byte res 1 ; ball byte offset in vbuffer
 ball_mask res 2 ; ball mask to put in vbuffer 
 sound_timer res 1 ; sound duration in multiple of 16.7msec. 
 balls res 1 ; number of recking balls available
@@ -417,7 +368,6 @@ ball_dy res 1
 ball_speed res 1
 score res 2 ; score stored in Binary Coded Decimal
 ball_timer res 1 
-odd_fld_pread res 1 ; value of paddle read during odd field
  
 ;; cpu reset entry point
 RES_VECT  CODE    0x0000            
@@ -428,7 +378,7 @@ RES_VECT  CODE    0x0000
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
 ; interrupt service routine triggered by PWM3 period rollover
-; after initialization is done all processing in done inside 
+; after initialization all processing in done inside 
 ; this interrupt.
 ; It is designed as a round robin scheduler.    
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
@@ -439,6 +389,7 @@ isr
     bsf flags, F_BIT8
     btfsc flags, F_SYNC
     goto task_switch
+; clear video buffer before each line display
     banksel vbuffer
     clrf vbuffer
     clrf vbuffer+1
@@ -446,14 +397,13 @@ isr
     clrf vbuffer+3
     clrf vbuffer+4
     clrf vbuffer+5
-; generate chroma sync
+; generate chroma synchronization
     tdelay 18
     chroma_ref
     banksel TRISA
     bcf TRISA,CHROMA
     tdelay 16
     bsf TRISA,CHROMA
-    porch_on
 task_switch ; round robin task scheduler   
     movfw task
     brw
@@ -465,13 +415,13 @@ task_switch ; round robin task scheduler
     goto sound ;task 5, check sound timer expiration
     goto read_button ;task 6,  read button
     goto move_ball ;task 7, move recking ball.
-    goto collision ; task 8, check for collision with brick wall and paddle
+    goto collision ; task 8, check for collision with bricks.
     goto video_first ; task 9, wait FIRST_VIDEO line.
     goto draw_score ;task 10,  draw score en ball count
     goto draw_top_wall ;task 11,  draw top wall
-    goto draw_sides ;task 12, draw play space
+    goto draw_sides ;task 12, draw play space with sides walls
     goto draw_bricks  ;task 13, draw bricks rows
-    goto draw_empty;task 14, draw empty space down to bottom
+    goto draw_empty;task 14, draw empty space with sides walls down to bottom
     goto draw_paddle ;task 15, draw paddle
     goto wait_field_end ;task 16, idle to end of video field
     reset ; error trap, task out of range
@@ -479,7 +429,6 @@ isr_exit
     banksel TRISA
     btfsc flags, F_SOUND
     bcf TRISA,AUDIO
-    porch_off
     banksel PWM3INTF
     bcf PWM3INTF,PRIF
     retfie
@@ -559,16 +508,11 @@ vsync_end
     movwf PWM3PRL
     bsf PWM3LDCON,7
     incf task
+ ; divide lcount by 2 go get correct scan line count    
     lsrf lcount
     leave
 
 ; task 4, read paddle potentiometer
-; paddle_pos is mean between 2 reading
-; first reading during odd field is saved
-; in 'odd_fld_pread' variable
-; second reading during even field
-; is added to first and result divided by 4
-; to get paddle_pos    
 read_paddle
     incf task
     btfsc flags, F_SOUND
@@ -580,27 +524,15 @@ read_paddle
     movwf ADCON0
     btfsc ADCON0,NOT_DONE
     bra $-1
-    movfw ADRESH
-    pushw
-    movlw 4<<CHS0
-    movwf ADCON0
-    btfss flags, F_EVEN
-    bra even_field_read
-    popw
-    movwf odd_fld_pread
-    leave
-; potentiometer read during even field
-even_field_read    
-    popw
-    addwf odd_fld_pread
-    rrf odd_fld_pread
-    lsrf odd_fld_pread,W
+    lsrf ADRESH,W
     movwf paddle_pos
     movlw PADDLE_LIMIT
     subwf paddle_pos,W
     movlw PADDLE_LIMIT
     skpnc
     movwf paddle_pos
+    movlw 4<<CHS0
+    movwf ADCON0
 ; create paddle mask
     call compute_paddle_mask
     banksel TRISA
@@ -638,18 +570,6 @@ sound_fx1
     rrf PWM2DCL
     bsf PWM2LDCON,LDA
     return
-    
-;; sound effect, high pitch to low-pitch    
-;sound_fx2
-;    btfss flags, F_EVEN
-;    return
-;    banksel PWM2CON
-;    lslf PWM2PRL
-;    rlf PWM2PRH
-;    lslf PWM2DCL
-;    rlf PWM2DCH
-;    bsf PWM2LDCON,LDA
-;    return
     
 ; initialize sound generation.
 ; input:
@@ -751,10 +671,9 @@ compute_paddle_mask
     bra $-3
     return
     
-    
-    
-    
 ; task 7, move recking ball.   
+; also check for ball bounce on paddle
+; and ball lost at bottom    
 move_ball
     decfsz ball_timer
     bra move_ball_exit
@@ -900,7 +819,7 @@ compute_ball_mask
     bra $-3
     return
     
-; task 8, collision detection
+; task 8, check collision with bricks
 collision
     movlw ROW1_Y
     pushw
@@ -960,10 +879,9 @@ pong_sound
 collision_exit
     incf task
     leave
-
-    
     
 ; check if  lb <= x < hb
+; design to take same number of Tcy whatever the path.
 ; 13 tcy    
 ; input:
 ;    WREG  x
@@ -1005,7 +923,8 @@ video_first
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; check if ball is visible on this scan line    
-; visible if ball_y <=lcount<ball_y+BALL_HEIGHT    
+; visible if ball_y <=lcount<ball_y+BALL_HEIGHT
+; designed to use a constant number of Tcy    
 ;  22 tcy   
 ;  input:
 ;	none    
@@ -1021,7 +940,8 @@ ball_visible
     return
     
     
-    
+; display vbuffer
+; the 6 macros display_byte unroll to 240 instructions    
 display_vbuffer
     display_byte 0
     display_byte 1
@@ -1083,9 +1003,10 @@ draw_top_wall
     next_task BRICK_HEIGHT
 
 ; put ball mask in video_buffer
-; 38 tcy    
+; designed to take a constant number of Tcy    
+; 38 Tcy    
 put_ball_in_buffer
-    call ball_visible ; +22tcy
+    call ball_visible ; +22 Tcy
     skpc
     bra kill_time
     clrf FSR1H
@@ -1102,7 +1023,7 @@ kill_time
     tdelay 7
     return ; 37 tcy
     
-; task 12,  only on even field draw vertical sides and ball.
+; task 12,  draw vertical sides over bricks.
 ; lcount 58-73    
 draw_sides 
     banksel TRISA
@@ -1115,6 +1036,8 @@ draw_sides
     black
     next_task 2*BRICK_HEIGHT
  
+; copy a brick row in vbuffer
+; FSR1 initialized to point row    
 copy_row
     moviw FSR1++
     iorwf vbuffer
@@ -1130,6 +1053,7 @@ copy_row
     iorwf vbuffer+5
     return    
 
+;common code to all bricks row display    
 rows_common
     movwf fg_color
     clrf FSR1H
@@ -1162,6 +1086,7 @@ draw_bricks
     banksel TRISA
     lsrf WREG
     lsrf WREG
+    ; select color according to row index {0..5}
     brw
     movlw YELLOW
     bra rows_common
@@ -1180,7 +1105,8 @@ MSG_FIRST equ 40
 MSG_HEIGHT equ 40
 MSG_PIXELS_COUNT equ 16 
 ; task 14
-; draw all rows below bricks to paddle
+; draw all rows below bricks down to paddle
+; also display message when game over. 
 ; lcount 122-241 
 draw_empty
     banksel TRISA
@@ -1214,7 +1140,7 @@ print_msg
     movwf FSR1H
     movlw low cool_msg
     movwf FSR1L
-    call display_msg
+    call copy_msg
     bra msg
 ; display 'END!' message    
 display_end
@@ -1222,23 +1148,15 @@ display_end
     movwf FSR1H
     movlw low end_msg
     movwf FSR1L
-    call display_msg
+    call copy_msg
 msg
     call display_vbuffer
 draw_empty_exit
     next_task PADDLE_Y-ROW6_Y-BRICK_HEIGHT
-;    incf slice
-;    movlw LAST_VIDEO_LINE-PADDLE_THICKNESS+1
-;    subwf lcount,W
-;    skpz
-;    leave
-;    clrf slice
-;    incf task
-;    leave
 
-; display end message
-; message as a maximum of 24 vbuffer    
-display_msg
+; copy message in vbuffer
+; message as  24 pixels
+copy_msg
     movlw MSG_FIRST
     subwf slice,W
     lsrf WREG
@@ -1392,46 +1310,22 @@ bw_init
     bra bw_init
     return
 
-; compute tcy delay from pixel coordinateur
-;  1 pixel is 5 tcy wide.
-; input:
-;   WREG  px
-; output
-;   WREG  tcy    
-px2tcy
-   pushw
-   lslf WREG
-   lslf WREG
-   addwf T
-   popw
-   return
-
-   
-    
-    
-    
-; REF: https://en.wikipedia.org/wiki/LFSR#Fibonacci_LFSRs    
+; pseudo random number generator    
+; REF: https://en.wikipedia.org/wiki/LFSR#Fibonacci_LFSRs  
+POLY equ 0xb400 
+SEED equ 0xace1 
 lfsr16
     banksel seed
-    movfw seed+1
-    movwf temp1
-    lslf WREG
-    lslf WREG
-    movwf temp2
-    xorwf temp1
-    lslf temp2
-    movfw temp2
-    xorwf temp1
-    lslf temp2
-    lslf temp2,W
-    xorwf temp1
-    lslf temp1
-    rlf seed
-    rlf seed+1
+    lsrf seed
+    rrf seed+1
+    movlw high POLY
+    skpnc
+    xorwf seed
+random
     movfw seed
     return
     
-
+; ball is sent at random direcction at serve.
 set_ball_dx
     call lfsr16 ;random
     movlw 7
@@ -1477,17 +1371,6 @@ game_init
     bsf flags, F_START
     return
     
-; delay by TIMER0
-; parameter
-;   WREG -> 2*Tcy+7cy    
-t0delay 
-    comf WREG
-    movwf TMR0
-    bcf INTCON,T0IF
-    btfss INTCON,T0IF
-    bra $-1
-    return
-    
 MAIN_PROG CODE                      ; let linker place main program
 
 initialize
@@ -1499,96 +1382,73 @@ initialize
     movwi FSR0++
     btfss FSR0L,7
     bra $-2
-; clear banked RAM
-    clrf FSR0L
-    movlw 0x20
-    movwf FSR0H
-    clrw 
-    movwi FSR0++
-    btfss FSR0H,0
-    bra $-2
 ; initialize LFSR seed
     banksel seed
-    comf seed
-    comf seed+1
-    comf seed+2
-    comf seed+3
+    movlw high SEED
+    movwf seed
+    movlw low SEED
+    movwf seed+1
 ;   setup arguments stack pointer
     movlw high (stack+STACK_SIZE)
     movwf FSR0H
     movlw low (stack+STACK_SIZE)
     movwf FSR0L
-; setup OPTION register to enable weak pullup and prescale used by TIMER
-; TIMER0 prescale 1:2
-    movlw ~((1<<NOT_WPUEN)|(1<<TMR0CS)|(1<<PSA)|(7<<PS0_OPTION_REG))
-    movwf OPTION_REG
 ; disable analog inputs, except AN0
     banksel ANSELA
     clrf ANSELA
 ; paddle potentiometer input     
     bsf ANSELA,PADDLE
+; adc clock Fosc/32    
     banksel ADCON1
     movlw (2<<ADCS0)
     movwf ADCON1
 ; pin setup
-    banksel WPUA
-    clrf WPUA
     banksel TRISA
+; nstc sync output    
     bcf TRISA,SYNC_OUT
+; video luminance output always set to 1.    
     banksel LATA
     bsf LATA, VIDEO_OUT
+;  clear all PWM special fonction registers
+;  to start configuration in a clean state.    
+    movlw high PWMEN
+    movwf FSR1H
+    movlw low PWMEN
+    movwf FSR1L
+clr_pwm_sfr
+    clrf INDF1
+    incf FSR1L
+    movlw 0xc1
+    subwf FSR1L,W
+    skpz
+    bra clr_pwm_sfr
 ; PWM1 chroma signal on RA1
     banksel PWM1CON
-    clrf PWM1LDCON
-    clrf PWM1PHL
-    clrf PWM1PHH
-    clrf PWM1OFL
-    clrf PWM1OFH
-    clrf PWM1PRH
+    movlw (1<<EN)|(1<<OE)
+    movwf PWM1CON
     movlw 7
     movwf PWM1PRL
     movlw 4
     movwf PWM1DCL
-    clrf PWM1DCH
     bsf PWM1LDCON,7
-    movlw (1<<EN)|(1<<OE)
-    movwf PWM1CON
-; PWM2 sound
+; PWM2 sound, clock source Fosc/8
     banksel PWM2CON
-    clrf PWM2PHL
-    clrf PWM2PHH
-    clrf PWM2OFL
-    clrf PWM2OFH
-    movlw 3<<PWM2PS0 ; clock source FOSC/8
+    movlw 3<<PWM2PS0
     movwf PWM2CLKCON
-    movlw high 3578;7
-    movwf PWM2PRH
-    movlw low 3578;7
-    movwf PWM2PRL
-    lsrf PWM2PRH,W
-    movwf PWM2DCH
-    rrf PWM2PRL,W
-    movwf PWM2DCL
-    bsf PWM2LDCON,LDA
 ; PWM3 set to horizontal period 15734 hertz, output on RA2
     banksel PWM3CON
-    clrf PWM3LDCON
-    clrf PWM3PHL
-    clrf PWM3PHH
-    clrf PWM3OFL
-    clrf PWM3OFH
     movlw low HPERIOD
     movwf PWM3PRL
     movlw high HPERIOD
     movwf PWM3PRH
     movlw HSYNC
     movwf PWM3DCL
-    clrf PWM3DCH
     movlw (1<<EN)|(1<<OE)|(1<<POL)
     movwf PWM3CON
     bsf PWM3LDCON,7
     bsf PWM3INTE,PRIE
-; enbable interrupt    
+; enbable interrupt
+; only interrupt used is PWM3PR rollover    
     banksel PIR3
     bcf PIR3,PWM3IF
     banksel PIE3
@@ -1596,10 +1456,7 @@ initialize
     bsf INTCON,PEIE
     bsf INTCON,GIE
     call game_init
-    clrf flags
-    bsf flags, F_SYNC
 ; test code
-    bsf flags, F_START
 ; all processing done in ISR    
     goto $
 
@@ -1629,14 +1486,15 @@ digits
     dt  0xE0,0xA0,0xE0,0xA0,0xE0 ; 8
     dt  0xE0,0xA0,0xE0,0x20,0x60 ; 9
     reset
-    
+
+; PWM2PR count for sound frequencies    
 frequency
     brw
     dt high 35795, low 35795 ; 100 hertz
     dt high 3579, low 3579 ; 1000 hertz
     reset
   
-;display END! when game is over    
+; END! message bitmap
 end_msg
 ;    brw
     data 0xe8,0xc8,0
@@ -1645,6 +1503,7 @@ end_msg
     data 0x8a,0xa0,0
     data 0xea,0xc8,0
   
+; COOL message bitmap    
 cool_msg
 ;    brw
     data 0xee,0xe8,0
@@ -1652,6 +1511,7 @@ cool_msg
     data 0x8a,0xa8,0
     data 0x8a,0xa8,0
     data 0xee,0xee,0
+    
     
 eeprom org (PROG_SIZE-EEPROM_SIZE)
 max_score 
