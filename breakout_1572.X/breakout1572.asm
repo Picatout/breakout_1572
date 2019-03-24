@@ -372,9 +372,16 @@ ball_timer res 1
 ;; cpu reset entry point
 RES_VECT  CODE    0x0000            
     goto    initialize  ; go to beginning of program
-    reset   
-    reset
-    reset
+    
+; delay = 3+3*n  (including the call)    
+; SEE tdelay macro
+;input:
+;   WREG <- n {1..255}
+_3ntcy
+    decfsz WREG
+    bra $-1
+_4tcy
+    return  
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
 ; interrupt service routine triggered by PWM3 period rollover
@@ -959,23 +966,20 @@ draw_score
     lsrf WREG
     lsrf WREG
     pushw
-    movlw 0xf
-    andwf score,W
-    call digits
-    iorwf vbuffer
-    swapf score+1,W
-    andlw 0xf
+    movfw score
     call digits
     swapf WREG
     iorwf vbuffer
-    movlw 0xf
-    andwf score+1,W
+    swapf score+1,W
     call digits
+    iorwf vbuffer
+    movfw score+1
+    call digits
+    swapf WREG
     iorwf vbuffer+1
     movfw balls
     call digits
-    iorwf vbuffer+5
-    tdelay 9
+    iorwf vbuffer+4
     call display_vbuffer
     dropn 1
 score_exit
@@ -1154,17 +1158,15 @@ msg
 draw_empty_exit
     next_task PADDLE_Y-ROW6_Y-BRICK_HEIGHT
 
-; copy message in vbuffer
-; message as  24 pixels
+; copy message bitmap in vbuffer
+; message is  16 pixels wide
 copy_msg
     movlw MSG_FIRST
     subwf slice,W
     lsrf WREG
     lsrf WREG
     lsrf WREG
-    movwf temp1
     lslf WREG
-    addwf temp1,W
     addwf FSR1L
     skpnc
     incf FSR1H
@@ -1172,8 +1174,6 @@ copy_msg
     movwf vbuffer+1
     moviw FSR1++
     movwf vbuffer+2
-    moviw FSR1++
-    movwf vbuffer+3
     return
     
 ; task 15, draw paddle at bottom screen  
@@ -1239,17 +1239,6 @@ field_end
 
 ; helper functions
 
-; delay = 4+(n-1)*3    
-;input:
-;   WREG <- n {1..255}
-_3ntcy
-    decfsz WREG
-    bra $-1
-    return
-_5tcy ; call here for 5*tcy delay using a single instruction
-    nop
-_4tcy ; call here for 4*Tcy delay using a single instruction    
-    return
 
 ; increment user score
 ; This is a BCD addition where a single digit is added to score.   
@@ -1321,7 +1310,9 @@ lfsr16
     movlw high POLY
     skpnc
     xorwf seed
-random
+; call here for 5 Tcy delay using a single instruction
+; see tdelay macro 
+_5tcy
     movfw seed
     return
     
@@ -1466,51 +1457,54 @@ clr_pwm_sfr
 ;   WREG -> digit
 ; output:
 ;   WREG -> pixels
-;   T -> glyph row    
+;   T -> glyph row  
+; numérique, 2 digits compressés dans
+; 5 octets
 digits
-    pushw 
-    lslf WREG
-    lslf WREG
-    addwf T
-    popw
+    movwf temp1
+    andlw 0x0e
+    movwf temp2
+    lslf temp2
+    lslf temp2
+    addwf temp2
+    lsrf temp2,W
     addwf T,W
-    brw
-    dt  0x40,0xA0,0xA0,0xA0,0x40 ; 0
-    dt  0x40,0xC0,0x40,0x40,0xE0 ; 1
-    dt  0xE0,0x20,0xC0,0x80,0xE0 ; 2
-    dt  0xE0,0x20,0xC0,0x20,0xE0 ; 3
-    dt  0xA0,0xA0,0xE0,0x20,0x20 ; 4
-    dt  0xE0,0x80,0xE0,0x20,0xE0 ; 5
-    dt  0xC0,0x80,0xE0,0xA0,0xE0 ; 6
-    dt  0xE0,0x20,0x20,0x20,0x20 ; 7
-    dt  0xE0,0xA0,0xE0,0xA0,0xE0 ; 8
-    dt  0xE0,0xA0,0xE0,0x20,0x60 ; 9
-    reset
-
+    call digit_row
+    btfss temp1,0
+    swapf WREG
+    andlw 0xf
+    return
+digit_row    
+    brw ; high nibble even digit, low nibble odd digit
+    dt  H'44',H'AC',H'A4',H'A4',H'4E' ; 0, 1
+    dt  H'EE',H'22',H'CC',H'82',H'EE' ; 2, 3
+    dt  H'AE',H'A8',H'EE',H'22',H'2E' ; 4, 5
+    dt  H'CE',H'82',H'E2',H'A2',H'E2' ; 6, 7
+    dt  H'EE',H'AA',H'EE',H'A2',H'E6' ; 8, 9
+    
 ; PWM2PR count for sound frequencies    
 frequency
     brw
     dt high 35795, low 35795 ; 100 hertz
     dt high 3579, low 3579 ; 1000 hertz
-    reset
   
 ; END! message bitmap
 end_msg
 ;    brw
-    data 0xe8,0xc8,0
-    data 0x8e,0xa8,0
-    data 0xea,0xa8,0
-    data 0x8a,0xa0,0
-    data 0xea,0xc8,0
+    data 0xf4,0x5c
+    data 0x86,0x52
+    data 0xe5,0x52
+    data 0x84,0xd2
+    data 0xf4,0x5c
   
 ; COOL message bitmap    
 cool_msg
 ;    brw
-    data 0xee,0xe8,0
-    data 0x8a,0xa8,0
-    data 0x8a,0xa8,0
-    data 0x8a,0xa8,0
-    data 0xee,0xee,0
+    data 0xee,0xe8
+    data 0x8a,0xa8
+    data 0x8a,0xa8
+    data 0x8a,0xa8
+    data 0xee,0xef
     
     
 eeprom org (PROG_SIZE-EEPROM_SIZE)
