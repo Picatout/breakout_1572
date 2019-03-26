@@ -121,3 +121,12 @@ démo
 [Un court vidéo de démonstration sur youtube](https://youtu.be/5JV19paUu_A)
 
 [mon blogue sur wordpress](https://picatout.wordpress.com/)
+
+2019-03-25, 10:30
+-
+Hier j'ai commencé à travailler le code pour en réduire la taille. J'ai réussi à le réduire d'environ 100 instructions. En ce moment
+1183 mots sur les 2048 que contient la mémoire flash sont utilisés. 
+
+23:23, J'en suis rendu à 1144 instructions. Mais l'optimization n'est pas terminée.
+
+
