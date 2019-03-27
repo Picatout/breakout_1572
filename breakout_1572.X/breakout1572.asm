@@ -1405,7 +1405,6 @@ clr_pwm_sfr
     bsf INTCON,PEIE
     bsf INTCON,GIE
 ; test code
-    incf score+1
 ; all processing done in ISR    
     goto $
 

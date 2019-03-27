@@ -1,4 +1,4 @@
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE  1
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE  1
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -57,7 +57,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00051 ;    13        |  1      | task 6, user input
                       00052 ;    14        |  1      | task 7, move ball
                       00053 ;    15        |  1      | task 8, collision control
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE  2
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE  2
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -116,7 +116,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00094  
                       00095 ;pins assignment
   00000000            00096 AUDIO EQU RA0  ; PWM2 output for audio tones
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE  3
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE  3
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -175,7 +175,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00147     
                       00148 ; move to next task on slice limit
                       00149 ; parameters:
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE  4
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE  4
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -234,7 +234,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00200     if (r==1)
                       00201     nop
                       00202     exitm
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE  5
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE  5
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -293,7 +293,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00253     movlw DARK_GREEN
                       00254     movwf TRISA
                       00255     endm
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE  6
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE  6
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -352,7 +352,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00306     endm
                       00307 
                       00308 ; drop n elements from stack
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE  7
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE  7
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -411,7 +411,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0002                  00359 slice res 1 ; task slice counter, a task may use more than one slice.
 0003                  00360 task res 1 ; where in video phase 
 0004                  00361 temp1 res 1 ; temporary storage
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE  8
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE  8
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -470,7 +470,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00411 ; generate chroma synchronization
                       00412     tdelay 14
                           M     if 14==0
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE  9
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE  9
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -529,7 +529,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     call _4tcy
                           M     exitm
                           M     endif
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 10
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 10
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -588,7 +588,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00449     
                       00450 ; task 0, vertical synchronization pre equalization
                       00451 ; 6 half horizontal scan lines    
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 11
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 11
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -647,7 +647,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0059   00B4           00481     movwf PWM3DCH
 005A   17BF           00482     bsf PWM3LDCON,7
 005B   0A??           00483     incf slice
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 12
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 12
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -706,7 +706,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 007B   140C           00529     bsf TRISA, PADDLE
 007C   3003           00530     movlw 3
 007D   009D           00531     movwf ADCON0
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 13
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 13
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -765,7 +765,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 00A3   1180           00579     bcf flags, F_SOUND
 00A4   003B           00580     banksel PWM2CON
 00A5   132B           00581     bcf PWM2CON,OE
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 14
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 14
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -824,7 +824,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 00C9   0008           00628     return
                       00629     
                       00630 ;task 6, read button and paddle position
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 15
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 15
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -883,7 +883,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00674 ; ball_x out of bounds    
 00EA   09??           00675     comf ball_dx
 00EB   0A??           00676     incf ball_dx
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 16
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 16
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -942,7 +942,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0113   2???           00724     call create_ball_mask
                       00725     leave
 0114   2???               M     goto isr_exit
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 17
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 17
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1001,7 +1001,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0134   08??           00773     movfw ball_y
 0135   2???           00774     call between
 0136   1C03           00775     skpc
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 18
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 18
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1060,7 +1060,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0164   2???           00823     call sound_init
 0165                  00824 collision_exit
 0165   0A??           00825     incf task
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 19
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 19
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1119,7 +1119,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       00871 ; visible if ball_y <= lcount < ball_y+BALL_HEIGHT
                       00872 ; designed to use a constant number of Tcy    
                       00873 ;  22 tcy   
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 20
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 20
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1178,7 +1178,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0197   35??               M     lslf vbuffer+0
 0198   301B               M     movlw BLACK
 0199   1803               M     skpnc
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 21
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 21
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1237,7 +1237,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 01C3   008C               M     movwf TRISA
                           M     display_bit 1
 01C4   35??               M     lslf vbuffer+1
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 22
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 22
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1296,7 +1296,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 01EE   1803               M     skpnc
 01EF   08??               M     movfw fg_color
 01F0   008C               M     movwf TRISA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 23
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 23
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1355,7 +1355,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0219   35??               M     lslf vbuffer+3
 021A   301B               M     movlw BLACK
 021B   1803               M     skpnc
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 24
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 24
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1414,7 +1414,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0245   008C               M     movwf TRISA
                           M     display_bit 4
 0246   35??               M     lslf vbuffer+4
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 25
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 25
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1473,7 +1473,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0270   1803               M     skpnc
 0271   08??               M     movfw fg_color
 0272   008C               M     movwf TRISA
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 26
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 26
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1532,7 +1532,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 028B   2???           00925     call digits
 028C   0E89           00926     swapf WREG
 028D   04??           00927     iorwf vbuffer+1
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 27
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 27
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1591,7 +1591,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     call _4tcy
                           M     exitm
                           M     endif
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 28
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 28
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1650,7 +1650,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 02B9   3FC0           00972     movwi [FSR1]
 02BA   0008           00973     return ; 37 tcy
 02BB                  00974 kill_time 
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 29
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 29
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1709,7 +1709,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     endif
                           M     if LEFT_MARGIN-37==2
                           M     bra $+1
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 30
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 30
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1768,7 +1768,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 02CC   1D03               M     skpz
                           M     leave
 02CD   2???               M     goto isr_exit
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 31
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 31
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1827,7 +1827,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                       01027     
                       01028 ; task 13, draw brick rows
                       01029 ; lcount 74-121   
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 32
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 32
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1886,7 +1886,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 030D   00??           01078     movwf fg_color
 030E   3028           01079     movlw MSG_FIRST
                       01080     pushw
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 33
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 33
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -1945,7 +1945,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     exitm
                           M     endif
                           M     if 24==4
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 34
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 34
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -2004,7 +2004,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 032F   3007               M     movlw q
 0330   2???               M     call _3ntcy ; Tcy=3+3*q
                           M     if (r==2)
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 35
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 35
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -2063,7 +2063,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
                           M     if LEFT_MARGIN-3==3
                           M     nop
                           M     bra $+1
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 36
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 36
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -2122,7 +2122,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0354   2???           01153     goto even_field
 0355   3005           01154     movlw 5
 0356   02??           01155     subwf lcount,W
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 37
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 37
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -2181,7 +2181,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0377   390F           01203     andlw 15
 0378   3C09           01204     sublw 9
 0379   1803           01205     skpnc
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 38
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 38
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -2240,7 +2240,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 039E   08??           01256     movfw seed
 039F   0008           01257     return
                       01258     
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 39
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 39
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -2299,7 +2299,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 03C8   2???           01309     call brick_wall_init
 03C9   002?           01310     banksel balls
 03CA   3002           01311     movlw 2
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 40
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 40
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -2358,7 +2358,7 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0012   110C           01362     bcf TRISA,SYNC_OUT
                       01363 ;  clear all PWM special fonction registers
                       01364 ;  to start configuration in a clean state.
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 41
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 41
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
@@ -2407,86 +2407,85 @@ LOC  OBJECT CODE     LINE SOURCE TEXT
 0035   170B           01405     bsf INTCON,PEIE
 0036   178B           01406     bsf INTCON,GIE
                       01407 ; test code
-0037   0A??           01408     incf score+1
-                      01409 ; all processing done in ISR    
-0038   2???           01410     goto $
-                      01411 
-                      01412 ;digits character table
-                      01413 ; input:
-                      01414 ;   temp3 -> glyph row
-                      01415 ;   WREG -> digit
-                      01416 ; output:
-                      01417 ;   WREG -> pixels
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 42
+                      01408 ; all processing done in ISR    
+0037   2???           01409     goto $
+                      01410 
+                      01411 ;digits character table
+                      01412 ; input:
+                      01413 ;   temp3 -> glyph row
+                      01414 ;   WREG -> digit
+                      01415 ; output:
+                      01416 ;   WREG -> pixels
+                      01417 ; 2 digits packed in 5 bytes
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 42
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      01418 ; 2 digits packed in 5 bytes
-                      01419 ; high nibble even digit, low nibble odd digit    
-0039                  01420 digits
-0039   00??           01421     movwf temp1
-003A   390E           01422     andlw 0x0e
-003B   00??           01423     movwf temp2
+                      01418 ; high nibble even digit, low nibble odd digit    
+0038                  01419 digits
+0038   00??           01420     movwf temp1
+0039   390E           01421     andlw 0x0e
+003A   00??           01422     movwf temp2
+003B   35??           01423     lslf temp2
 003C   35??           01424     lslf temp2
-003D   35??           01425     lslf temp2
-003E   07??           01426     addwf temp2
-003F   36??           01427     lsrf temp2,W
-0040   07??           01428     addwf temp3,W
-0041   2???           01429     call digit_row
-0042   1C00           01430     btfss temp1,0
-0043   0E89           01431     swapf WREG
-0044   390F           01432     andlw 0xf
-0045   0008           01433     return
-0046                  01434 digit_row    
-0046   000B           01435     brw
-0047   3444 34AC 34A4 01436     dt  0x44,0xAC,0xA4,0xA4,0x4E ; 0, 1
+003D   07??           01425     addwf temp2
+003E   36??           01426     lsrf temp2,W
+003F   07??           01427     addwf temp3,W
+0040   2???           01428     call digit_row
+0041   1C00           01429     btfss temp1,0
+0042   0E89           01430     swapf WREG
+0043   390F           01431     andlw 0xf
+0044   0008           01432     return
+0045                  01433 digit_row    
+0045   000B           01434     brw
+0046   3444 34AC 34A4 01435     dt  0x44,0xAC,0xA4,0xA4,0x4E ; 0, 1
        34A4 344E 
-004C   34EE 3422 34CC 01437     dt  0xEE,0x22,0xCC,0x82,0xEE ; 2, 3
+004B   34EE 3422 34CC 01436     dt  0xEE,0x22,0xCC,0x82,0xEE ; 2, 3
        3482 34EE 
-0051   34AE 34A8 34EE 01438     dt  0xAE,0xA8,0xEE,0x22,0x2E ; 4, 5
+0050   34AE 34A8 34EE 01437     dt  0xAE,0xA8,0xEE,0x22,0x2E ; 4, 5
        3422 342E 
-0056   34CE 3482 34E2 01439     dt  0xCE,0x82,0xE2,0xA2,0xE2 ; 6, 7
+0055   34CE 3482 34E2 01438     dt  0xCE,0x82,0xE2,0xA2,0xE2 ; 6, 7
        34A2 34E2 
-005B   34EE 34AA 34EE 01440     dt  0xEE,0xAA,0xEE,0xA2,0xE6 ; 8, 9
+005A   34EE 34AA 34EE 01439     dt  0xEE,0xAA,0xEE,0xA2,0xE6 ; 8, 9
        34A2 34E6 
-                      01441     
-                      01442 ; PWM2PR count for sound frequencies    
-0060                  01443 frequency
-0060   000B           01444     brw
-0061   348B 34D3      01445     dt high 35795, low 35795 ; 100 hertz
-0063   340D 34FB      01446     dt high 3579, low 3579 ; 1000 hertz
-                      01447   
-                      01448 ; END! message bitmap
-0065                  01449 end_msg
-                      01450 ;    brw
-0065   00F4 005C      01451     data 0xf4,0x5c
-0067   0086 0052      01452     data 0x86,0x52
-0069   00E5 0052      01453     data 0xe5,0x52
-006B   0084 00D2      01454     data 0x84,0xd2
-006D   00F4 005C      01455     data 0xf4,0x5c
-                      01456   
-                      01457 ; COOL message bitmap    
-006F                  01458 cool_msg
-                      01459 ;    brw
-006F   00EE 00E8      01460     data 0xee,0xe8
-0071   008A 00A8      01461     data 0x8a,0xa8
-0073   008A 00A8      01462     data 0x8a,0xa8
-0075   008A 00A8      01463     data 0x8a,0xa8
-0077   00EE 00EF      01464     data 0xee,0xef
+                      01440     
+                      01441 ; PWM2PR count for sound frequencies    
+005F                  01442 frequency
+005F   000B           01443     brw
+0060   348B 34D3      01444     dt high 35795, low 35795 ; 100 hertz
+0062   340D 34FB      01445     dt high 3579, low 3579 ; 1000 hertz
+                      01446   
+                      01447 ; END! message bitmap
+0064                  01448 end_msg
+                      01449 ;    brw
+0064   00F4 005C      01450     data 0xf4,0x5c
+0066   0086 0052      01451     data 0x86,0x52
+0068   00E5 0052      01452     data 0xe5,0x52
+006A   0084 00D2      01453     data 0x84,0xd2
+006C   00F4 005C      01454     data 0xf4,0x5c
+                      01455   
+                      01456 ; COOL message bitmap    
+006E                  01457 cool_msg
+                      01458 ;    brw
+006E   00EE 00E8      01459     data 0xee,0xe8
+0070   008A 00A8      01460     data 0x8a,0xa8
+0072   008A 00A8      01461     data 0x8a,0xa8
+0074   008A 00A8      01462     data 0x8a,0xa8
+0076   00EE 00EF      01463     data 0xee,0xef
+                      01464     
                       01465     
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 43
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 43
 
 
 LOC  OBJECT CODE     LINE SOURCE TEXT
   VALUE
 
-                      01466     
-                      01467 eeprom org (PROG_SIZE-EEPROM_SIZE)
-                      01468  
-3FA7 1EFF             01469     END
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 44
+                      01466 eeprom org (PROG_SIZE-EEPROM_SIZE)
+                      01467  
+3FA7 1EFF             01468     END
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 44
 
 
 SYMBOL TABLE
@@ -2545,7 +2544,7 @@ BSR0                              00000000
 BSR1                              00000001
 BSR2                              00000002
 BSR3                              00000003
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 45
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 45
 
 
 SYMBOL TABLE
@@ -2604,7 +2603,7 @@ CWG1DBR2                          00000002
 CWG1DBR3                          00000003
 CWG1DBR4                          00000004
 CWG1DBR5                          00000005
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 46
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 46
 
 
 SYMBOL TABLE
@@ -2663,7 +2662,7 @@ F_SOUND                           00000003
 F_START                           00000004
 F_SYNC                            00000002
 Fhorz                             00003D76
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 47
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 47
 
 
 SYMBOL TABLE
@@ -2722,7 +2721,7 @@ IOCAN0                            00000000
 IOCAN1                            00000001
 IOCAN2                            00000002
 IOCAN3                            00000003
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 48
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 48
 
 
 SYMBOL TABLE
@@ -2781,7 +2780,7 @@ NOT_POR                           00000001
 NOT_RI                            00000002
 NOT_RMCLR                         00000003
 NOT_RWDT                          00000004
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 49
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 49
 
 
 SYMBOL TABLE
@@ -2840,7 +2839,7 @@ PMADR                             00000191
 PMADRH                            00000192
 PMADRL                            00000191
 PMCON1                            00000195
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 50
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 50
 
 
 SYMBOL TABLE
@@ -2899,7 +2898,7 @@ PWM1EN                            00000007
 PWM1EN_A                          00000000
 PWM1IE                            00000004
 PWM1IF                            00000004
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 51
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 51
 
 
 SYMBOL TABLE
@@ -2958,7 +2957,7 @@ PWM1PHH5                          00000005
 PWM1PHH6                          00000006
 PWM1PHH7                          00000007
 PWM1PHIE                          00000002
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 52
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 52
 
 
 SYMBOL TABLE
@@ -3017,7 +3016,7 @@ PWM1TMRL3                         00000003
 PWM1TMRL4                         00000004
 PWM1TMRL5                         00000005
 PWM1TMRL6                         00000006
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 53
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 53
 
 
 SYMBOL TABLE
@@ -3076,7 +3075,7 @@ PWM2OFH3                          00000003
 PWM2OFH4                          00000004
 PWM2OFH5                          00000005
 PWM2OFH6                          00000006
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 54
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 54
 
 
 SYMBOL TABLE
@@ -3135,7 +3134,7 @@ PWM2PRH6                          00000006
 PWM2PRH7                          00000007
 PWM2PRIE                          00000000
 PWM2PRIF                          00000000
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 55
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 55
 
 
 SYMBOL TABLE
@@ -3194,7 +3193,7 @@ PWM3DCL1                          00000001
 PWM3DCL2                          00000002
 PWM3DCL3                          00000003
 PWM3DCL4                          00000004
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 56
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 56
 
 
 SYMBOL TABLE
@@ -3253,7 +3252,7 @@ PWM3PH                            00000DB1
 PWM3PHH                           00000DB2
 PWM3PHH0                          00000000
 PWM3PHH1                          00000001
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 57
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 57
 
 
 SYMBOL TABLE
@@ -3312,7 +3311,7 @@ PWM3TMRH5                         00000005
 PWM3TMRH6                         00000006
 PWM3TMRH7                         00000007
 PWM3TMRL                          00000DB9
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 58
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 58
 
 
 SYMBOL TABLE
@@ -3371,7 +3370,7 @@ SREN                              00000005
 STACK_SIZE                        00000050
 START_BTN                         00000003
 STATUS                            00000003
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 59
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 59
 
 
 SYMBOL TABLE
@@ -3430,7 +3429,7 @@ TMR2IE                            00000001
 TMR2IF                            00000001
 TMR2ON                            00000002
 TOS                               00000FEE
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 60
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 60
 
 
 SYMBOL TABLE
@@ -3489,7 +3488,7 @@ WR                                00000001
 WREG                              00000009
 WREG_SHAD                         00000FE5
 WREN                              00000002
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 61
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 61
 
 
 SYMBOL TABLE
@@ -3536,7 +3535,7 @@ _LPBOREN_ON                       000037FF
 _LVP_OFF                          00001FFF
 _LVP_ON                           00003FFF
 _MAIN_PROG_0005                   00000005
-_MAIN_PROG_0038                   00000038
+_MAIN_PROG_0037                   00000037
 _MCLRE_OFF                        00003FBF
 _MCLRE_ON                         00003FFF
 _PLLEN_OFF                        00003EFF
@@ -3548,7 +3547,7 @@ _STVREN_OFF                       00003DFF
 _STVREN_ON                        00003FFF
 _WDTE_NSLEEP                      00003FF7
 _WDTE_OFF                         00003FE7
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 62
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 62
 
 
 SYMBOL TABLE
@@ -3585,13 +3584,13 @@ bw_init                           00000396
 clr_pwm_sfr                       00000017
 collision                         00000130
 collision_exit                    00000165
-cool_msg                          0000006F
+cool_msg                          0000006E
 copy_msg                          00000320
 copy_row                          000002D1
 create_ball_mask                  000003B5
 dark_green                        
-digit_row                         00000046
-digits                            00000039
+digit_row                         00000045
+digits                            00000038
 display_bit                       
 display_byte                      
 display_vbuffer                   00000183
@@ -3605,9 +3604,9 @@ draw_top_wall                     0000029B
 dropn                             
 eeprom                            00000780
 empty_common                      000002BF
-end_msg                           00000065
+end_msg                           00000064
 even_field                        0000035A
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 63
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 63
 
 
 SYMBOL TABLE
@@ -3623,7 +3622,7 @@ fill5                             000000CD
 fill6                             000000D5
 flags                             00000000
 freeze_ball                       0000010C
-frequency                         00000060
+frequency                         0000005F
 game_init                         000003C6
 game_over_test                    00000384
 hi_line                           00000353
@@ -3666,7 +3665,7 @@ resume                            000003D1
 resume_game                       000000D5
 row1                              000000A7
 row2                              000000AF
-MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  11:50:05         PAGE 64
+MPASM 5.83  /HOME/JACQUES/GITHUB/BREAKOUT_15   3-27-2019  12:45:48         PAGE 64
 
 
 SYMBOL TABLE
@@ -3710,6 +3709,6 @@ yellow
 
 Errors   :     0
 Warnings :     0 reported,     0 suppressed
-Messages :     0 reported,   270 suppressed
+Messages :     0 reported,   269 suppressed
 
 
