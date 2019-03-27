@@ -90,6 +90,7 @@ F_SOUND equ 3   ; sound enabled
 F_START equ 4   ; game started 
 F_PAUSE equ 5   ; game paused after a ball lost
 F_COOL equ 6    ; player got maximum score
+F_BORDERS equ 7  ; draw borders
  
 ;pins assignment
 AUDIO EQU RA0  ; PWM2 output for audio tones
@@ -132,7 +133,9 @@ ROW3_Y equ 90
 ROW4_Y equ 98
 ROW5_Y equ 106
 ROW6_Y equ 114 
-
+DIGIT_PIXEL_HEIGHT equ 4 ; scan lines
+DIGIT_FONT_HEIGHT equ 5 ; 4x5 pixels font  
+ 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; assembler macros ;;
 ;;;;;;;;;;;;;;;;;;;;;;
@@ -251,6 +254,16 @@ dark_green macro
     movwf TRISA
     endm
 
+; draw borders
+borders macro
+    bsf flags,F_BORDERS
+    endm
+    
+; no borders draw
+no_borders macro    
+    bcf flags,F_BORDERS
+    endm
+    
 ; shift out 1 bit    
 display_bit macro n
     lslf vbuffer+n
@@ -394,8 +407,9 @@ isr
     clrf vbuffer+3
     clrf vbuffer+4
     clrf vbuffer+5
+    borders ; default to drawing borders
 ; generate chroma synchronization
-    tdelay 15
+    tdelay 14
     bcf TRISA,CHROMA
     tdelay 16
     bsf TRISA,CHROMA
@@ -646,47 +660,48 @@ move_ball
     movwf ball_timer
     movfw ball_dx
     addwf ball_x
-    btfss ball_dx,7
-    bra right_bound
-left_bound
-    btfss ball_x,7
-    bra move_y
-    clrf ball_x
-    bra toggle_dx
-right_bound    
-    movfw ball_x
-    sublw BALL_RIGHT_BOUND
-    skpnc
-    bra move_y
-    decf ball_x
-toggle_dx
-    comf ball_dx
-    incf ball_dx
-move_y
     movfw ball_dy
     addwf ball_y
-    btfss ball_dy,7
-    bra bottom_bound
-top_bound    
+; test x bounds
+    clrw
+    pushw
+    movlw BALL_RIGHT_BOUND+1
+    pushw
+    movfw ball_x
+    call between
+    skpnc
+    bra y_bounds
+; ball_x out of bounds    
+    comf ball_dx
+    incf ball_dx
+    movlw BALL_RIGHT_BOUND
+    btfsc ball_x,7
+    clrf ball_x
+    skpz
+    movwf ball_x
+; test y bounds
+y_bounds    
     movlw BALL_TOP_BOUND
-    subwf ball_y,W
+    pushw
+    movlw PADDLE_Y-BALL_HEIGHT
+    pushw
+    movfw ball_y
+    call between
     skpnc
     bra move_ball_exit
-    movlw BALL_TOP_BOUND
-    movwf ball_y
+; ball_y out of bound
     comf ball_dy
     incf ball_dy
+    movlw BALL_TOP_BOUND
+    btfss ball_y,7
+    movwf ball_y
+    btfss ball_y,7
     bra move_ball_exit
-bottom_bound
-    movfw ball_y
-    sublw PADDLE_Y-BALL_HEIGHT+1
-    skpnc
-    bra move_ball_exit
+;ball at bottom
     call paddle_bounce
     skpnc
     bra move_ball_exit
 ball_lost
-;    banksel balls
     decfsz balls
     bra pause_game
     bcf flags, F_START
@@ -715,40 +730,29 @@ move_ball_exit
 ; output:
 ;   C set if bounced    
 paddle_bounce
-; if ball_x over paddle bounce ball
-    movfw paddle_pos
-    pushw
-    skpnz
-    decf T
-    addlw PADDLE_WIDTH
-    pushw
-    movfw ball_x
-    call between
-    skpnc
-    bra bouncing
-    bcf STATUS,C
-    return
-bouncing
-    movlw PADDLE_Y-BALL_HEIGHT-1
-    movwf ball_y
-    comf ball_dy
-    incf ball_dy
-; bounce direction depend where paddle was hit.    
     movfw paddle_pos
     subwf ball_x,W
-    skpc
-    bra bounce_left
-    skpnz
-    bra bounce_left
-    movlw PADDLE_WIDTH-2
+    skpc 
+    return ; ball fall left of paddle
+    movlw PADDLE_WIDTH-BALL_WIDTH+1
     addwf paddle_pos,W
     subwf ball_x,W
-    movlw 1
-    skpnc
-    movwf ball_dx ; bounce right
-    bra paddle_sound
-bounce_left
-    movlw -1
+    skpc
+    bra ball_bouncing
+    clrc ; ball fall right of paddle
+    return
+ball_bouncing
+; bounce direction depend where paddle was hit.    
+    andlw 0x6
+    brw
+    movlw -1      ;0-1 paddle hit left, bounce left
+    bra set_dx
+    movfw ball_dx ;2-3 paddle hit at center mirror bounce
+    bra set_dx
+    movfw ball_dx ;4-5  mirror bounce
+    bra set_dx
+    movlw 1       ;6 paddle hit right, bounce right
+set_dx    
     movwf ball_dx
 paddle_sound    
     movlw 2
@@ -759,8 +763,6 @@ paddle_sound
 ; report bounce    
     bsf STATUS,C
     return
-    
-    
     
 ; task 8, check collision with bricks
 collision
@@ -866,7 +868,7 @@ video_first
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ; check if ball is visible on this scan line    
-; visible if ball_y <=lcount<ball_y+BALL_HEIGHT
+; visible if ball_y <= lcount < ball_y+BALL_HEIGHT
 ; designed to use a constant number of Tcy    
 ;  22 tcy   
 ;  input:
@@ -884,18 +886,23 @@ ball_visible
     
     
 ; display vbuffer
-; the 6 macros display_byte unroll to 240 instructions    
+; the 6 macros 'display_byte' unroll to 240 instructions    
 display_vbuffer
-    white 
-    tdelay BORDER_WIDTH
-display_vbuffer_2    
+    movlw WHITE
+    btfss flags,F_BORDERS
+    movlw BLACK
+    movwf TRISA
+    tdelay BORDER_WIDTH-3
     display_byte 0
     display_byte 1
     display_byte 2
     display_byte 3
     display_byte 4
     display_byte 5
-    white
+    movlw WHITE
+    btfss flags,F_BORDERS
+    movlw BLACK
+    movwf TRISA
     tdelay BORDER_WIDTH
     black
     return
@@ -904,10 +911,9 @@ display_vbuffer_2
 ;  lcount 30-49    
 draw_score 
 ;    banksel TRISA
-    movfw slice
+    lsrf slice,W
     lsrf WREG
-    lsrf WREG
-    pushw
+    movwf temp3
     movfw score
     call digits
     swapf WREG
@@ -922,10 +928,10 @@ draw_score
     movfw balls
     call digits
     iorwf vbuffer+4
-    call display_vbuffer_2
-    dropn 1
+    no_borders
+    call display_vbuffer
 score_exit
-    next_task 5*4
+    next_task DIGIT_PIXEL_HEIGHT*DIGIT_FONT_HEIGHT ;4*5 
 
     
 ; task 11,  draw top wall, 8 screen lines 
@@ -1399,16 +1405,16 @@ clr_pwm_sfr
     bsf INTCON,PEIE
     bsf INTCON,GIE
 ; test code
+    incf score+1
 ; all processing done in ISR    
     goto $
 
 ;digits character table
 ; input:
-;   T -> glyph row
+;   temp3 -> glyph row
 ;   WREG -> digit
 ; output:
 ;   WREG -> pixels
-;   T -> glyph row  
 ; 2 digits packed in 5 bytes
 ; high nibble even digit, low nibble odd digit    
 digits
@@ -1419,7 +1425,7 @@ digits
     lslf temp2
     addwf temp2
     lsrf temp2,W
-    addwf T,W
+    addwf temp3,W
     call digit_row
     btfss temp1,0
     swapf WREG
@@ -1427,11 +1433,11 @@ digits
     return
 digit_row    
     brw
-    dt  H'44',H'AC',H'A4',H'A4',H'4E' ; 0, 1
-    dt  H'EE',H'22',H'CC',H'82',H'EE' ; 2, 3
-    dt  H'AE',H'A8',H'EE',H'22',H'2E' ; 4, 5
-    dt  H'CE',H'82',H'E2',H'A2',H'E2' ; 6, 7
-    dt  H'EE',H'AA',H'EE',H'A2',H'E6' ; 8, 9
+    dt  0x44,0xAC,0xA4,0xA4,0x4E ; 0, 1
+    dt  0xEE,0x22,0xCC,0x82,0xEE ; 2, 3
+    dt  0xAE,0xA8,0xEE,0x22,0x2E ; 4, 5
+    dt  0xCE,0x82,0xE2,0xA2,0xE2 ; 6, 7
+    dt  0xEE,0xAA,0xEE,0xA2,0xE6 ; 8, 9
     
 ; PWM2PR count for sound frequencies    
 frequency

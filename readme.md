@@ -129,4 +129,8 @@ Hier j'ai commencé à travailler le code pour en réduire la taille. J'ai réus
 
 23:23, J'en suis rendu à 1144 instructions. Mais l'optimization n'est pas terminée.
 
+2019-03-27
+-
+Les 2 derniers jours j'ai retravailler le code pour le rendre plus élégant, ce faisant j'ai sauvé environ 165 instructions. Comme je ne vois pas d'atures pistes d'amélioration, je m'arrête ici. 
+
 
