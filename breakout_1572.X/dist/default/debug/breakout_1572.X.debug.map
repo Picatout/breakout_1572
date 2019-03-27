@@ -1,17 +1,17 @@
 MPLINK 5.09, LINKER
-Linker Map File - Created Sun Mar 24 14:36:44 2019
+Linker Map File - Created Tue Mar 26 21:18:48 2019
 
                                  Section Info
                   Section       Type    Address   Location Size(Bytes)
                 ---------  ---------  ---------  ---------  ---------
                  RES_VECT       code   0x000000    program   0x000008
-                      ISR       code   0x000004    program   0x000878
-                   .cinit    romdata   0x000440    program   0x000004
-                MAIN_PROG       code   0x000442    program   0x00017c
+                      ISR       code   0x000004    program   0x0007d0
+                   .cinit    romdata   0x0003ec    program   0x000004
+                MAIN_PROG       code   0x0003ee    program   0x0000f2
                    .org_0       code   0x000780    program   0x000000
 .config_8007_BUILD/DEFAULT/DEBUG/BREAKOUT1572       code   0x008007    program   0x000002
 .config_8008_BUILD/DEFAULT/DEBUG/BREAKOUT1572       code   0x008008    program   0x000002
-                   .udata      udata   0x000020       data   0x00000a
+                   .udata      udata   0x000020       data   0x000050
                .udata_shr      udata   0x000070       data   0x000010
                   v_array      udata   0x0000a0       data   0x000040
 
@@ -20,114 +20,108 @@ Linker Map File - Created Sun Mar 24 14:36:44 2019
                               Program Memory Usage 
                                Start         End      
                            ---------   ---------      
-                            0x000000    0x0004ff      
+                            0x000000    0x000466      
                             0x008007    0x008008      
-            1282 out of 2055 program addresses used, program memory utilization is 62%
+            1129 out of 2055 program addresses used, program memory utilization is 54%
 
 
 
                               Symbols - Sorted by Name
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
-                   _3ntcy   0x0003d1    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                    _4tcy   0x0003d5    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                    _5tcy   0x0003d4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_0084   0x000084    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_00F8   0x0000f8    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_0126   0x000126    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_016C   0x00016c    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_01B1   0x0001b1    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_0303   0x000303    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_03D2   0x0003d2    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_03D8   0x0003d8    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_03DD   0x0003dd    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_043E   0x00043e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          _MAIN_PROG_0006   0x000448    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          _MAIN_PROG_000D   0x00044f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          _MAIN_PROG_005F   0x0004a1    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                add_score   0x00019e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                ball_lost   0x000123    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-             ball_visible   0x0001ba    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                  between   0x0001a5    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-             between_exit   0x0001af    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-            between_exit2   0x0001b1    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-             bottom_bound   0x00011c    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              bounce_left   0x000155    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                 bouncing   0x000144    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          brick_wall_init   0x0003f9    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                  bw_init   0x000400    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                collision   0x00016e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-           collision_exit   0x0001a3    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-        compute_ball_mask   0x00015d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-      compute_paddle_mask   0x0000ea    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                 cool_msg   0x0004f1    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                 copy_row   0x000314    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                   digits   0x0004a2    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              display_end   0x000377    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              display_msg   0x000385    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          display_vbuffer   0x0001c1    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              draw_bricks   0x000335    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               draw_empty   0x000353    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          draw_empty_exit   0x00037d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              draw_paddle   0x000397    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               draw_score   0x0002b2    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               draw_sides   0x0002ff    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-            draw_top_wall   0x0002d3    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                   _3ntcy   0x000001    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                    _4tcy   0x000003    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                    _5tcy   0x0003c4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_007D   0x00007d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_0095   0x000095    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_0148   0x000148    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_018D   0x00018d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_02DA   0x0002da    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_02E4   0x0002e4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_0394   0x000394    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_0399   0x000399    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+          _MAIN_PROG_0005   0x0003f3    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+          _MAIN_PROG_0038   0x000426    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+           _RES_VECT_0002   0x000002    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                add_score   0x00017a    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                ball_lost   0x000103    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+        ball_track_pallet   0x00010b    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+             ball_visible   0x000196    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                  between   0x000181    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+             between_exit   0x00018b    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+            between_exit2   0x00018d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+             bottom_bound   0x0000fc    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              bounce_left   0x000131    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                 bouncing   0x000120    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+          brick_wall_init   0x0003b5    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                  bw_init   0x0003bc    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              clr_pwm_sfr   0x000405    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                collision   0x00014a    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+           collision_exit   0x00017f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+        compute_ball_mask   0x000139    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                 cool_msg   0x00045d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                 copy_msg   0x000344    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                 copy_row   0x0002ee    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                digit_row   0x000434    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                   digits   0x000427    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+          display_vbuffer   0x00019d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              draw_bricks   0x00030f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               draw_empty   0x00032c    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+          draw_empty_exit   0x000351    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              draw_paddle   0x000359    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               draw_score   0x00028e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               draw_sides   0x0002e4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+            draw_top_wall   0x0002aa    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                    eeprom   0x000780    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                  end_msg   0x0004e2    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               even_field   0x0003bf    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          even_field_read   0x00008e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                field_end   0x0003c9    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                frequency   0x0004dc    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                game_init   0x000428    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                game_over   0x0000de    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-           game_over_test   0x0003ee    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-             game_running   0x0000d7    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                  hi_line   0x0003b8    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                inc_score   0x0003d6    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               initialize   0x000442    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+             empty_common   0x0002d5    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                  end_msg   0x000453    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               even_field   0x000380    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                field_end   0x00038a    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                frequency   0x00044e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                game_init   0x0003db    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+           game_over_test   0x0003aa    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               game_start   0x0000d4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                  hi_line   0x000379    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                inc_score   0x000392    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               initialize   0x0003ee    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                       isr   0x000004    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                 isr_exit   0x000030    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                kill_time   0x0002fb    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               left_bound   0x000102    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                   lfsr16   0x00040a    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                max_score   0x000780    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                move_ball   0x0000fa    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-           move_ball_exit   0x000135    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                   move_y   0x00010f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                      msg   0x00037c    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-            paddle_bounce   0x000138    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-             paddle_sound   0x000157    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               pong_sound   0x00019f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                post_last   0x00006a    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               post_vsync   0x000061    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                pre_vsync   0x000038    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                print_msg   0x000365    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-       put_ball_in_buffer   0x0002ee    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                   px2tcy   0x000404    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                   random   0x000410    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              read_button   0x0000ca    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              read_paddle   0x00007b    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              right_bound   0x000108    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              rows_common   0x000321    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               score_exit   0x0002cb    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              set_ball_dx   0x000412    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-         set_ball_dx_exit   0x000426    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              set_presync   0x000043    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                set_vsync   0x000059    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-             skip_2_tasks   0x0000e2    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                    sound   0x00009b    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                sound_fx1   0x0000aa    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               sound_init   0x0000b3    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                sound_off   0x0000a3    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                  t0delay   0x00043a    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              task_switch   0x00001c    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                top_bound   0x000113    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              video_first   0x0001b3    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                    vsync   0x00004e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                vsync_end   0x00006e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-           wait_field_end   0x0003b5    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-             wait_trigger   0x0000d9    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                 isr_exit   0x00002d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                kill_time   0x0002d1    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               left_bound   0x0000e4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                    lfsr8   0x0003c0    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                move_ball   0x0000db    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+           move_ball_exit   0x000112    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                   move_y   0x0000ef    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                    msg01   0x000350    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+            paddle_bounce   0x000114    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+             paddle_sound   0x000133    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               pong_sound   0x00017b    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                post_last   0x000064    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               post_vsync   0x00005b    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                pre_vsync   0x000033    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                print_msg   0x000330    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+       put_ball_in_buffer   0x0002c4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              read_button   0x0000c6    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              read_paddle   0x000076    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                   resume   0x0000d6    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              right_bound   0x0000e8    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              rows_common   0x0002fb    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               score_exit   0x0002a2    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              set_ball_dx   0x0003c6    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+         set_ball_dx_exit   0x0003d9    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              set_presync   0x00003e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                set_vsync   0x000053    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                    sound   0x000097    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                sound_fx1   0x0000a6    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               sound_init   0x0000af    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                sound_off   0x00009f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              task_switch   0x000019    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                toggle_dx   0x0000ed    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                top_bound   0x0000f3    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              video_first   0x00018f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                    vsync   0x000048    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                vsync_end   0x000068    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+           wait_field_end   0x000376    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                 ball_byte   0x0000db       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                   ball_dx   0x000079       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                   ball_dy   0x00007a       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
@@ -146,7 +140,6 @@ Linker Map File - Created Sun Mar 24 14:36:44 2019
                     fill6   0x0000d5       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                     flags   0x000070       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                    lcount   0x000071       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-            odd_fld_pread   0x00007f       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
               paddle_byte   0x0000d8       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
               paddle_mask   0x0000d9       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                paddle_pos   0x000076       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
@@ -157,7 +150,7 @@ Linker Map File - Created Sun Mar 24 14:36:44 2019
                      row5   0x0000c7       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                      row6   0x0000cf       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                     score   0x00007c       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                     seed   0x000028       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                     seed   0x00007f       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                     slice   0x000072       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
               sound_timer   0x0000de       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                     stack   0x000020       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
@@ -172,107 +165,100 @@ Linker Map File - Created Sun Mar 24 14:36:44 2019
                               Symbols - Sorted by Address
                      Name    Address   Location    Storage File                     
                 ---------  ---------  ---------  --------- ---------                
+                   _3ntcy   0x000001    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+           _RES_VECT_0002   0x000002    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                    _4tcy   0x000003    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                       isr   0x000004    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              task_switch   0x00001c    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                 isr_exit   0x000030    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                pre_vsync   0x000038    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              set_presync   0x000043    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                    vsync   0x00004e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                set_vsync   0x000059    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               post_vsync   0x000061    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                post_last   0x00006a    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                vsync_end   0x00006e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              read_paddle   0x00007b    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_0084   0x000084    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          even_field_read   0x00008e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                    sound   0x00009b    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                sound_off   0x0000a3    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                sound_fx1   0x0000aa    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               sound_init   0x0000b3    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              read_button   0x0000ca    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-             game_running   0x0000d7    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-             wait_trigger   0x0000d9    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                game_over   0x0000de    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-             skip_2_tasks   0x0000e2    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-      compute_paddle_mask   0x0000ea    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_00F8   0x0000f8    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                move_ball   0x0000fa    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               left_bound   0x000102    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              right_bound   0x000108    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                   move_y   0x00010f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                top_bound   0x000113    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-             bottom_bound   0x00011c    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                ball_lost   0x000123    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_0126   0x000126    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-           move_ball_exit   0x000135    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-            paddle_bounce   0x000138    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                 bouncing   0x000144    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              bounce_left   0x000155    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-             paddle_sound   0x000157    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-        compute_ball_mask   0x00015d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_016C   0x00016c    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                collision   0x00016e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                add_score   0x00019e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               pong_sound   0x00019f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-           collision_exit   0x0001a3    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                  between   0x0001a5    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-             between_exit   0x0001af    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-            between_exit2   0x0001b1    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_01B1   0x0001b1    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              video_first   0x0001b3    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-             ball_visible   0x0001ba    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          display_vbuffer   0x0001c1    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               draw_score   0x0002b2    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               score_exit   0x0002cb    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-            draw_top_wall   0x0002d3    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-       put_ball_in_buffer   0x0002ee    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                kill_time   0x0002fb    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               draw_sides   0x0002ff    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_0303   0x000303    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                 copy_row   0x000314    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              rows_common   0x000321    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              draw_bricks   0x000335    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               draw_empty   0x000353    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                print_msg   0x000365    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              display_end   0x000377    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                      msg   0x00037c    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          draw_empty_exit   0x00037d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              display_msg   0x000385    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              draw_paddle   0x000397    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-           wait_field_end   0x0003b5    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                  hi_line   0x0003b8    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               even_field   0x0003bf    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                field_end   0x0003c9    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                   _3ntcy   0x0003d1    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_03D2   0x0003d2    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                    _5tcy   0x0003d4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                    _4tcy   0x0003d5    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                inc_score   0x0003d6    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_03D8   0x0003d8    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_03DD   0x0003dd    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-           game_over_test   0x0003ee    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          brick_wall_init   0x0003f9    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                  bw_init   0x000400    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                   px2tcy   0x000404    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                   lfsr16   0x00040a    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                   random   0x000410    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-              set_ball_dx   0x000412    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-         set_ball_dx_exit   0x000426    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                game_init   0x000428    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                  t0delay   0x00043a    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                _ISR_043E   0x00043e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-               initialize   0x000442    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          _MAIN_PROG_0006   0x000448    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          _MAIN_PROG_000D   0x00044f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-          _MAIN_PROG_005F   0x0004a1    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                   digits   0x0004a2    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                frequency   0x0004dc    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                  end_msg   0x0004e2    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                 cool_msg   0x0004f1    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                max_score   0x000780    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              task_switch   0x000019    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                 isr_exit   0x00002d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                pre_vsync   0x000033    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              set_presync   0x00003e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                    vsync   0x000048    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                set_vsync   0x000053    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               post_vsync   0x00005b    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                post_last   0x000064    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                vsync_end   0x000068    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              read_paddle   0x000076    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_007D   0x00007d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_0095   0x000095    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                    sound   0x000097    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                sound_off   0x00009f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                sound_fx1   0x0000a6    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               sound_init   0x0000af    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              read_button   0x0000c6    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               game_start   0x0000d4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                   resume   0x0000d6    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                move_ball   0x0000db    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               left_bound   0x0000e4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              right_bound   0x0000e8    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                toggle_dx   0x0000ed    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                   move_y   0x0000ef    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                top_bound   0x0000f3    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+             bottom_bound   0x0000fc    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                ball_lost   0x000103    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+        ball_track_pallet   0x00010b    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+           move_ball_exit   0x000112    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+            paddle_bounce   0x000114    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                 bouncing   0x000120    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              bounce_left   0x000131    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+             paddle_sound   0x000133    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+        compute_ball_mask   0x000139    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_0148   0x000148    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                collision   0x00014a    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                add_score   0x00017a    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               pong_sound   0x00017b    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+           collision_exit   0x00017f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                  between   0x000181    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+             between_exit   0x00018b    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_018D   0x00018d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+            between_exit2   0x00018d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              video_first   0x00018f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+             ball_visible   0x000196    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+          display_vbuffer   0x00019d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               draw_score   0x00028e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               score_exit   0x0002a2    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+            draw_top_wall   0x0002aa    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+       put_ball_in_buffer   0x0002c4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                kill_time   0x0002d1    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+             empty_common   0x0002d5    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_02DA   0x0002da    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_02E4   0x0002e4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               draw_sides   0x0002e4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                 copy_row   0x0002ee    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              rows_common   0x0002fb    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              draw_bricks   0x00030f    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               draw_empty   0x00032c    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                print_msg   0x000330    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                 copy_msg   0x000344    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                    msg01   0x000350    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+          draw_empty_exit   0x000351    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              draw_paddle   0x000359    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+           wait_field_end   0x000376    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                  hi_line   0x000379    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               even_field   0x000380    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                field_end   0x00038a    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                inc_score   0x000392    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_0394   0x000394    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                _ISR_0399   0x000399    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+           game_over_test   0x0003aa    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+          brick_wall_init   0x0003b5    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                  bw_init   0x0003bc    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                    lfsr8   0x0003c0    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                    _5tcy   0x0003c4    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              set_ball_dx   0x0003c6    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+         set_ball_dx_exit   0x0003d9    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                game_init   0x0003db    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+               initialize   0x0003ee    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+          _MAIN_PROG_0005   0x0003f3    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+              clr_pwm_sfr   0x000405    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+          _MAIN_PROG_0038   0x000426    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                   digits   0x000427    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                digit_row   0x000434    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                frequency   0x00044e    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                  end_msg   0x000453    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                 cool_msg   0x00045d    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                    eeprom   0x000780    program     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                     stack   0x000020       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-                     seed   0x000028       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                     flags   0x000070       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                    lcount   0x000071       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                     slice   0x000072       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
@@ -287,7 +273,7 @@ Linker Map File - Created Sun Mar 24 14:36:44 2019
                ball_speed   0x00007b       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                     score   0x00007c       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                ball_timer   0x00007e       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
-            odd_fld_pread   0x00007f       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
+                     seed   0x00007f       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                   vbuffer   0x0000a0       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                     temp3   0x0000a6       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm
                      row1   0x0000a7       data     static /home/jacques/github/breakout_1572/breakout_1572.X/breakout1572.asm

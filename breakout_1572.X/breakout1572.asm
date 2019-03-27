@@ -89,8 +89,7 @@ F_SYNC equ 2    ; set during vertical synchronization phase
 F_SOUND equ 3   ; sound enabled 
 F_START equ 4   ; game started 
 F_PAUSE equ 5   ; game paused after a ball lost
-F_OVER equ 6    ; game over
-F_COOL equ 7    ; player got maximum score
+F_COOL equ 6    ; player got maximum score
  
 ;pins assignment
 AUDIO EQU RA0  ; PWM2 output for audio tones
@@ -502,10 +501,10 @@ vsync_end
     movlw low HPERIOD
     movwf PWM3PRL
     bsf PWM3LDCON,7
-    incf task
  ; divide lcount by 2 go get correct scan line count    
     lsrf lcount
     call lfsr8 ; update prng 60 times/sec.
+    incf task
     leave
 
 ; task 4, read paddle potentiometer
@@ -541,11 +540,14 @@ read_paddle
     movlw 7
     andwf paddle_pos,W
     skpnz
-    leave
+    bra read_paddle_exit
     lsrf paddle_mask
     rrf paddle_mask+1
     decfsz WREG
     bra $-3
+read_paddle_exit    
+    btfsc flags, F_PAUSE
+    call track_paddle
     leave
     
 ; task 5,  sound timer
@@ -603,8 +605,8 @@ sound_init
     bsf PWM2LDCON,LDA
     bsf PWM2CON,OE
     bsf PWM2CON,EN
-    pickn 1
     banksel sound_timer
+    pickn 1
     movwf sound_timer
     dropn 2
     banksel TRISA
@@ -617,46 +619,18 @@ read_button
     banksel PORTA
     movfw PORTA
     andlw 1<<START_BTN
-    movwf temp1
-    btfsc flags, F_OVER
-    bra game_over
-    btfsc flags,F_START
-    bra game_running
-; game not running
+    banksel TRISA
     skpz
-    bra skip_2_tasks
-; start game    
-    call game_init
-    bsf flags, F_START
     leave
-game_running
+    btfsc flags, F_START
+    bra resume_game
+    call game_init
+    leave
+resume_game
     btfss flags, F_PAUSE
     leave
-; game on pause    
-wait_trigger
-    skpz
-    bra skip_2_tasks
-    bcf flags,F_PAUSE
-    call set_ball_dx
+    call resume
     leave
-; game over
-game_over
-    skpz
-    bra skip_2_tasks
-    call game_init
-    bsf flags, F_START
-    leave
-; while game not running skip 'move_ball' and 'collision' tasks    
-skip_2_tasks
-    movfw paddle_pos
-    addlw 2
-    movwf ball_x
-;    call compute_ball_mask
-    incf task ; skip move_ball
-    bra move_ball_exit
-;    incf task ; skip collision
-;    leave
-
     
     
 
@@ -665,8 +639,9 @@ skip_2_tasks
 ; also check for ball bounce on paddle
 ; and ball lost at bottom    
 move_ball
+    incf task
     decfsz ball_timer
-    bra move_ball_exit
+    leave
     movfw ball_speed
     movwf ball_timer
     movfw ball_dx
@@ -677,15 +652,14 @@ left_bound
     btfss ball_x,7
     bra move_y
     clrf ball_x
-    comf ball_dx
-    incf ball_dx
-    bra move_y
+    bra toggle_dx
 right_bound    
     movfw ball_x
     sublw BALL_RIGHT_BOUND
     skpnc
     bra move_y
     decf ball_x
+toggle_dx
     comf ball_dx
     incf ball_dx
 move_y
@@ -705,34 +679,34 @@ top_bound
     bra move_ball_exit
 bottom_bound
     movfw ball_y
-    sublw PADDLE_Y-BALL_HEIGHT-1
+    sublw PADDLE_Y-BALL_HEIGHT+1
     skpnc
     bra move_ball_exit
     call paddle_bounce
     skpnc
     bra move_ball_exit
 ball_lost
-    bsf flags, F_PAUSE ; pause game
-    banksel balls
+;    banksel balls
     decfsz balls
-    bra $+3
+    bra pause_game
     bcf flags, F_START
-    bsf flags, F_OVER
-    movlw 2
-    addwf paddle_pos,W
-    movwf ball_x
-    movlw PADDLE_Y-BALL_HEIGHT+1
-    movwf ball_y
-    movlw -4
-    movwf ball_dy
+    bra freeze_ball
+pause_game
+    bsf flags, F_PAUSE
     movlw 8
     pushw
     movlw 2
     call sound_init
-    incf task ; skip collision task
+freeze_ball
+    clrf ball_dx
+    clrf ball_dy
+    movlw 3
+    addwf paddle_pos,W
+    movwf ball_x
+    movlw PADDLE_Y-BALL_HEIGHT-1
+    movwf ball_y
 move_ball_exit
-    call compute_ball_mask
-    incf task
+    call create_ball_mask
     leave
 
 ; check if ball is bouncing on paddle
@@ -755,7 +729,7 @@ paddle_bounce
     bcf STATUS,C
     return
 bouncing
-    movlw PADDLE_Y-BALL_HEIGHT
+    movlw PADDLE_Y-BALL_HEIGHT-1
     movwf ball_y
     comf ball_dy
     incf ball_dy
@@ -787,27 +761,6 @@ paddle_sound
     return
     
     
-; compute ball_mask and ball_byte
-; ball_mask= BALL_MASK>>(ball_x%8)
-; ball_byte= ball_x/8     
-compute_ball_mask
-    banksel vbuffer
-    lsrf ball_x,W
-    lsrf WREG
-    lsrf WREG
-    movwf ball_byte
-    movlw BALL_MASK
-    movwf ball_mask
-    clrf ball_mask+1
-    movlw 7
-    andwf ball_x,W
-    skpnz
-    return
-    lsrf ball_mask
-    rrf ball_mask+1
-    decfsz WREG
-    bra $-3
-    return
     
 ; task 8, check collision with bricks
 collision
@@ -933,12 +886,18 @@ ball_visible
 ; display vbuffer
 ; the 6 macros display_byte unroll to 240 instructions    
 display_vbuffer
+    white 
+    tdelay BORDER_WIDTH
+display_vbuffer_2    
     display_byte 0
     display_byte 1
     display_byte 2
     display_byte 3
     display_byte 4
     display_byte 5
+    white
+    tdelay BORDER_WIDTH
+    black
     return
  
 ; task 10, draw score en ball count
@@ -963,7 +922,7 @@ draw_score
     movfw balls
     call digits
     iorwf vbuffer+4
-    call display_vbuffer
+    call display_vbuffer_2
     dropn 1
 score_exit
     next_task 5*4
@@ -982,11 +941,11 @@ draw_top_wall
     movlw WHITE
     movwf fg_color
     tdelay LEFT_MARGIN
-    white
+;    white
     call display_vbuffer
-    white
-    tdelay BORDER_WIDTH
-    black
+;    white
+;    tdelay BORDER_WIDTH
+;    black
     next_task BRICK_HEIGHT
 
 ; put ball mask in video_buffer
@@ -1015,11 +974,11 @@ empty_common
     movlw WHITE
     movwf fg_color
     tdelay LEFT_MARGIN-37
-    white
+;    white
     call display_vbuffer
-    white
-    tdelay BORDER_WIDTH
-    black
+;    white
+;    tdelay BORDER_WIDTH
+;    black
     return
     
 ; task 12,  draw vertical sides over bricks.
@@ -1053,11 +1012,11 @@ rows_common
     clrf FSR1H
     call copy_row
     tdelay 1
-    white
+;    white
     call display_vbuffer
-    white
-    tdelay BORDER_WIDTH
-    black
+;    white
+;    tdelay BORDER_WIDTH
+;    black
     next_task BRICKS_ROWS*BRICK_HEIGHT
     
 ; task 13, draw brick rows
@@ -1104,7 +1063,7 @@ MSG_PIXELS_COUNT equ 16
 ; lcount 122-241 
 draw_empty
 ;    banksel TRISA
-    btfsc flags, F_OVER
+    btfss flags, F_START
     bra print_msg
     call empty_common
     bra draw_empty_exit
@@ -1144,7 +1103,11 @@ copy_msg
     movwf vbuffer+1
     moviw FSR1++
     movwf vbuffer+2
-msg01    
+    bra msg02
+msg01
+    tdelay 24
+msg02
+    tdelay LEFT_MARGIN-45
     call display_vbuffer
 draw_empty_exit
     next_task PADDLE_Y-ROW6_Y-BRICK_HEIGHT
@@ -1166,11 +1129,11 @@ draw_paddle
     movlw WHITE
     movwf fg_color
     tdelay LEFT_MARGIN-3
-    white
+ ;   white
     call display_vbuffer
-    white
-    tdelay BORDER_WIDTH
-    black
+;    white
+;    tdelay BORDER_WIDTH
+;    black
     next_task PADDLE_THICKNESS
 
 ; task 16,  wait end of this field, reset task to zero    
@@ -1254,7 +1217,7 @@ game_over_test ; all bricks destroyed?
     subwf score+1,W
     skpz
     return
-    bsf flags,F_OVER ; game over
+    bcf flags,F_START ; game over
     bsf flags,F_COOL ; with maximum score.
     return
     
@@ -1277,7 +1240,6 @@ bw_init
 ; REF: https://en.wikipedia.org/wiki/LFSR#Fibonacci_LFSRs  
 POLY equ 0xb8 
 lfsr8
-;    banksel seed
     lsrf seed
     movlw POLY
     skpnc
@@ -1312,24 +1274,53 @@ set_ball_dx
 set_ball_dx_exit
     movwf ball_dx
     return
+
+; compute ball_mask and ball_byte
+; ball_mask= BALL_MASK>>(ball_x%8)
+; ball_byte= ball_x/8     
+create_ball_mask
+    banksel vbuffer
+    lsrf ball_x,W
+    lsrf WREG
+    lsrf WREG
+    movwf ball_byte
+    movlw BALL_MASK
+    movwf ball_mask
+    clrf ball_mask+1
+    movlw 7
+    andwf ball_x,W
+    skpnz
+    return
+    lsrf ball_mask
+    rrf ball_mask+1
+    decfsz WREG
+    bra $-3
+    return
     
 game_init
     clrf score
     clrf score+1
     call brick_wall_init
     banksel balls
+    movlw 2
+    movwf ball_timer
+    movlw 2
+    movwf ball_speed
     movlw 3
     movwf balls
-    clrf ball_timer
-    incf ball_timer
-    movlw PADDLE_Y-BALL_HEIGHT+1
-    movwf ball_y
+    bsf flags,F_START
+resume
+    bcf flags, F_PAUSE
     call set_ball_dx
     movlw -4
     movwf ball_dy
-    movlw 2
-    movwf ball_speed
-    clrf flags
+track_paddle
+    movlw PADDLE_Y-BALL_HEIGHT-1
+    movwf ball_y
+    movlw 3
+    addwf paddle_pos,W
+    movwf ball_x
+    call create_ball_mask
     return
     
 MAIN_PROG CODE                      ; let linker place main program
@@ -1407,7 +1398,6 @@ clr_pwm_sfr
     bsf PIE3,PWM3IE
     bsf INTCON,PEIE
     bsf INTCON,GIE
-    call game_init
 ; test code
 ; all processing done in ISR    
     goto $
