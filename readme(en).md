@@ -1,5 +1,8 @@
 breakout game
 =
+
+[Cliquez ici pour la version francophone](readme.md)
+
 This project is concept demo to show that a color NTSC signal can be generated with simple hardware. This project implement a 1976 arcade game named **breakout**.  
 
 The hardware use only 2 actives components a PIC12F1572 which is an 8 pins MCU with 2 Kwords of flash and 256 bytes of ram. The other is an external oscillator runnung 28.636 Mhz which 8 times the chroma reference frequency of NTSC signal.

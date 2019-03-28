@@ -1,7 +1,7 @@
 Jeu breakout
 ============
 
-[click here for english version](readme(en).md)
+[Click here for english version](readme(en).md)
 
 Introduction
 ------------
@@ -92,7 +92,7 @@ scan lines  | slices  |   usage
 4-6       |  6      | task 1, vertical sync
 7-9       |  6      | task 2, vertical post-equalization
 10        |  1      | task 3, synchronization end
-11        |  1      | task 4, read paddle    
+11        |  1      | task [Un court vidéo de démonstration sur youtube](https://youtu.be/vrqX9GyqXJU)4, read paddle    
 12        |  1      | task 5, sound timer
 13        |  1      | task 6, read button
 14        |  1      | task 7, move ball
