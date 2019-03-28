@@ -1,6 +1,8 @@
 Jeu breakout
 ============
 
+[click here for english version](readme(en).md)
+
 Introduction
 ------------
   Le jeu d'arcade [breakout](https://fr.wikipedia.org/wiki/Breakout_(jeu_vid%C3%A9o,_1976)) date de 1976. Il s'agit d'un dérivé du jeu pong.
@@ -90,9 +92,9 @@ scan lines  | slices  |   usage
 4-6       |  6      | task 1, vertical sync
 7-9       |  6      | task 2, vertical post-equalization
 10        |  1      | task 3, synchronization end
-11        |  1      | task 4, reserved slot, do nothing    
+11        |  1      | task 4, read paddle    
 12        |  1      | task 5, sound timer
-13        |  1      | task 6, user input
+13        |  1      | task 6, read button
 14        |  1      | task 7, move ball
 15        |  1      | task 8, collision control
 16-29     |  14     | task 9, do nothing until first visible line    
