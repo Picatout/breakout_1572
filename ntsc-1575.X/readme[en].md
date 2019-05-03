@@ -17,7 +17,7 @@ difference between the 2 signal is 90&deg;. Both signals are sent to a summing p
 the phase is a resultant of the 2 vectors sum. Assuming both vectors have the same amplitude at summing point we get
 3 possibles sum, when **chroma0** is cutoff, **chroma1** is cutoff and both signals are on. but as the PWM peripherals 
 have a **POL** to invert the output (*180&deg; dephasing*) playing with output cutoff and POL bit of each PWM we 
-get 8 combinations total. The using **video_y0** and **video_y1** bits to vary the luminescence level we get 4*8=
+get 8 combinations total. Using 2 bits to generate Y level, **video_y0** and **video_y1**, we get 4*8=
 48 colors to which we add the 4 gray scale level when no chroma signal is used.
 
 ![color bars test](color_bars.png)
