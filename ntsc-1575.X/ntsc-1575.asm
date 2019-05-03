@@ -61,7 +61,8 @@
 ;    250-262/3 |  11/12  | task 16, wait end of field    
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
  
-    
+COLOR_TEST equ 1
+ 
     include p16f1575.inc
     
     __config _CONFIG1, _FOSC_ECH & _WDTE_OFF & _MCLRE_OFF
@@ -236,7 +237,9 @@ C9 equ (0<<CHROMA0)|(0<<CHROMA1)|(1<<VIDEO_Y0)|(0<<VIDEO_Y1)|OTHERS
 C10 equ (0<<CHROMA0)|(1<<CHROMA1)|(0<<VIDEO_Y0)|(0<<VIDEO_Y1)|OTHERS
 C11 equ (1<<CHROMA0)|(0<<CHROMA1)|(0<<VIDEO_Y0)|(0<<VIDEO_Y1)|OTHERS
 C12 equ (0<<CHROMA0)|(0<<CHROMA1)|(0<<VIDEO_Y0)|(0<<VIDEO_Y1)|OTHERS
- 
+
+    
+    
 ; color palette selection
 palette macro n ; n -> {0-3}
     banksel palnbr
@@ -246,21 +249,25 @@ palette macro n ; n -> {0-3}
     if n==0
     bcf PWM1CON,POL  ; CHROMA0
     bcf PWM2CON,POL  ; CHROMA1
+    banksel COLOR_TRIS
     exitm
     endif
     if n==1
     bsf PWM1CON,POL
     bcf PWM2CON,POL
+    banksel COLOR_TRIS
     exitm
     endif
     if n==2
     bcf PWM1CON,POL
     bsf PWM2CON,POL
+    banksel COLOR_TRIS
     exitm
     endif
     if n==3
     bsf PWM1CON,POL
     bsf PWM2CON,POL
+    banksel COLOR_TRIS
     endif
     endm
 
@@ -280,6 +287,16 @@ black macro
     movlw BLACK
     movwf COLOR_TRIS
     endm
+
+dark_gray macro
+    movlw DARK_GRAY
+    movwf COLOR_TRIS
+    endm
+    
+gray macro
+    movlw GRAY
+    movwf COLOR_TRIS
+    endm
     
 ; set video output to white    
 white macro    
@@ -287,6 +304,40 @@ white macro
     movwf COLOR_TRIS
     endm
 
+colorn  macro n
+    movlw n
+    movwf COLOR_TRIS
+    endm
+
+color_bars macro
+   colorn BLACK
+   tdelay 4
+   colorn C1
+   tdelay 4
+   colorn C2
+   tdelay 4
+   colorn C3
+   tdelay 4
+   colorn C4
+   tdelay 4
+   colorn C5
+   tdelay 4
+   colorn C6
+   tdelay 4
+   colorn C7
+   tdelay 4
+   colorn C8
+   tdelay 4
+   colorn C9
+   tdelay 4
+   colorn C10
+   tdelay 4
+   colorn C11
+   tdelay 4
+   colorn C12
+;   tdelay 4
+   endm
+    
 ; set video output to mauve    
 mauve macro
     movlw C2
@@ -494,6 +545,9 @@ task_switch ; round robin task scheduler
     goto draw_empty;task 14, draw empty space with sides walls down to bottom
     goto draw_paddle ;task 15, draw paddle
     goto wait_field_end ;task 16, idle to end of video field
+if COLOR_TEST
+    goto color_bars_task ; task 17
+endif    
     reset ; error trap, task out of range
 isr_exit
     banksel TRISA
@@ -579,7 +633,12 @@ vsync_end
  ; divide lcount by 2 go get correct scan line count    
     lsrf lcount
     call lfsr8 ; update prng 60 times/sec.
+if COLOR_TEST
+    movlw 9 ; video_first
+    movwf task
+else    
     incf task
+endif    
     leave
 
 ; task 4, read paddle potentiometer
@@ -917,7 +976,12 @@ video_first
     skpz
     leave
     clrf slice
+if COLOR_TEST
+    movlw 17
+    movwf task
+else    
     incf task
+endif    
     leave
    
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1238,6 +1302,32 @@ field_end
     xorwf flags
     leave
 
+color_bars_task:
+    tdelay 8
+    white
+    tdelay 4
+    gray
+    tdelay 4
+    dark_gray
+    palette 0
+    color_bars
+    palette 1
+    color_bars
+    palette 2
+    color_bars
+    palette 3
+    color_bars
+    black
+    incf slice
+    movlw 220
+    xorwf slice,W
+    skpz
+    leave
+    movlw 16
+    movwf task
+    leave
+    
+    
 ; helper functions
 
 
@@ -1488,7 +1578,7 @@ clr_pwm_sfr
     bsf PIE3,PWM3IE
     bsf INTCON,PEIE
     bsf INTCON,GIE
-    palette 3
+    palette 0
 ; test code
 ; all processing done in ISR    
     goto $

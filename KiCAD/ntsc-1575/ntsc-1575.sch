@@ -543,21 +543,10 @@ F 3 "" H 5425 2800 50  0001 C CNN
 	1    5425 2800
 	1    0    0    -1  
 $EndComp
-Text Label 4750 2000 2    50   ~ 0
+Text Label 5050 2000 2    50   ~ 0
 chroma0
 Text Label 5000 2500 2    50   ~ 0
 chroma1
-$Comp
-L device:C C1
-U 1 1 5CCAB2FE
-P 4900 2000
-F 0 "C1" V 4648 2000 50  0000 C CNN
-F 1 "100n" V 4739 2000 50  0000 C CNN
-F 2 "" H 4938 1850 50  0001 C CNN
-F 3 "" H 4900 2000 50  0001 C CNN
-	1    4900 2000
-	0    1    1    0   
-$EndComp
 Connection ~ 5425 2000
 Text Label 5850 4800 0    50   ~ 0
 chroma1
